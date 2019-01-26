@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: helpme
+  password: helpme
+
+development:
+  <<: *default
+  database: helpme_development
+
+test:
+  <<: *default
+  database: helpme_test
+
+production:
+  <<: *default
+  url: <%= ENV['HELPME_DATABASE_URL'] %>
