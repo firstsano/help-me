@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  resources :questions, only: %i[index new show edit]
+  resources :questions
 end
