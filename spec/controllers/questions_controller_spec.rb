@@ -54,6 +54,48 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do
+    context 'with valid attributes' do
+      it 'assigns requested question to @question' do
+        question = create :question
+        patch :update, params: { id: question, question: { title: 'MyTitle', body: 'MyBody' } }
+        question.reload
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'saves question\'s changes' do
+        question = create :question
+        patch :update, params: { id: question, question: { title: 'MyTitle', body: 'MyBody' } }
+        question.reload
+        expect(question.title).to eq 'MyTitle'
+        expect(question.body).to eq 'MyBody'
+      end
+
+      it 'redirects to updated question' do
+        question = create :question
+        patch :update, params: { id: question, question: { title: 'MyTitle', body: 'MyBody' } }
+        question.reload
+        expect(response).to redirect_to question_path(assigns(:question))
+      end
+    end
+
+    context 'with invalid attributes' do
+      it 'does not save question\'s changes' do
+        question = create :question
+        patch :update, params: { id: question, question: { title: nil, body: nil } }
+        question.reload
+        expect(question.title).to be_present
+        expect(question.body).to be_present
+      end
+
+      it 'renders edit view' do
+        question = create :question
+        patch :update, params: { id: question, question: { title: nil, body: nil } }
+        expect(response).to render_template :edit
+      end
+    end
+  end
+
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'saves the new question to the database' do
