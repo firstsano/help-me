@@ -28,3 +28,6 @@
 
 # Ignore ide files
 .idea
+
+# Ignore task file
+task.txt
