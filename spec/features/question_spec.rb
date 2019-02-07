@@ -32,7 +32,15 @@ feature 'User can view list of questions', %q{
   I want to be able to view a list of questions
 } do
 
-  scenario 'User sees a list of all questions'
+  given!(:questions) { create_list :question, 10 }
+
+  scenario 'User sees a list of all questions' do
+    visit questions_path
+
+    questions.each do |question|
+      expect(page).to have_content question.title
+    end
+  end
 end
 
 feature 'User can post an answer to the question', %q{
