@@ -51,7 +51,21 @@ feature 'User can post an answer to the question', %q{
   I want to be able to answer the question
 } do
 
-  scenario 'User posts an answer to the question'
+  given(:question) { create :question }
+  given(:answer) { attributes_for :answer }
+
+  scenario 'User posts an answer to the question' do
+    visit questions_path(question)
+
+    fill_in 'Title', with: answer[:title]
+    fill_in 'Body', with: answer[:body]
+    click_on 'Answer the question'
+
+    expect(page).to have_text 'Answer created successfully'
+    expect(page).to have_content answer[:title]
+    expect(page).to have_content answer[:body]
+  end
+
 end
 
 feature 'User can view a question', %q{
