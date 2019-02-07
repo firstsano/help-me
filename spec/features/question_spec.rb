@@ -41,6 +41,8 @@ feature 'User can view list of questions', %q{
       expect(page).to have_content question.title
     end
   end
+
+  scenario 'User sees links to all of the questions'
 end
 
 feature 'User can post an answer to the question', %q{
