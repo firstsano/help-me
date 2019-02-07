@@ -1,0 +1,10 @@
+= link_to 'Create question', new_question_path, class: 'btn btn-primary'
+
+table
+  thead
+    tr
+      th Title
+  tbody
+    - @questions.each do |question|
+      tr
+        td= question.title
