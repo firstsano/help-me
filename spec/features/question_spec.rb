@@ -32,7 +32,17 @@ feature 'User can view list of questions', %q{
   I want to be able to view a list of questions
 } do
 
-  scenario 'User sees a list of all questions'
+  given!(:questions) { create_list :question, 10 }
+
+  scenario 'User sees a list of all questions' do
+    visit questions_path
+
+    questions.each do |question|
+      expect(page).to have_content question.title
+    end
+  end
+
+  scenario 'User sees links to all of the questions'
 end
 
 feature 'User can post an answer to the question', %q{
@@ -41,7 +51,21 @@ feature 'User can post an answer to the question', %q{
   I want to be able to answer the question
 } do
 
-  scenario 'User posts an answer to the question'
+  given(:question) { create :question }
+  given(:answer) { attributes_for :answer }
+
+  scenario 'User posts an answer to the question' do
+    visit questions_path(question)
+
+    fill_in 'Title', with: answer[:title]
+    fill_in 'Body', with: answer[:body]
+    click_on 'Answer the question'
+
+    expect(page).to have_text 'Answer created successfully'
+    expect(page).to have_content answer[:title]
+    expect(page).to have_content answer[:body]
+  end
+
 end
 
 feature 'User can view a question', %q{
