@@ -1,0 +1,9 @@
+= show_for @question do |s|
+  = s.attribute :title
+  = s.attribute :body
+
+.answer
+  = simple_form_for([@question, @answer]) do |f|
+    = f.input :title
+    = f.input :body
+    = f.submit 'Answer the question'
