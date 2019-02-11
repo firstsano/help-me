@@ -7,3 +7,9 @@
     = f.input :title
     = f.input :body
     = f.submit 'Answer the question'
+
+.answers
+  - @question.answers.each do |answer|
+    = show_for answer do |s|
+     = s.attribute :title
+     = s.attribute :body

@@ -52,12 +52,20 @@ feature 'User can view a question', %q{
 } do
 
   given(:question) { create :question }
+  given!(:answers) { create_list :answer, 5, question: question }
 
   scenario 'User views a question' do
     visit question_path(question)
 
     expect(page).to have_content question.title
     expect(page).to have_content question.body
+
+    within('.answers') do
+      answers.each do |answer|
+        expect(page).to have_content answer.title
+        expect(page).to have_content answer.body
+      end
+    end
   end
 end
 

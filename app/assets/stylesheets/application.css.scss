@@ -15,4 +15,10 @@
  *= require_self
  */
 
- @import "material";
+$primary: (
+  color: #283593,
+  dark:  darken(#283593, 10%),
+  light: lighten(#283593, 10%)
+);
+
+@import "material";
