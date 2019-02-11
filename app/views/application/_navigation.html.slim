@@ -16,5 +16,11 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
           .dropdown-divider
           a.dropdown-item href="#" Something else here
     ul.navbar-nav.ml-auto
-      li.nav-item
-        == link_to 'Log in' + material_icon.face.to_s, new_user_session_path, class: 'nav-link'
+      - if current_user
+        span.navbar-text = current_user.name
+        li.nav-item
+          == button_to destroy_user_session_path, class: 'nav-link', method: :delete
+            | Log out == material_icon.exit_to_app
+      - else
+        li.nav-item
+          == link_to "Log in #{material_icon.exit_to_app}".html_safe, new_user_session_path, class: 'nav-link'
