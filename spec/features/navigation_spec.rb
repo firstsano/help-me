@@ -16,7 +16,7 @@ feature 'User can navigate through pages', %q{
     visit root_path
 
     expect_main_menu
-    expect(page).to have_link 'Questons', href: questions_path
+    expect(page).to have_link 'Questions', href: questions_path
   end
 
   scenario 'Signed in user sees personal info and controls' do
