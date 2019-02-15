@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[show index]
   before_action :load_question, only: %i[show edit update destroy]
+  before_action :authorize_resource!, only: :destroy
 
   def index
     @questions = Question.all
@@ -19,10 +20,10 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
+    @question.created_by = current_user
 
     if @question.save
-      flash[:notice] = 'Question created successfully'
-      redirect_to @question
+      redirect_to @question, notice: 'Question created successfully'
     else
       render :new
     end
@@ -38,7 +39,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     @question.destroy
-    redirect_to questions_path
+    redirect_to questions_path, notice: 'The question was successfully deleted'
   end
 
   private
@@ -49,5 +50,10 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body)
+  end
+
+  def authorize_resource!
+    message = { error: 'You are not permitted to perform this operation' }
+    redirect_to questions_path, **message if @question.created_by != current_user
   end
 end
