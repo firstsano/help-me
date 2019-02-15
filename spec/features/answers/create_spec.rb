@@ -10,7 +10,7 @@ feature 'User can create an answer to the question', %q{
   given(:answer) { attributes_for :answer }
 
   context 'When user is signed in' do
-    scenario 'User posts an answer to the question' do
+    scenario 'User creates an answer to the question', js: true do
       user = create :user
       sign_in user
       visit question_path(question)
@@ -21,7 +21,7 @@ feature 'User can create an answer to the question', %q{
         click_on 'Answer the question'
       end
 
-      expect(page).to have_text 'Answer created successfully'
+      expect(current_path).to eq question_path(question)
       expect(page).to have_content answer[:title]
       expect(page).to have_content answer[:body]
     end

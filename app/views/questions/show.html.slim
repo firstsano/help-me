@@ -7,13 +7,10 @@
     = button_to 'Delete', question_path(@question), method: :delete
 
 .answer
-  = simple_form_for([@question, @answer]) do |f|
+  = simple_form_for([@question, @answer], remote: true) do |f|
     = f.input :title
     = f.input :body
-    = f.submit 'Answer the question'
+    = f.submit 'Answer the question', class: 'btn btn-primary'
 
 .answers
-  - @question.answers.each do |answer|
-    = show_for answer do |s|
-     = s.attribute :title
-     = s.attribute :body
+  = render @question.answers

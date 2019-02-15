@@ -22,10 +22,17 @@ class AnswersController < ApplicationController
     @answer = Answer.new answer_params
     @answer.assign_attributes question: @question, created_by: current_user
 
-    if @answer.save
-      redirect_to answer_path(@answer), notice: 'Answer created successfully'
-    else
-      render :new
+    respond_to do |format|
+      if @answer.save
+        format.html do
+          redirect_to answer_path(@answer),
+                      notice: 'Answer created successfully'
+        end
+        format.js
+      else
+        format.html { render :new }
+        format.js { head :no_content }
+      end
     end
   end
 
