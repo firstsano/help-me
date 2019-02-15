@@ -22,8 +22,7 @@ class AnswersController < ApplicationController
     @answer.question = @question
 
     if @answer.save
-      flash[:notice] = 'Answer created successfully'
-      redirect_to answer_path(@answer)
+      redirect_to answer_path(@answer), notice: 'Answer created successfully'
     else
       render :new
     end
