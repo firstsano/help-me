@@ -126,7 +126,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    context 'when owner deletes the question' do
+    context 'when owner deletes a question' do
       let!(:question) { create :question, created_by: user }
 
       before { sign_in user }
@@ -141,7 +141,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'when someone else deletes the question' do
+    context 'when someone else deletes a question' do
       before { question }
       before { sign_in user }
 

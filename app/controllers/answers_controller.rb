@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :load_question, only: %i[index new create]
   before_action :load_answer, only: %i[show edit update destroy]
+  before_action :authorize_resource!, only: :destroy
 
   def index
     @answers = @question.answers.all
@@ -19,7 +20,7 @@ class AnswersController < ApplicationController
 
   def create
     @answer = Answer.new answer_params
-    @answer.question = @question
+    @answer.assign_attributes question: @question, created_by: current_user
 
     if @answer.save
       redirect_to answer_path(@answer), notice: 'Answer created successfully'
@@ -39,7 +40,7 @@ class AnswersController < ApplicationController
   def destroy
     question = @answer.question
     @answer.destroy
-    redirect_to question_answers_path(question)
+    redirect_to question_path(question), notice: 'Answer successfully destroyed'
   end
 
   private
@@ -54,5 +55,10 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:title, :body)
+  end
+
+  def authorize_resource!
+    message = { error: 'You are not permitted to perform this operation' }
+    redirect_to answer_path(@answer), **message if @answer.created_by != current_user
   end
 end
