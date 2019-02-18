@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../features_helper'
 
 feature 'User can create a question', %q{
   In order to get some knowledge

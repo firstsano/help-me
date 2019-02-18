@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../features_helper'
 
 feature 'User can sign up', %q{
   In order to be able to create questions and answers

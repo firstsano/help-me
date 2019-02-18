@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../features_helper'
 
 feature 'User can destroy an answer', %q{
   In order to remove wrong or deprecated answer
