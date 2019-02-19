@@ -30,10 +30,14 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
+    respond_to do |format|
+      if @question.update(question_params)
+        format.html { redirect_to @question }
+        format.js
+      else
+        format.html { render :edit }
+        format.js { head :no_content }
+      end
     end
   end
 

@@ -11,7 +11,6 @@
  * It is generally better to create a new file per style scope.
  *
  *= require material_icons
- *= require_tree .
  *= require_self
  */
 
@@ -22,3 +21,4 @@ $primary: (
 );
 
 @import "material";
+@import "components/index";
