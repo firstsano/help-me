@@ -11,11 +11,12 @@ feature 'User can create an answer to the question', %q{
 
   context 'When user is signed in' do
     scenario 'User creates an answer to the question', js: true do
+      create_list :answer, 5, question: question
       user = create :user
       sign_in user
       visit question_path(question)
 
-      within('.answer') do
+      within('.question-answer') do
         fill_in 'Title', with: answer[:title]
         fill_in 'Body', with: answer[:body]
         click_on 'Answer the question'
@@ -31,7 +32,7 @@ feature 'User can create an answer to the question', %q{
     scenario 'User tries to create an answer to the question' do
       visit question_path(question)
 
-      within('.answer') do
+      within('.question-answer') do
         fill_in 'Title', with: answer[:title]
         fill_in 'Body', with: answer[:body]
         click_on 'Answer the question'

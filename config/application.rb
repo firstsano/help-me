@@ -20,8 +20,7 @@ module HelpMe
       g.controller_specs true
       g.helper_specs false
       g.view_specs false
-      g.javascripts false
-      g.stylesheets false
+      g.assets false
     end
   end
 end

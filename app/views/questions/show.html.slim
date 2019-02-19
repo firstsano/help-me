@@ -6,7 +6,7 @@
   - if @question.created_by == current_user
     = button_to 'Delete', question_path(@question), method: :delete
 
-.answer
+.question-answer
   = simple_form_for([@question, @answer], remote: true) do |f|
     = f.input :title
     = f.input :body

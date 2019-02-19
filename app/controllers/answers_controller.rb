@@ -19,8 +19,8 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = Answer.new answer_params
-    @answer.assign_attributes question: @question, created_by: current_user
+    @answer = @question.answers.build answer_params
+    @answer.created_by = current_user
 
     respond_to do |format|
       if @answer.save
