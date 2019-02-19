@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :load_question, only: %i[index new create]
   before_action :load_answer, only: %i[show edit update destroy]
-  before_action :authorize_resource!, only: :destroy
+  before_action :authorize_resource!, only: %i[edit update destroy]
 
   def index
     @answers = @question.answers.all
@@ -65,7 +65,7 @@ class AnswersController < ApplicationController
   end
 
   def authorize_resource!
-    message = { error: 'You are not permitted to perform this operation' }
-    redirect_to answer_path(@answer), **message if @answer.created_by != current_user
+    message = { alert: 'You are not permitted to perform this operation' }
+    redirect_to question_answers_path(@answer.question), **message if @answer.created_by != current_user
   end
 end

@@ -37,12 +37,23 @@ RSpec.describe AnswersController, type: :controller do
     before { sign_in user }
     before { get :edit, params: { id: answer } }
 
-    it 'assigns the answer to @answer' do
-      expect(assigns(:answer)).to eq(answer)
+    context 'when owner tries to edit an answer' do
+      let(:answer) { create :answer, question: question, created_by: user }
+
+      it 'assigns the answer to @answer' do
+        expect(assigns(:answer)).to eq(answer)
+      end
+
+      it 'renders edit view' do
+        expect(response).to render_template :edit
+      end
     end
 
-    it 'renders edit view' do
-      expect(response).to render_template :edit
+    context 'when someone else tries to edit an answer' do
+      it 'redirects to the answers with alert message' do
+        expect(response).to redirect_to question_answers_path(question)
+        expect(controller).to set_flash[:alert]
+      end
     end
   end
 
@@ -91,41 +102,56 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    let(:new_attributes) { attributes_for(:answer) }
     before { sign_in user }
 
-    context 'with valid attributes' do
-      let(:new_attributes) { attributes_for(:answer) }
+    context 'when owner updates an answer' do
+      let(:answer) { create :answer, question: question, created_by: user }
 
-      before do
-        patch :update, params: { id: answer, answer: new_attributes }
-        answer.reload
+      context 'with valid attributes' do
+        before do
+          patch :update, params: { id: answer, answer: new_attributes }
+          answer.reload
+        end
+
+        it 'saves the answer' do
+          expect(answer.body).to eq new_attributes[:body]
+        end
+
+        it 'redirects to the answer' do
+          expect(response).to redirect_to answer_path(answer)
+        end
       end
 
-      it 'saves the answer' do
-        expect(answer.body).to eq new_attributes[:body]
-      end
+      context 'with invalid attributes' do
+        before do
+          patch :update, params: { id: answer, answer: attributes_for(:answer, body: nil) }
+          answer.reload
+        end
 
-      it 'redirects to the answer' do
-        expect(response).to redirect_to answer_path(answer)
+        it 'assigns the answer to @answer' do
+          expect(assigns(:answer)).to be_a_kind_of Answer
+        end
+
+        it 'does not save the answer' do
+          expect(answer.body).not_to be_nil
+        end
+
+        it 'renders edit view' do
+          expect(response).to render_template :edit
+        end
       end
     end
 
-    context 'with invalid attributes' do
-      before do
-        patch :update, params: { id: answer, answer: attributes_for(:answer, body: nil) }
-        answer.reload
+    context 'when someone else tries to update an answer' do
+      it 'does not change answer\'s body' do
+        expect { patch :update, params: { id: answer, answer: new_attributes } }.not_to change(answer, :body)
       end
 
-      it 'assigns the answer to @answer' do
-        expect(assigns(:answer)).to be_a_kind_of Answer
-      end
-
-      it 'does not save the answer' do
-        expect(answer.body).not_to be_nil
-      end
-
-      it 'renders edit view' do
-        expect(response).to render_template :edit
+      it 'redirects to the answer with error message' do
+        patch :update, params: { id: answer, answer: new_attributes }
+        expect(response).to redirect_to question_answers_path(question)
+        expect(controller).to set_flash[:alert]
       end
     end
   end
