@@ -51,50 +51,83 @@ RSpec.describe QuestionsController, type: :controller do
     before { sign_in user }
     before { get :edit, params: { id: question } }
 
-    it 'assigns requested question to @question' do
-      expect(assigns(:question)).to eq question
+    context 'when owner tries to edit a question' do
+      let(:question) { create :question, created_by: user }
+
+      it 'assigns requested question to @question' do
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'renders edit view' do
+        expect(response).to render_template :edit
+      end
     end
 
-    it 'renders edit view' do
-      expect(response).to render_template :edit
+    context 'when someone else tries to edit a question' do
+      it 'redirects to questions with message' do
+        expect(response).to redirect_to questions_path
+        expect(controller).to set_flash[:alert]
+      end
     end
   end
 
   describe 'PATCH #update' do
     before { sign_in user }
 
-    context 'with valid attributes' do
-      let(:new_attributes) { attributes_for(:question) }
+    context 'when owner updates a question' do
+      let(:question) { create :question, created_by: user }
 
-      before do
-        patch :update, params: { id: question, question: new_attributes }
-        question.reload
+      context 'with valid attributes' do
+        let(:new_attributes) { attributes_for(:question) }
+
+        before do
+          patch :update, params: { id: question, question: new_attributes }
+          question.reload
+        end
+
+        it 'assigns requested question to @question' do
+          expect(assigns(:question)).to eq question
+        end
+
+        it 'saves question\'s changes' do
+          expect(question.title).to eq new_attributes[:title]
+          expect(question.body).to eq new_attributes[:body]
+        end
+
+        it 'redirects to updated question' do
+          expect(response).to redirect_to question_path(assigns(:question))
+        end
       end
 
-      it 'assigns requested question to @question' do
-        expect(assigns(:question)).to eq question
-      end
+      context 'with invalid attributes' do
+        before { patch :update, params: { id: question, question: attributes_for(:question, title: nil) } }
 
-      it 'saves question\'s changes' do
-        expect(question.title).to eq new_attributes[:title]
-        expect(question.body).to eq new_attributes[:body]
-      end
+        it 'does not save question\'s changes' do
+          question.reload
+          expect(question.title).not_to be_nil
+        end
 
-      it 'redirects to updated question' do
-        expect(response).to redirect_to question_path(assigns(:question))
+        it 'renders edit view' do
+          expect(response).to render_template :edit
+        end
       end
     end
 
-    context 'with invalid attributes' do
-      before { patch :update, params: { id: question, question: attributes_for(:question, title: nil) } }
+    context 'when someone else updates a question' do
+      let(:new_attributes) { attributes_for(:question) }
 
-      it 'does not save question\'s changes' do
-        question.reload
-        expect(question.title).not_to be_nil
+      it 'does not change the question title' do
+        expect { patch :update, params: { id: question, question: new_attributes } }.not_to change(question, :title)
       end
 
-      it 'renders edit view' do
-        expect(response).to render_template :edit
+      it 'does not change the question body' do
+        expect { patch :update, params: { id: question, question: new_attributes } }.not_to change(question, :body)
+      end
+
+      it 'redirects to question with error message' do
+        patch :update, params: { id: question, question: new_attributes }
+        expect(response).to redirect_to questions_path
+        expect(controller).to set_flash[:alert]
       end
     end
   end

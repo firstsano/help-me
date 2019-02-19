@@ -18,7 +18,7 @@ feature 'User can create a question', %q{
 
       fill_in 'Title', with: 'Awesome title'
       fill_in 'Body', with: 'Awesome Body'
-      click_on 'Create'
+      click_on 'Save'
 
       expect(page).to have_text 'Question created successfully'
 
