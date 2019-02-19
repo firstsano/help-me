@@ -61,7 +61,7 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:title, :body)
+    params.require(:answer).permit(:body)
   end
 
   def authorize_resource!

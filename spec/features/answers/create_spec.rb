@@ -17,7 +17,6 @@ feature 'User can create an answer to the question', %q{
       visit question_path(question)
 
       within('.question-answer') do
-        fill_in 'Title', with: answer[:title]
         fill_in 'Body', with: answer[:body]
         click_on 'Answer the question'
       end
@@ -33,7 +32,6 @@ feature 'User can create an answer to the question', %q{
       visit question_path(question)
 
       within('.question-answer') do
-        fill_in 'Title', with: answer[:title]
         fill_in 'Body', with: answer[:body]
         click_on 'Answer the question'
       end

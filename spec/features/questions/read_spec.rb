@@ -33,7 +33,6 @@ feature 'User can view a question', %q{
 
     within('.answers') do
       answers.each do |answer|
-        expect(page).to have_content answer.title
         expect(page).to have_content answer.body
       end
     end

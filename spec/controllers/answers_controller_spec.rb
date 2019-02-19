@@ -75,16 +75,16 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid attributes' do
       it 'assigns the answer to @answer' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer, title: nil) }
+        post :create, params: { question_id: question, answer: attributes_for(:answer, body: nil) }
         expect(assigns(:answer)).to be_a_kind_of Answer
       end
 
       it 'does not save the answer' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, title: nil) } }.not_to change(Answer, :count)
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, body: nil) } }.not_to change(Answer, :count)
       end
 
       it 'renders new view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer, title: nil) }
+        post :create, params: { question_id: question, answer: attributes_for(:answer, body: nil) }
         expect(response).to render_template :new
       end
     end
@@ -102,7 +102,6 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'saves the answer' do
-        expect(answer.title).to eq new_attributes[:title]
         expect(answer.body).to eq new_attributes[:body]
       end
 
@@ -113,7 +112,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid attributes' do
       before do
-        patch :update, params: { id: answer, answer: attributes_for(:answer, title: nil) }
+        patch :update, params: { id: answer, answer: attributes_for(:answer, body: nil) }
         answer.reload
       end
 
@@ -122,7 +121,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'does not save the answer' do
-        expect(answer.title).not_to be_nil
+        expect(answer.body).not_to be_nil
       end
 
       it 'renders edit view' do
