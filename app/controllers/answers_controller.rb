@@ -1,51 +1,22 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: %i[index new create]
-  before_action :load_answer, only: %i[show edit update destroy]
-  before_action :authorize_resource!, only: %i[edit update destroy]
-
-  def index
-    @answers = @question.answers.all
-  end
-
-  def new
-    @answer = Answer.new
-  end
+  before_action :authenticate_user!, except: :show
+  before_action :load_question, only: :create
+  before_action :load_answer, only: %i[show update destroy]
+  before_action :authorize_resource!, only: %i[update destroy]
 
   def show
-  end
-
-  def edit
   end
 
   def create
     @answer = @question.answers.build answer_params
     @answer.created_by = current_user
-
-    respond_to do |format|
-      if @answer.save
-        format.html do
-          redirect_to answer_path(@answer),
-                      notice: 'Answer created successfully'
-        end
-        format.js
-      else
-        format.html { render :new }
-        format.js { head :no_content }
-      end
-    end
+    @answer.save
+    render :create
   end
 
   def update
-    respond_to do |format|
-      if @answer.update(answer_params)
-        format.html { redirect_to answer_path(@answer) }
-        format.js
-      else
-        format.html { render :edit }
-        format.js { head :no_content }
-      end
-    end
+    @answer.update answer_params
+    render :update
   end
 
   def destroy
