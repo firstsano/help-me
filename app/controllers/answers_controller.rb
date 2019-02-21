@@ -37,10 +37,14 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if @answer.update(answer_params)
-      redirect_to answer_path(@answer)
-    else
-      render :edit
+    respond_to do |format|
+      if @answer.update(answer_params)
+        format.html { redirect_to answer_path(@answer) }
+        format.js
+      else
+        format.html { render :edit }
+        format.js { head :no_content }
+      end
     end
   end
 

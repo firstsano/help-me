@@ -11,7 +11,7 @@
   - if @question.created_by == current_user
     = link_to 'Edit', edit_question_path(@question),
               class: 'btn btn-primary question-controls__edit',
-              data: { 'remote-form': '.question-form' }
+              data: { 'remote-form' => '.question-form' }
     = button_to 'Delete', question_path(@question),
                 method: :delete,
                 class: 'btn btn-danger'

@@ -1,2 +1,12 @@
 .answer data-answer-id=answer.id
   = answer.body
+  .answer-form.answer-form_remote
+    = simple_form_for answer, remote: true do |f|
+      = f.input :body
+      = f.submit 'Save'
+
+  .controls
+    - if answer.created_by == current_user
+      = link_to 'Edit', edit_answer_path(answer),
+                class: 'btn btn-primary controls__edit',
+                data: { 'remote-form' => "[data-answer-id=#{answer.id}] .answer-form" }
