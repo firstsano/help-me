@@ -6,37 +6,44 @@ feature 'User can destroy an answer', %q{
   I want to be able to delete it
 } do
 
+  given(:question) { create :question }
+
+  before { create_list :answer, 5, question: question }
+
   context 'When user is signed in' do
     given(:user) { create :user }
 
     before { sign_in user }
 
-    scenario 'Owner tries to destroy an anwer' do
-      answer = create :answer, created_by: user
-      question = answer.question
-      visit answer_path(answer)
+    scenario 'Owner tries to destroy an anwer', js: true do
+      answers = create_list :answer, 3, question: question, created_by: user
+      answer = answers.first
+      visit question_path(question)
 
-      click_on 'Delete'
+      within("[data-answer-id='#{answer.id}']") do
+        accept_confirm { click_on 'Delete' }
+      end
 
       expect(current_path).to eq question_path(question)
-      expect(page).to have_content 'Answer successfully destroyed'
+      expect(page).not_to have_selector "[data-answer-id='#{answer.id}']"
     end
 
     scenario 'User tries to destroy someone else\'s answer' do
-      other_user = create :user
-      answer = create :answer, created_by: other_user
-      visit answer_path(answer)
+      visit question_path(question)
 
-      expect(page).not_to have_button 'Delete'
+      within(".answers") do
+        expect(page).not_to have_button "Delete"
+      end
     end
   end
 
   context 'When user is not signed in' do
     scenario 'User tries to destroy an answer' do
-      answer = create :answer
-      visit answer_path(answer)
+      visit question_path(question)
 
-      expect(page).not_to have_button 'Delete'
+      within(".answers") do
+        expect(page).not_to have_button "Delete"
+      end
     end
   end
 end

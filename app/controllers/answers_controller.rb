@@ -20,9 +20,8 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    question = @answer.question
     @answer.destroy
-    redirect_to question_path(question), notice: 'Answer successfully destroyed'
+    render :destroy
   end
 
   private
@@ -41,6 +40,6 @@ class AnswersController < ApplicationController
 
   def authorize_resource!
     message = { alert: 'You are not permitted to perform this operation' }
-    redirect_to question_answers_path(@answer.question), **message if @answer.created_by != current_user
+    redirect_to question_path(@answer.question), **message if @answer.created_by != current_user
   end
 end

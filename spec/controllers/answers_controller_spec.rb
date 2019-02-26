@@ -97,9 +97,9 @@ RSpec.describe AnswersController, type: :controller do
         expect { patch :update, params: { id: answer, answer: new_attributes, format: 'js' } }.not_to change(answer, :body)
       end
 
-      it 'redirects to the answer with error message' do
+      it 'redirects to question with error message' do
         patch :update, params: { id: answer, answer: new_attributes, format: 'js' }
-        expect(response).to redirect_to question_answers_path(question)
+        expect(response).to redirect_to question_path(question)
         expect(controller).to set_flash[:alert]
       end
     end
@@ -112,21 +112,27 @@ RSpec.describe AnswersController, type: :controller do
       before { sign_in user }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: { id: answer, format: 'js' } }.to change(Answer, :count).by(-1)
       end
 
-      it 'redirects to index' do
-        delete :destroy, params: { id: answer }
-        expect(response).to redirect_to question_path(question)
+      it 'renders destroy view' do
+        delete :destroy, params: { id: answer, format: 'js' }
+        expect(response).to render_template :destroy
       end
     end
 
-    context 'when someone else deletes a question' do
+    context 'when someone else tries to delete an answer' do
       before { sign_in user }
       before { answer }
 
-      it 'deletes the answer' do
+      it 'does not delete the answer' do
         expect { delete :destroy, params: { id: answer } }.not_to change(Answer, :count)
+      end
+
+      it 'redirects to question' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question_path(question)
+        expect(controller).to set_flash[:alert]
       end
     end
   end
