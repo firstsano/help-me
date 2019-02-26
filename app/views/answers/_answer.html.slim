@@ -1,6 +1,7 @@
 .answer data-answer-id=answer.id
   = answer.body
   .answer-form.answer-form_remote
+    .answer__errors
     = simple_form_for answer, remote: true do |f|
       = f.input :body
       = f.submit 'Save'

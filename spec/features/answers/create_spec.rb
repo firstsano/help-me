@@ -10,20 +10,35 @@ feature 'User can create an answer to the question', %q{
   given(:answer) { attributes_for :answer }
 
   context 'When user is signed in' do
-    scenario 'User creates an answer to the question', js: true do
+    before do
       create_list :answer, 5, question: question
       user = create :user
       sign_in user
       visit question_path(question)
+    end
 
-      within('.question-answer') do
-        fill_in 'Body', with: answer[:body]
-        click_on 'Answer the question'
+    context 'With valid attributes' do
+      scenario 'User creates an answer to the question', js: true do
+        within('.question-answer') do
+          fill_in 'Body', with: answer[:body]
+          click_on 'Answer the question'
+        end
+
+        expect(current_path).to eq question_path(question)
+        expect(page).to have_content answer[:body]
       end
+    end
 
-      expect(current_path).to eq question_path(question)
-      expect(page).to have_content answer[:title]
-      expect(page).to have_content answer[:body]
+    context 'With invalid attributes' do
+      scenario 'User tries to create an answer', js: true do
+        within('.question-answer') do
+          fill_in 'Body', with: ''
+          click_on 'Answer the question'
+        end
+
+        expect(current_path).to eq question_path(question)
+        expect(page).to have_content 'Body can\'t be blank'
+      end
     end
   end
 

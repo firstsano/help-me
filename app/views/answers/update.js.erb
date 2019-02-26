@@ -1,1 +1,6 @@
-$('.answer[data-answer-id="<%= @answer.id %>"]').html('<%= j render(@answer) %>');
+<%- if @answer.errors.present? %>
+  $('.answer[data-answer-id="<%= @answer.id %>"] .answer__errors').html('<ul><li><%= j @answer.errors.full_messages.join("<li></li>") %></li></ul>');
+<%- else %>
+  $('.answer[data-answer-id="<%= @answer.id %>"] .answer__errors').html('');
+  $('.answer[data-answer-id="<%= @answer.id %>"]').html('<%= j render(@answer) %>');
+<% end %>

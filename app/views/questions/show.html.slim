@@ -17,6 +17,7 @@
                 class: 'btn btn-danger'
 
 .question-answer
+  .question-answer__errors
   = simple_form_for [@question, @answer], remote: true do |f|
     = f.input :body
     = f.submit 'Answer the question', class: 'btn btn-primary'
