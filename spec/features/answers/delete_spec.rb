@@ -9,8 +9,9 @@ feature 'User can destroy an answer', %q{
   context 'When user is signed in' do
     given(:user) { create :user }
 
+    before { sign_in user }
+
     scenario 'Owner tries to destroy an anwer' do
-      sign_in user
       answer = create :answer, created_by: user
       question = answer.question
       visit answer_path(answer)
@@ -22,7 +23,6 @@ feature 'User can destroy an answer', %q{
     end
 
     scenario 'User tries to destroy someone else\'s answer' do
-      sign_in user
       other_user = create :user
       answer = create :answer, created_by: other_user
       visit answer_path(answer)

@@ -11,8 +11,8 @@ feature 'User can create a question', %q{
   context 'When user is signed in' do
     scenario 'User creates a question' do
       sign_in user
-
       visit questions_path
+
       click_on 'Create question'
       expect(current_path).to eq new_question_path
 

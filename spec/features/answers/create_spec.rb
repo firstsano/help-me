@@ -32,7 +32,7 @@ feature 'User can create an answer to the question', %q{
     context 'With invalid attributes' do
       scenario 'User tries to create an answer', js: true do
         within('.question-answer') do
-          fill_in 'Body', with: ''
+          fill_in 'Body', with: nil
           click_on 'Answer the question'
         end
 

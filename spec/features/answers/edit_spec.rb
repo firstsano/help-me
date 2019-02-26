@@ -21,25 +21,50 @@ feature 'Editing answer', %q{
       end
     end
 
-    scenario 'Owner tries to edit an answer', js: true do
-      answer = create :answer, question: question, created_by: user
-      new_answer = attributes_for :answer
-      visit question_path(question)
+    context 'With valid attributes' do
+      scenario 'Owner tries to edit an answer', js: true do
+        answer = create :answer, question: question, created_by: user
+        new_answer = attributes_for :answer
+        visit question_path(question)
 
-      within("[data-answer-id='#{answer.id}']") do
-        expect(page).not_to have_selector '.answer-form'
+        within("[data-answer-id='#{answer.id}']") do
+          expect(page).not_to have_selector '.answer-form'
 
-        click_on 'Edit'
-        expect(current_path).to eq question_path(question)
+          click_on 'Edit'
+          expect(current_path).to eq question_path(question)
 
-        within('.answer-form') do
-          fill_in 'Body', with: new_answer[:body]
-          click_on 'Save'
+          within('.answer-form') do
+            fill_in 'Body', with: new_answer[:body]
+            click_on 'Save'
+          end
+
+          expect(current_path).to eq question_path(question)
+          expect(page).to have_content new_answer[:body]
+          expect(page).not_to have_selector '.answer-form'
         end
+      end
+    end
 
-        expect(current_path).to eq question_path(question)
-        expect(page).to have_content new_answer[:body]
-        expect(page).not_to have_selector '.answer-form'
+    context 'With invalid attributes' do
+      scenario 'Owner tries to edit an answer', js: true do
+        answer = create :answer, question: question, created_by: user
+        visit question_path(question)
+
+        within("[data-answer-id='#{answer.id}']") do
+          expect(page).not_to have_selector '.answer-form'
+
+          click_on 'Edit'
+          expect(current_path).to eq question_path(question)
+
+          within('.answer-form') do
+            fill_in 'Body', with: nil
+            click_on 'Save'
+          end
+
+          expect(current_path).to eq question_path(question)
+          expect(page).to have_selector '.answer-form'
+          expect(page).to have_content 'Body can\'t be blank'
+        end
       end
     end
   end
