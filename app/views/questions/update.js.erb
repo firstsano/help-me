@@ -1,3 +1,8 @@
-$('.question').html('<%= j render(@question) %>');
-$('.question-form').hide();
-$('.question-controls .question-controls__edit').show();
+<%- if @question.errors.present? %>
+  $('.question-form__errors').html('<ul><li><%= j @question.errors.full_messages.join("<li></li>") %></li></ul>');
+<%- else %>
+  $('.question-form__errors').html('');
+  $('.question').html('<%= j render(@question) %>');
+  $('.question-form').hide();
+  $('.question-controls .question-controls__edit').show();
+<%- end %>

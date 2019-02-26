@@ -47,30 +47,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    before { sign_in user }
-    before { get :edit, params: { id: question } }
-
-    context 'when owner tries to edit a question' do
-      let(:question) { create :question, created_by: user }
-
-      it 'assigns requested question to @question' do
-        expect(assigns(:question)).to eq question
-      end
-
-      it 'renders edit view' do
-        expect(response).to render_template :edit
-      end
-    end
-
-    context 'when someone else tries to edit a question' do
-      it 'redirects to questions with message' do
-        expect(response).to redirect_to questions_path
-        expect(controller).to set_flash[:alert]
-      end
-    end
-  end
-
   describe 'PATCH #update' do
     before { sign_in user }
 
@@ -81,7 +57,7 @@ RSpec.describe QuestionsController, type: :controller do
         let(:new_attributes) { attributes_for(:question) }
 
         before do
-          patch :update, params: { id: question, question: new_attributes }
+          patch :update, params: { id: question, question: new_attributes, format: 'js' }
           question.reload
         end
 
@@ -94,21 +70,23 @@ RSpec.describe QuestionsController, type: :controller do
           expect(question.body).to eq new_attributes[:body]
         end
 
-        it 'redirects to updated question' do
-          expect(response).to redirect_to question_path(assigns(:question))
+        it 'renders update view' do
+          expect(response).to render_template :update
         end
       end
 
       context 'with invalid attributes' do
-        before { patch :update, params: { id: question, question: attributes_for(:question, title: nil) } }
+        before do
+          patch :update, params: { id: question, question: attributes_for(:question, title: nil), format: 'js' }
+          question.reload
+        end
 
         it 'does not save question\'s changes' do
-          question.reload
           expect(question.title).not_to be_nil
         end
 
-        it 'renders edit view' do
-          expect(response).to render_template :edit
+        it 'renders update view' do
+          expect(response).to render_template :update
         end
       end
     end

@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[show index]
-  before_action :load_question, only: %i[show edit update destroy]
-  before_action :authorize_resource!, only: %i[edit update destroy]
+  before_action :load_question, only: %i[show update destroy]
+  before_action :authorize_resource!, only: %i[update destroy]
 
   def index
     @questions = Question.all
@@ -13,9 +13,6 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
-  end
-
-  def edit
   end
 
   def create
@@ -30,15 +27,8 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @question.update(question_params)
-        format.html { redirect_to @question }
-        format.js
-      else
-        format.html { render :edit }
-        format.js { head :no_content }
-      end
-    end
+    @question.update(question_params)
+    render :update
   end
 
   def destroy

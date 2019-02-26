@@ -2,6 +2,7 @@
   = render @question
 
 .question-form.question-form_remote
+  .question-form__errors
   = simple_form_for @question, remote: true do |f|
     = f.input :title
     = f.input :body
