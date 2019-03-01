@@ -10,7 +10,7 @@ feature 'Choosing the best answer', %q{
 
   before { sign_in user }
 
-  scenario 'Question\'s owner sets the best answer' do
+  scenario 'Question\'s owner sets the best answer', js: true do
     question = create :question, created_by: user
     answers = create_list :answer, 10, question: question
     best_answers = answers.sample 3
