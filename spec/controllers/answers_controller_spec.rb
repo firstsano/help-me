@@ -136,4 +136,37 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PUT #best' do
+    before { sign_in user }
+
+    context 'when answer owner sets the best answer' do
+      let(:question) { create :question, created_by: user }
+
+      before { put :best, params: { id: answer, format: 'js' } }
+
+      it 'marks the answer as the best' do
+        answer.reload
+        expect(answer).to be_best
+      end
+
+      it 'renders best view' do
+        expect(response).to render_template :best
+      end
+    end
+
+    context 'when someone else tries to set the best answer' do
+      it 'does not set an answer as the best' do
+        put :best, params: { id: answer, format: 'js' }
+        answer.reload
+        expect(answer).not_to be_best
+      end
+
+      it 'redirects to the question with error message' do
+        put :best, params: { id: answer, format: 'js' }
+        expect(response).to redirect_to question_path(question)
+        expect(controller).to set_flash[:alert]
+      end
+    end
+  end
 end
