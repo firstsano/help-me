@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_19_072314) do
+ActiveRecord::Schema.define(version: 2019_02_28_130630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,9 @@ ActiveRecord::Schema.define(version: 2019_02_19_072314) do
     t.datetime "updated_at", null: false
     t.bigint "question_id"
     t.integer "created_by_id"
+    t.boolean "is_best", default: false
     t.index ["created_by_id"], name: "index_answers_on_created_by_id"
+    t.index ["is_best"], name: "index_answers_on_is_best"
     t.index ["question_id"], name: "index_answers_on_question_id"
   end
 
