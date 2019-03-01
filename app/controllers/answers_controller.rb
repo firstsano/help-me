@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: :show
   before_action :load_question, only: :create
-  before_action :load_answer, only: %i[show update destroy]
+  before_action :load_answer, only: %i[show update destroy best]
   before_action :authorize_resource!, only: %i[update destroy]
 
   def show
@@ -11,17 +11,24 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build answer_params
     @answer.created_by = current_user
     @answer.save
-    render :create
   end
 
   def update
     @answer.update answer_params
-    render :update
   end
 
   def destroy
     @answer.destroy
-    render :destroy
+  end
+
+  def best
+    question = @answer.question
+    if question.created_by != current_user
+      redirect_to question_path(question), alert: 'You are not permitted to perform this operation'
+    else
+      question.set_best_answer @answer
+      render :best
+    end
   end
 
   private
