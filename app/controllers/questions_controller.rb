@@ -28,7 +28,6 @@ class QuestionsController < ApplicationController
 
   def update
     @question.update(question_params)
-    render :update
   end
 
   def destroy
