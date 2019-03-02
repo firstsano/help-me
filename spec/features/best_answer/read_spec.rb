@@ -16,11 +16,11 @@ feature 'User can view the best answer', %q{
     best_answer = create :answer, :best, question: question
     visit question_path(question)
 
-    expect(page).to have_selector ".answers__best-answer", count: 1
+    expect(page).to have_selector ".answer_best", count: 1
 
     first_answer = ".answers .answer:first-child"
-    required_answer = "[data-answer-id='#{best.id}']"
-    best_answer = ".answers__best-answer"
+    required_answer = "[data-answer-id='#{best_answer.id}']"
+    best_answer = ".answer_best"
     expect(page).to have_selector "#{first_answer}#{required_answer}#{best_answer}"
   end
 end
