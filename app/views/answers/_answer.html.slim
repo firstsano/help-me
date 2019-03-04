@@ -16,7 +16,7 @@
                   method: :delete,
                   remote: true,
                   data: { confirm: 'Are you sure want to delete this record?' }
-    - if question_owner
+    - if answer.can_be_best_for? current_user
       = button_to 'Best answer', best_answer_path(answer),
                   class: 'btn btn-success',
                   method: :put,

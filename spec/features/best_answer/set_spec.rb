@@ -22,14 +22,22 @@ feature 'Choosing the best answer', %q{
       end
 
       expect(current_path).to eq question_path(question)
-      expect(page).to have_selector ".answers__best-answer", count: 1
+      expect(page).to have_selector ".answer_best", count: 1
 
       first_answer = ".answers .answer:first-child"
       required_answer = "[data-answer-id='#{answer.id}']"
-      best_answer = ".answers__best-answer"
+      best_answer = ".answer_best"
       expect(page).to have_selector "#{first_answer}#{required_answer}#{best_answer}"
     end
   end
 
-  scenario 'User tries to set the best answer for someone else\'s question'
+  scenario 'User tries to set the best answer for someone else\'s question' do
+    question = create :question
+    answers = create_list :answer, 10, question: question
+    visit question_path(question)
+
+    within(".answers") do
+      expect(page).not_to have_button "Best answer"
+    end
+  end
 end

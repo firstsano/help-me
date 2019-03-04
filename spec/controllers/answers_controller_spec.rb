@@ -147,7 +147,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'marks the answer as the best' do
         answer.reload
-        expect(answer).to be_best
+        expect(answer).to be_is_best
       end
 
       it 'renders best view' do
@@ -159,7 +159,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not set an answer as the best' do
         put :best, params: { id: answer, format: 'js' }
         answer.reload
-        expect(answer).not_to be_best
+        expect(answer).not_to be_is_best
       end
 
       it 'redirects to the question with error message' do

@@ -16,7 +16,7 @@ class Answer < ApplicationRecord
     update_attributes is_best: false
   end
 
-  def best?
-    is_best?
+  def can_be_best_for?(user)
+    (not is_best?) and question.created_by == user
   end
 end

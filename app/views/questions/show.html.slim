@@ -24,4 +24,4 @@
     = f.submit 'Answer the question', class: 'btn btn-primary'
 
 .answers
-  = render @question.answers, question_owner: (@question.created_by == current_user)
+  = render @question.answers
