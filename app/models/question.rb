@@ -1,5 +1,5 @@
 class Question < ApplicationRecord
-  has_many :answers, -> { order is_best: :desc }
+  has_many :answers, -> { order is_best: :desc, updated_at: :desc }
   has_one :best_answer, -> { where is_best: true }, class_name: 'Answer'
   belongs_to :created_by, foreign_key: :created_by_id, class_name: 'User'
 

@@ -1,1 +1,6 @@
-$('.answers').html('<%= j render(@question.answers) %>');
+<%- if @previous_best_answer %>
+  $('.answer[data-answer-id="<%= @previous_best_answer.id %>"]').remove();
+  $('.answers').prepend('<%= j render(@previous_best_answer) %>');
+<%- end %>
+$('.answer[data-answer-id="<%= @answer.id %>"]').remove();
+$('.answers').prepend('<%= j render(@answer) %>');

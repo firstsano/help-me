@@ -140,10 +140,20 @@ RSpec.describe AnswersController, type: :controller do
   describe 'PUT #best' do
     before { sign_in user }
 
+    it 'assigns the answer to @answer' do
+      put :best, params: { id: answer, format: 'js' }
+      expect(assigns(:answer)).to eq answer
+    end
+
     context 'when answer owner sets the best answer' do
       let(:question) { create :question, created_by: user }
+      let!(:previous_best_answer) { create :answer, :best, question: question }
 
       before { put :best, params: { id: answer, format: 'js' } }
+
+      it 'assigns the previous best answer to @previous_best_answer' do
+        expect(assigns(:previous_best_answer)).to eq previous_best_answer
+      end
 
       it 'marks the answer as the best' do
         answer.reload

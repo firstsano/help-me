@@ -22,11 +22,12 @@ class AnswersController < ApplicationController
   end
 
   def best
-    @question = @answer.question
-    if @question.created_by != current_user
-      redirect_to question_path(@question), alert: 'You are not permitted to perform this operation'
+    question = @answer.question
+    if question.created_by != current_user
+      redirect_to question_path(question), alert: 'You are not permitted to perform this operation'
     else
-      @question.set_best_answer @answer
+      @previous_best_answer = question.best_answer
+      question.set_best_answer @answer
       render :best
     end
   end
