@@ -6,6 +6,7 @@ ruby '2.6.0'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap',     '4.1.1'
 gem 'carrierwave', '~> 1.0'
+gem 'cocoon'
 gem 'devise'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
