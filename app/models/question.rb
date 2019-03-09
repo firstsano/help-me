@@ -4,6 +4,8 @@ class Question < ApplicationRecord
   has_many :attachments, as: :attachable
   belongs_to :created_by, foreign_key: :created_by_id, class_name: 'User'
 
+  accepts_nested_attributes_for :attachments
+
   validates :title, :body, :created_by, presence: true
 
   def set_best_answer(answer)

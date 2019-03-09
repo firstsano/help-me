@@ -19,9 +19,12 @@ feature 'Adding attachment to question', %q{
 
     fill_in 'Title', with: new_question[:title]
     fill_in 'Body', with: new_question[:body]
-    attach_file 'File', Rails.root.join('spec', 'spec_helper.rb')
+    attach_file 'File', Rails.root.join('spec', 'fixtures', 'sample.txt')
     click_on 'Save'
 
-    expect(page).to have_content 'spec_helper.rb'
+    expect(page).to have_link 'sample.txt'
+
+    click_on 'sample.txt'
+    expect(page.status_code).to eq 200
   end
 end
