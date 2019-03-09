@@ -13,6 +13,7 @@
 //= require rails-ujs
 //= require activestorage
 //= require jquery2
+//= require jquery.remotipart
 //= require popper
 //= require bootstrap
 //= require material
