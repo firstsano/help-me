@@ -1,5 +1,7 @@
 .answer data-answer-id=answer.id class=('answer_best' if answer.is_best?)
   = answer.body
+  = render answer.attachments
+
   .answer-form.answer-form_remote
     .answer__errors
     = simple_form_for answer, remote: true do |f|

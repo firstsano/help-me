@@ -8,6 +8,7 @@ feature 'Adding attachment to answer', %q{
 
   given(:user) { create :user }
   given(:question) { create :question }
+  given(:answer) { attributes_for :answer }
 
   before do
     sign_in user
@@ -22,6 +23,7 @@ feature 'Adding attachment to answer', %q{
     end
 
     expect(current_path).to eq question_path(question)
-    expect(page).to have_content 'sample.txt'
+    expect(page).to have_link 'sample.txt'
+    expect { within('.answers') { click_on 'sample.txt' } }.to change { current_path }
   end
 end
