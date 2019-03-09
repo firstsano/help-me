@@ -13,18 +13,26 @@ feature 'Adding attachment to question', %q{
     visit questions_path
   end
 
-  scenario 'User creates a question with attachment' do
+  scenario 'User creates a question with multiple attachments', js: true do
+    number_of_attachments = 3
     new_question = attributes_for :question
     click_on 'Create question'
 
     fill_in 'Title', with: new_question[:title]
     fill_in 'Body', with: new_question[:body]
-    attach_file 'File', Rails.root.join('spec', 'fixtures', 'sample.txt')
+
+    within('.attachments-form') do
+      number_of_attachments.times do
+        click_on 'Add attachment'
+        last_attachment = find_all('.attachment-fields').last
+        within(last_attachment) { attach_file 'File', Rails.root.join('spec', 'fixtures', 'sample.txt') }
+      end
+    end
+
     click_on 'Save'
+    expect(page).to have_link 'sample.txt', count: number_of_attachments
 
-    expect(page).to have_link 'sample.txt'
-
-    click_on 'sample.txt'
-    expect(page.status_code).to eq 200
+    last_attachment = find_all('.attachment').last
+    within(last_attachment) { click_on 'sample.txt' }
   end
 end
