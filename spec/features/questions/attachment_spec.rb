@@ -33,6 +33,6 @@ feature 'Adding attachment to question', %q{
     expect(page).to have_link 'sample.txt', count: number_of_attachments
 
     last_attachment = find_all('.attachment').last
-    within(last_attachment) { click_on 'sample.txt' }
+    expect { within(last_attachment) { click_on 'sample.txt' } }.to change { current_path }
   end
 end

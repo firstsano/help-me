@@ -22,8 +22,10 @@
   .question-answer__errors
   = simple_form_for [@question, @answer], remote: true do |f|
     = f.input :body
-    = f.simple_fields_for :attachments do |a|
-      = a.input :source, as: :file, label: 'File'
+    .attachments-form
+      = f.simple_fields_for :attachments do |a|
+        = render 'attachment_fields', f: a
+      .links = link_to_add_association 'Add attachment', f, :attachments
     = f.submit 'Answer the question', class: 'btn btn-primary'
 
 .answers
