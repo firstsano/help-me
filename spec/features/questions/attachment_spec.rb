@@ -85,5 +85,6 @@ feature 'Removing attachment from question', %q{
     expect(current_path).to eq question_path(question)
     expect(page).to have_link 'sample.txt'
     expect(page).to have_link 'sample3.txt'
+    expect(page).not_to have_link 'sample2.txt'
   end
 end

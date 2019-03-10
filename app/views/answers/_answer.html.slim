@@ -6,6 +6,10 @@
     .answer__errors
     = simple_form_for answer, remote: true do |f|
       = f.input :body
+      .attachments-form
+        = f.simple_fields_for :attachments do |a|
+          = render 'attachment_fields', f: a
+        .links = link_to_add_association 'Add attachment', f, :attachments
       = f.submit 'Save', class: 'btn btn-primary'
 
   .controls

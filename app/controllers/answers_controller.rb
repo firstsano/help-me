@@ -43,7 +43,7 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, attachments_attributes: {})
+    params.require(:answer).permit(:body, attachments_attributes: [:id, :source, :_destroy])
   end
 
   def authorize_resource!
