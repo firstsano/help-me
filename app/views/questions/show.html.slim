@@ -1,12 +1,15 @@
 .question
   = render @question
-  .attachments = render @question.attachments
 
 .question-form.question-form_remote
   .question-form__errors
   = simple_form_for @question, remote: true do |f|
     = f.input :title
     = f.input :body
+    .attachments-form
+      = f.simple_fields_for :attachments do |a|
+        = render 'attachment_fields', f: a
+      .links = link_to_add_association 'Add attachment', f, :attachments
     = f.button :submit, 'Save'
 
 .controls.question-controls

@@ -1,3 +1,4 @@
 = show_for @question do |s|
   = s.attribute :title
   = s.attribute :body
+  .attachments = render @question.attachments
