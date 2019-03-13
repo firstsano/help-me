@@ -70,3 +70,9 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+module FactoryBot
+  class SyntaxRunner
+    include CoreHelper
+  end
+end
