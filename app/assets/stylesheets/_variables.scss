@@ -1,0 +1,8 @@
+$color-primary: #29b6f6;
+
+// Setup material scheme
+$primary: (
+    color: $color-primary,
+    dark: darken($color-primary, 10%),
+    light: lighten($color-primary, 10%)
+);

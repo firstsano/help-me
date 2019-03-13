@@ -15,7 +15,7 @@ feature 'User can destroy a question', %q{
       question = create :question, created_by: user
       visit question_path(question)
 
-      expect(page).to have_button 'Delete'
+      expect(page).to have_link 'Delete'
       click_on 'Delete'
 
       expect(current_path).to eq questions_path

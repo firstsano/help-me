@@ -28,19 +28,19 @@ feature 'Editing answer', %q{
         visit question_path(question)
 
         within("[data-answer-id='#{answer.id}']") do
-          expect(page).not_to have_selector '.answer-form'
+          expect(page).not_to have_selector '.answer__form'
 
           click_on 'Edit'
           expect(current_path).to eq question_path(question)
 
-          within('.answer-form') do
-            fill_in 'Body', with: new_answer[:body]
+          within('.answer__form') do
+            fill_in 'answer[body]', with: new_answer[:body]
             click_on 'Save'
           end
 
           expect(current_path).to eq question_path(question)
           expect(page).to have_content new_answer[:body]
-          expect(page).not_to have_selector '.answer-form'
+          expect(page).not_to have_selector '.answer__form'
         end
       end
     end
@@ -51,18 +51,18 @@ feature 'Editing answer', %q{
         visit question_path(question)
 
         within("[data-answer-id='#{answer.id}']") do
-          expect(page).not_to have_selector '.answer-form'
+          expect(page).not_to have_selector '.answer__form'
 
           click_on 'Edit'
           expect(current_path).to eq question_path(question)
 
-          within('.answer-form') do
-            fill_in 'Body', with: nil
+          within('.answer__form') do
+            fill_in 'answer[body]', with: nil
             click_on 'Save'
           end
 
           expect(current_path).to eq question_path(question)
-          expect(page).to have_selector '.answer-form'
+          expect(page).to have_selector '.answer__form'
           expect(page).to have_content 'Body can\'t be blank'
         end
       end

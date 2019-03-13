@@ -72,9 +72,9 @@ feature 'Removing attachment from question', %q{
     question = Question.last
     visit question_path(question)
 
-    within('.question-controls') { click_on 'Edit' }
+    within('.question__controls') { click_on 'Edit' }
 
-    within('.question-form .attachments-form') do
+    within('.question__form .attachments-form') do
       attachment = find_all('.attachment-fields')[1]
       expect(attachment).to be_present
       within(attachment) { click_on 'Remove attachment' }

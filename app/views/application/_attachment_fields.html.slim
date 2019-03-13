@@ -1,3 +1,7 @@
 .attachment-fields.nested-fields
+  - if f.object.source.file
+    .attachment-fields__title
+      i.material-icons attach_file
+      = f.object.source.file.filename
   = f.input :source, as: :file, label: 'File'
   = link_to_remove_association "Remove attachment", f

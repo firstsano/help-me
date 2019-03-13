@@ -1,11 +1,8 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: :show
+  before_action :authenticate_user!
   before_action :load_question, only: :create
-  before_action :load_answer, only: %i[show update destroy best]
+  before_action :load_answer, only: %i[update destroy best]
   before_action :authorize_resource!, only: %i[update destroy]
-
-  def show
-  end
 
   def create
     @answer = @question.answers.build answer_params

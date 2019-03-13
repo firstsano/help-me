@@ -1,6 +1,6 @@
 <%- if @answer.errors.present? %>
-  $('.question-answer__errors').html('<ul><li><%= j @answer.errors.full_messages.join("<li></li>") %></li></ul>');
+  $('.question-answer .answer__form-errors').html('<ul><li><%= j @answer.errors.full_messages.join("<li></li>") %></li></ul>');
 <%- else %>
-  $('.question-answer__errors').html('');
+  $('.question-answer .answer__form-errors').html('');
   $('.answers').append('<%= j render(@answer) %>');
 <% end %>

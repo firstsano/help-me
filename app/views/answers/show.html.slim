@@ -1,6 +1,0 @@
-= show_for @answer do |s|
-  = s.attribute :body
-
-.controls
-  - if current_user == @answer.created_by
-    = button_to 'Delete', answer_path(@answer), method: :delete

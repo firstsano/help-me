@@ -1,0 +1,34 @@
+.question {
+    @include vertical-padding(10px);
+
+    & .question__title {
+        margin: 0;
+    }
+
+    & .question__body {
+        @include border-radius(3px);
+
+        background-color: rgba(black, 0.05);
+        min-height: 100px;
+        padding: 10px;
+    }
+
+    & .question__controls {
+        padding-top: 10px;
+        text-align: right;
+    }
+
+    & .question__form {
+        display: none;
+    }
+
+    & .question__attachments {
+        @include vertical-padding(10px);
+
+        text-align: right;
+    }
+
+    & .question__control-button {
+        @extend .btn, .btn-secondary;
+    }
+}

@@ -1,35 +1,33 @@
-.question
-  = render @question
+.row
+  .col
+    h1
+      | Question #
+      = @question.id
+  .col.text-right
+    = link_to new_question_path, class: 'btn btn-primary'
+      i.material-icons add
+      | Create question
 
-.question-form.question-form_remote
-  .question-form__errors
-  = simple_form_for @question, remote: true do |f|
-    = f.input :title
-    = f.input :body
-    .attachments-form
-      = f.simple_fields_for :attachments do |a|
-        = render 'attachment_fields', f: a
-      .links = link_to_add_association 'Add attachment', f, :attachments
-    = f.button :submit, 'Save'
+hr.separator
 
-.controls.question-controls
-  - if @question.created_by == current_user
-    = link_to 'Edit', edit_question_path(@question),
-              class: 'btn btn-primary question-controls__edit',
-              data: { 'remote-form' => '.question-form' }
-    = button_to 'Delete', question_path(@question),
-                method: :delete,
-                class: 'btn btn-danger'
+= render @question
 
-.question-answer
-  .question-answer__errors
-  = simple_form_for [@question, @answer], remote: true do |f|
-    = f.input :body
-    .attachments-form
-      = f.simple_fields_for :attachments do |a|
-        = render 'attachment_fields', f: a
-      .links = link_to_add_association 'Add attachment', f, :attachments
-    = f.submit 'Answer the question', class: 'btn btn-primary'
+hr.separator
 
+h2 Answers
 .answers
   = render @question.answers
+
+hr.separator
+
+h2 Your answer
+.answer.question-answer
+  .answer__form
+    .answer__form-errors
+    = simple_form_for [@question, @answer], remote: true do |f|
+      = f.input :body, label: false
+      = render 'nested_attachment_form', form: f
+      .answer__controls
+        = button_tag type: :submit, class: 'answer__control-button'
+          i.material-icons add
+          | Answer the question

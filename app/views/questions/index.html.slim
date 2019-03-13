@@ -1,10 +1,17 @@
-= link_to 'Create question', new_question_path, class: 'btn btn-primary'
+.row
+  .col
+    h1 Questions
+  .col.text-right
+    = link_to new_question_path, class: 'btn btn-primary'
+      i.material-icons add
+      | Create question
+hr
 
-table
-  thead
-    tr
-      th Title
-  tbody
+.row
+  .col
     - @questions.each do |question|
-      tr
-        td= link_to question.title, question_path(question)
+      .card
+        .card-body
+          h5.card-title = link_to question.title, question_path(question)
+          p.card-text = question.body
+      br

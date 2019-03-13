@@ -1,0 +1,70 @@
+@mixin border-radius($args) {
+    border-radius: $args;
+    -moz-border-radius: $args;
+    -webkit-border-radius: $args;
+}
+
+@mixin box-shadow($args) {
+    box-shadow: $args;
+    -moz-box-shadow: $args;
+    -webkit-box-shadow: $args;
+}
+
+@mixin transform($transform) {
+    -webkit-transform: $transform !important;
+    -moz-transform: $transform !important;
+    -ms-transform: $transform !important;
+    -o-transform: $transform !important;
+    transform: $transform !important;
+}
+
+@mixin transition($transition) {
+    -webkit-transition: $transition;
+    -moz-transition: $transition;
+    -ms-transition: $transition;
+    -o-transition: $transition;
+    transition: $transition;
+}
+
+@mixin size($width, $height) {
+    width: $width;
+    height: $height;
+}
+
+@mixin max-size($width, $height) {
+    max-width: $width;
+    max-height: $height;
+}
+
+@mixin square($size) {
+    @include size($size, $size);
+}
+
+@mixin box-sizing($args) {
+    box-sizing: $args;
+    -moz-box-sizing: $args;
+    -webkit-box-sizing: $args;
+}
+
+@mixin no-link($color: inherit) {
+    color: $color;
+    text-decoration: none;
+    &:visited, &:focus, &:hover, &:active {
+        color: $color;
+        text-decoration: none;
+    }
+}
+
+@mixin soft-link($color: inherit) {
+    color: $color;
+    border-style: none none dashed none;
+    border-width: 1px;
+    border-color: $color;
+    line-height: 100%;
+    text-decoration: none;
+}
+
+@mixin vertical-padding($padding) {
+    padding-bottom: $padding;
+    padding-top: $padding;
+}

@@ -26,7 +26,7 @@ feature 'Adding attachment to an answer', %q{
     number_of_attachments = 3
 
     within('.question-answer') do
-      fill_in 'Body', with: answer[:body]
+      fill_in 'answer[body]', with: answer[:body]
       within('.attachments-form') do
         number_of_attachments.times { add_attachment 'sample.txt' }
       end
@@ -54,7 +54,7 @@ feature 'Removing attachment from an answer', %q{
     sign_in user
     visit question_path(question)
     within('.question-answer') do
-      fill_in 'Body', with: answer[:body]
+      fill_in 'answer[body]', with: answer[:body]
       within('.attachments-form') do
         add_attachment 'sample.txt'
         add_attachment 'sample2.txt'

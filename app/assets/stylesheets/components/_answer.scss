@@ -1,0 +1,32 @@
+.answer {
+    @include vertical-padding(10px);
+    @include border-radius(5px);
+
+    border: solid 1px rgba(black, 0.1);
+    padding: 10px;
+    margin-bottom: 10px;
+
+    & .answer__body {
+        min-height: 50px;
+        padding: 10px;
+    }
+
+    & .answer__controls {
+        padding-top: 10px;
+        text-align: right;
+    }
+
+    & .answer__form.answer__form_remote {
+        display: none;
+    }
+
+    & .answer__attachments {
+        @include vertical-padding(10px);
+
+        text-align: right;
+    }
+
+    & .answer__control-button {
+        @extend .btn, .btn-secondary;
+    }
+}

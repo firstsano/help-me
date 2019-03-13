@@ -1,1 +1,4 @@
-.attachment = link_to attachment.source.file.filename, attachment.source.url
+.attachment
+  = link_to attachment.source.url
+    i.material-icons attach_file
+    = attachment.source.file.filename

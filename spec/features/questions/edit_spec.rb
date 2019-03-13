@@ -24,20 +24,20 @@ feature 'Editing the question', %q{
       before { visit question_path(question) }
 
       scenario 'Owner tries to edit a question', js: true do
-        expect(page).not_to have_selector '.question-form'
+        expect(page).not_to have_selector '.question__form'
 
         click_on 'Edit'
         expect(current_path).to eq question_path(question)
-        expect(page).to have_selector '.question-form'
+        expect(page).to have_selector '.question__form'
 
-        within('.question-form') do
+        within('.question__form') do
           fill_in 'Title', with: new_question[:title]
           fill_in 'Body', with: new_question[:body]
           click_on 'Save'
         end
 
         expect(current_path).to eq question_path(question)
-        expect(page).not_to have_selector '.question-form'
+        expect(page).not_to have_selector '.question__form'
         expect(page).to have_content new_question[:title]
         expect(page).to have_content new_question[:body]
       end
@@ -50,20 +50,20 @@ feature 'Editing the question', %q{
       before { visit question_path(question) }
 
       scenario 'Owner tries to edit a question', js: true do
-        expect(page).not_to have_selector '.question-form'
+        expect(page).not_to have_selector '.question__form'
 
         click_on 'Edit'
         expect(current_path).to eq question_path(question)
-        expect(page).to have_selector '.question-form'
+        expect(page).to have_selector '.question__form'
 
-        within('.question-form') do
+        within('.question__form') do
           fill_in 'Title', with: new_question[:title]
           fill_in 'Body', with: nil
           click_on 'Save'
         end
 
         expect(current_path).to eq question_path(question)
-        expect(page).to have_selector '.question-form'
+        expect(page).to have_selector '.question__form'
         expect(page).to have_content 'Body can\'t be blank'
       end
     end

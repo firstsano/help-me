@@ -7,18 +7,6 @@ RSpec.describe AnswersController, type: :controller do
 
   before { create_list :answer, 10 }
 
-  describe 'GET #show' do
-    before { get :show, params: { id: answer } }
-
-    it 'assigns the answer to @answer' do
-      expect(assigns(:answer)).to eq(answer)
-    end
-
-    it 'renders show view' do
-      expect(response).to render_template :show
-    end
-  end
-
   describe 'POST #create' do
     before { sign_in user }
 

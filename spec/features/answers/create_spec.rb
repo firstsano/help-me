@@ -20,7 +20,7 @@ feature 'User can create an answer to the question', %q{
     context 'With valid attributes' do
       scenario 'User creates an answer to the question', js: true do
         within('.question-answer') do
-          fill_in 'Body', with: answer[:body]
+          fill_in 'answer[body]', with: answer[:body]
           click_on 'Answer the question'
         end
 
@@ -32,7 +32,7 @@ feature 'User can create an answer to the question', %q{
     context 'With invalid attributes' do
       scenario 'User tries to create an answer', js: true do
         within('.question-answer') do
-          fill_in 'Body', with: nil
+          fill_in 'answer[body]', with: nil
           click_on 'Answer the question'
         end
 
@@ -47,7 +47,7 @@ feature 'User can create an answer to the question', %q{
       visit question_path(question)
 
       within('.question-answer') do
-        fill_in 'Body', with: answer[:body]
+        fill_in 'answer[body]', with: answer[:body]
         click_on 'Answer the question'
       end
 

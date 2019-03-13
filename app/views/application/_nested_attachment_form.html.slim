@@ -1,0 +1,4 @@
+.attachments-form
+  = form.simple_fields_for :attachments do |a|
+    = render 'attachment_fields', f: a
+  .attachments-form__links = link_to_add_association 'Add attachment', form, :attachments

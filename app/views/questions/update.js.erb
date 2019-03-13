@@ -1,8 +1,9 @@
-<%- if @question.errors.present? %>
-  $('.question-form__errors').html('<ul><li><%= j @question.errors.full_messages.join("<li></li>") %></li></ul>');
-<%- else %>
-  $('.question-form__errors').html('');
-  $('.question').html('<%= j render(@question) %>');
-  $('.question-form').hide();
-  $('.question-controls .question-controls__edit').show();
-<%- end %>
+(function() {
+  <%- if @question.errors.present? %>
+    let $question = $('<%= j render(@question) %>');
+    let $questionForm = $question.find('.question__form');
+    $('.question__form').html($questionForm.html());
+  <%- else %>
+    $('.question').replaceWith('<%= j render(@question) %>');
+  <%- end %>
+})();

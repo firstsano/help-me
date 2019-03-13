@@ -25,6 +25,6 @@ feature 'User can navigate through pages', %q{
 
     expect_main_menu
     expect(page).to have_content user.name
-    expect(page).to have_button 'Log out'
+    expect(page).to have_link user.name, href: destroy_user_session_path
   end
 end

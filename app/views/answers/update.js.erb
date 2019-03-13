@@ -1,6 +1,9 @@
-<%- if @answer.errors.present? %>
-  $('.answer[data-answer-id="<%= @answer.id %>"] .answer__errors').html('<ul><li><%= j @answer.errors.full_messages.join("<li></li>") %></li></ul>');
-<%- else %>
-  $('.answer[data-answer-id="<%= @answer.id %>"] .answer__errors').html('');
-  $('.answer[data-answer-id="<%= @answer.id %>"]').html('<%= j render(@answer) %>');
-<% end %>
+(function() {
+  <%- if @answer.errors.present? %>
+    let $answer = $('<%= j render(@answer) %>');
+    let $answerForm = $answer.find('.answer__form');
+    $('.answer[data-answer-id="<%= @answer.id %>"] .answer__form').html($answerForm.html());
+  <%- else %>
+    $('.answer[data-answer-id="<%= @answer.id %>"]').replaceWith('<%= j render(@answer) %>');
+  <% end %>
+})();

@@ -10,15 +10,15 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- *= require material_icons
  *= require_self
  */
 
-$primary: (
-  color: #283593,
-  dark:  darken(#283593, 10%),
-  light: lighten(#283593, 10%)
-);
-
+@import "variables";
 @import "material";
+@import "mixins";
 @import "components/index";
+
+.separator {
+    border-color: $color-primary;
+    margin: 30px 0;
+}

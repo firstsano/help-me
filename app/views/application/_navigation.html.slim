@@ -1,26 +1,19 @@
-nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
-  a.navbar-brand href="#" HelpME
-  button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbarSupportedContent" \
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-    span.navbar-toggler-icon
-
-  .collapse.navbar-collapse id="navbarSupportedContent"
+nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.navigation
+  a.navbar-brand href="#"
+    i.material-icons help_outline
+    | HelpME
+  .collapse.navbar-collapse
     ul.navbar-nav.mr-auto
       li.nav-item
         = link_to 'Questions', questions_path, class: 'nav-link'
-      li.nav-item.dropdown
-        a.nav-link.dropdown-toggle href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" Dropdown
-        .dropdown-menu
-          a.dropdown-item href="#" Action
-          a.dropdown-item href="#" Another action
-          .dropdown-divider
-          a.dropdown-item href="#" Something else here
-    ul.navbar-nav.ml-auto
+    ul.navbar-nav.ml-auto.navigation__signing
       - if current_user
-        span.navbar-text = current_user.name
         li.nav-item
-          == button_to destroy_user_session_path, class: 'nav-link', method: :delete
-            | Log out == material_icon.exit_to_app
+          == link_to destroy_user_session_path, class: 'nav-link', method: :delete
+            = current_user.name
+            i.material-icons exit_to_app
       - else
         li.nav-item
-          == link_to "Log in #{material_icon.exit_to_app}".html_safe, new_user_session_path, class: 'nav-link'
+          == link_to new_user_session_path, class: 'nav-link'
+            | Log in
+            i.material-icons exit_to_app

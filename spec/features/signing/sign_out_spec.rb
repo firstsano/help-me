@@ -11,7 +11,7 @@ feature 'User can sign out', %q{
     sign_in user
 
     visit root_path
-    click_on 'Log out'
+    within('.navigation__signing') { click_on user.name }
 
     expect(current_path).to eq root_path
     expect(page).to have_content 'Signed out successfully.'
