@@ -1,16 +1,32 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
-  it { is_expected.to have_many :answers }
-  it { is_expected.to belong_to :created_by }
-  it { is_expected.to have_many :attachments }
-  it { is_expected.to accept_nested_attributes_for :attachments }
-  it { is_expected.to validate_presence_of :created_by }
-  it { is_expected.to validate_presence_of :title }
-  it { is_expected.to validate_presence_of :body }
+  context 'Associations' do
+    it { is_expected.to have_many :answers }
+    it { is_expected.to belong_to :created_by }
+    it { is_expected.to have_many :attachments }
+    it { is_expected.to have_many :votes }
+  end
+
+  context 'Validations' do
+    it { is_expected.to accept_nested_attributes_for :attachments }
+    it { is_expected.to validate_presence_of :created_by }
+    it { is_expected.to validate_presence_of :title }
+    it { is_expected.to validate_presence_of :body }
+  end
 
   describe 'instance_methods' do
     subject(:question) { create :question }
+
+    describe '#score' do
+      it { is_expected.to respond_to :score }
+
+      it 'counts total votes for a question' do
+        upvotes = create_list :vote, 10, votable: question
+        downvotes = create_list :downvote, 3, votable: question
+        expect(question.score).to eq 7
+      end
+    end
 
     describe '#set_best_answer' do
       let!(:answer) { create :answer, question: question }
