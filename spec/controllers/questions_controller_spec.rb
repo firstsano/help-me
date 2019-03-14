@@ -105,7 +105,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'redirects to question with error message' do
         patch :update, params: { id: question, question: new_attributes }
         expect(response).to redirect_to questions_path
-        expect(controller).to set_flash[:alert]
+        expect(controller).to set_flash[:error]
       end
     end
   end
@@ -153,11 +153,111 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when someone else deletes a question' do
-      before { question }
-      before { sign_in user }
+      before do
+        question
+        sign_in user
+      end
 
       it 'does not delete the question' do
         expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
+      end
+    end
+  end
+
+  describe 'POST #upvote' do
+    context 'when owner upvotes for a question' do
+      let!(:question) { create :question, created_by: user }
+
+      before { sign_in user }
+
+      it 'redirects to a question with error message' do
+        post :upvote, params: { id: question, format: 'json' }
+        expect(response).to redirect_to question_path(question)
+        expect(controller).to set_flash[:error]
+      end
+    end
+
+    context 'when someone else upvotes for a question' do
+      before { question }
+
+      context 'when user has already upvoted for this question' do
+        before { create :upvote, votable: question, user: user }
+
+        it 'removes upvote' do
+          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question, :upvotes).by(-1)
+        end
+      end
+
+      context 'when user has already downvoted for this question' do
+        before { create :downvote, votable: question, user: user }
+
+        it 'removes downvote' do
+          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question, :downvotes).by(-1)
+        end
+
+        it 'adds upvote' do
+          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question, :upvotes).by(1)
+        end
+      end
+
+      context 'when user upvotes for the question for the first time' do
+        it 'adds upvote' do
+          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question, :upvotes).by(1)
+        end
+      end
+
+      it 'assigns a question' do
+        post :upvote, params: { id: question, format: 'json' }
+        expect(assigns(:question)).to eq question.to_json
+      end
+    end
+  end
+
+  describe 'POST #downvote' do
+    context 'when owner downvotes for a question' do
+      let!(:question) { create :question, created_by: user }
+
+      before { sign_in user }
+
+      it 'redirects to a question with error message' do
+        post :downvote, params: { id: question, format: 'json' }
+        expect(response).to redirect_to question_path(question)
+        expect(controller).to set_flash[:error]
+      end
+    end
+
+    context 'when someone else downvotes for a question' do
+      before { question }
+
+      context 'when user has already downvoted for this question' do
+        before { create :downvote, votable: question, user: user }
+
+        it 'removes downvote' do
+          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question, :downvotes).by(-1)
+        end
+      end
+
+      context 'when user has already upvoted for this question' do
+        before { create :upvote, votable: question, user: user }
+
+        it 'removes upvote' do
+          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question, :upvotes).by(-1)
+        end
+
+        it 'adds downvote' do
+          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question, :downvotes).by(1)
+        end
+      end
+
+      context 'when user downvotes for the question for the first time' do
+        it 'adds downvote' do
+          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question, :downvotes).by(1)
+        end
+      end
+
+      it 'assigns a question' do
+        post :downvote, params: { id: question, format: 'json' }
+        expect(assigns(:question)).to eq question.to_json
       end
     end
   end
