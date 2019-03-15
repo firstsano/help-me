@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :vote do
+  factory :vote, aliases: [:upvote] do
     value { 1 }
     user
 

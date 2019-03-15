@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'controllers_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:question) { create :question }
@@ -178,13 +178,16 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when someone else upvotes for a question' do
-      before { question }
+      before do
+        question
+        sign_in user
+      end
 
       context 'when user has already upvoted for this question' do
         before { create :upvote, votable: question, user: user }
 
         it 'removes upvote' do
-          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question, :upvotes).by(-1)
+          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(-1)
         end
       end
 
@@ -192,23 +195,23 @@ RSpec.describe QuestionsController, type: :controller do
         before { create :downvote, votable: question, user: user }
 
         it 'removes downvote' do
-          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question, :downvotes).by(-1)
+          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(-1)
         end
 
         it 'adds upvote' do
-          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question, :upvotes).by(1)
+          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(1)
         end
       end
 
       context 'when user upvotes for the question for the first time' do
         it 'adds upvote' do
-          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question, :upvotes).by(1)
+          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(1)
         end
       end
 
       it 'assigns a question' do
         post :upvote, params: { id: question, format: 'json' }
-        expect(assigns(:question)).to eq question.to_json
+        expect(response.body).to eq question.to_json
       end
     end
   end
@@ -227,13 +230,16 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'when someone else downvotes for a question' do
-      before { question }
+      before do
+        question
+        sign_in user
+      end
 
       context 'when user has already downvoted for this question' do
         before { create :downvote, votable: question, user: user }
 
         it 'removes downvote' do
-          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question, :downvotes).by(-1)
+          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(-1)
         end
       end
 
@@ -241,23 +247,23 @@ RSpec.describe QuestionsController, type: :controller do
         before { create :upvote, votable: question, user: user }
 
         it 'removes upvote' do
-          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question, :upvotes).by(-1)
+          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(-1)
         end
 
         it 'adds downvote' do
-          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question, :downvotes).by(1)
+          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(1)
         end
       end
 
       context 'when user downvotes for the question for the first time' do
         it 'adds downvote' do
-          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question, :downvotes).by(1)
+          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(1)
         end
       end
 
       it 'assigns a question' do
         post :downvote, params: { id: question, format: 'json' }
-        expect(assigns(:question)).to eq question.to_json
+        expect(response.body).to eq question.to_json
       end
     end
   end

@@ -3,6 +3,8 @@ class Question < ApplicationRecord
   has_one :best_answer, -> { where is_best: true }, class_name: 'Answer'
   has_many :attachments, as: :attachable, inverse_of: :attachable
   has_many :votes, as: :votable, inverse_of: :votable
+  has_many :upvotes, -> { where value: 1 }, as: :votable, inverse_of: :votable, class_name: 'Vote'
+  has_many :downvotes, -> { where value: -1 }, as: :votable, inverse_of: :votable, class_name: 'Vote'
   belongs_to :created_by, foreign_key: :created_by_id, class_name: 'User'
 
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true

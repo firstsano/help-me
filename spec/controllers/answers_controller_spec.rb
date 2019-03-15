@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'controllers_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create :user }
