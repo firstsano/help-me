@@ -209,9 +209,10 @@ RSpec.describe QuestionsController, type: :controller do
         end
       end
 
-      it 'assigns a question' do
+      it 'assigns a hash with a score' do
         post :upvote, params: { id: question, format: 'json' }
-        expect(response.body).to eq question.to_json
+        expected_json = { score: question.score }.to_json
+        expect(response.body).to eq expected_json
       end
     end
   end
@@ -261,9 +262,10 @@ RSpec.describe QuestionsController, type: :controller do
         end
       end
 
-      it 'assigns a question' do
-        post :downvote, params: { id: question, format: 'json' }
-        expect(response.body).to eq question.to_json
+      it 'assigns a hash with a score' do
+        post :upvote, params: { id: question, format: 'json' }
+        expected_json = { score: question.score }.to_json
+        expect(response.body).to eq expected_json
       end
     end
   end

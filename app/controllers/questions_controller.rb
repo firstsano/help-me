@@ -40,14 +40,14 @@ class QuestionsController < ApplicationController
     vote = @question.votes.find_by user: current_user
     vote.destroy if vote
     @question.upvotes.create user: current_user unless vote&.upvote?
-    render json: @question
+    render json: { score: @question.score }
   end
 
   def downvote
     vote = @question.votes.find_by user: current_user
     vote.destroy if vote
     @question.downvotes.create user: current_user unless vote&.downvote?
-    render json: @question
+    render json: { score: @question.score }
   end
 
   private

@@ -23,6 +23,6 @@ class Question < ApplicationRecord
   end
 
   def score
-    votes.map(&:value).reduce :+
+    votes.map(&:value).reduce 0, :+
   end
 end

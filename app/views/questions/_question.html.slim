@@ -1,11 +1,19 @@
 .question
   .question__display
-    .question__score
-      = link_to vote_question_path(question)
-        | Vote up
-      = question.score
-      = link_to vote_question_path(question)
-        | Vote down
+    .question__score.vote
+      - if user_signed_in? and question.created_by != current_user
+        = link_to upvote_question_path(question),
+                  remote: true,
+                  method: :post,
+                  class: 'vote__button vote__button_upvote'
+          | Vote up
+      .vote__score = question.score
+      - if user_signed_in? and question.created_by != current_user
+        = link_to downvote_question_path(question),
+                  remote: true,
+                  method: :post,
+                  class: 'vote__button vote__button_upvote'
+          | Vote down
     .question__info
       h2.question__title = question.title
       .question__body = question.body
@@ -21,8 +29,8 @@
           i.material-icons edit
           | Edit
         =< link_to question_path(question),
-                    method: :delete,
-                    class: 'question__control-button'
+                   method: :delete,
+                   class: 'question__control-button'
           i.material-icons restore_from_trash
           | Delete
 

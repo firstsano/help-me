@@ -28,6 +28,10 @@ RSpec.describe Question, type: :model do
         downvotes = create_list :downvote, 3, votable: question
         expect(question.score).to eq 7
       end
+
+      it 'returns 0 when there are no votes' do
+        expect(question.score).to eq 0
+      end
     end
 
     describe '#upvotes' do

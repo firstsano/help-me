@@ -26,10 +26,10 @@ feature 'Adding attachment to question', %q{
 
     question = Question.last
     expect(current_path).to eq question_path(question)
+    filenames.each { |filename| expect(page).to have_link filename }
 
     filenames.each do |filename|
       visit question_path(question)
-      expect(page).to have_link filename
       expect { click_on filename }.to change { current_path }
     end
   end
