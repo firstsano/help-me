@@ -11,20 +11,59 @@ feature 'User can vote for or against a question', %q{
     given(:question) { create :question }
 
     before do
+      create_list :upvote, 5, votable: question
       sign_in user
       visit question_path(question)
     end
 
     scenario 'User votes for a question', js: true do
       within('.question__score.vote') do
-        within('.vote__score') { expect(page).to have_content '0' }
-        click_on 'Vote up'
-        expect(current_path).to eq question_path(question)
-        within('.vote__score') { expect(page).to have_content '1' }
+        within('.vote__score') { expect(page).to have_content 5 }
+
+        page.find('.vote__button_upvote').click
+        within('.vote__score') { expect(page).to have_content 6 }
+        expect(page).to have_selector '.vote__button_upvote.vote__button_active'
+
+        page.find('.vote__button_upvote').click
+        within('.vote__score') { expect(page).to have_content 5 }
+        expect(page).not_to have_selector '.vote__button_upvote.vote__button_active'
       end
+
+      expect(current_path).to eq question_path(question)
     end
 
-    scenario 'User votes against a question'
+    scenario 'User votes against a question', js: true do
+      within('.question__score.vote') do
+        within('.vote__score') { expect(page).to have_content 5 }
+
+        page.find('.vote__button_downvote').click
+        within('.vote__score') { expect(page).to have_content 4 }
+        expect(page).to have_selector '.vote__button_downvote.vote__button_active'
+
+        page.find('.vote__button_downvote').click
+        within('.vote__score') { expect(page).to have_content 5 }
+        expect(page).not_to have_selector '.vote__button_downvote.vote__button_active'
+      end
+
+      expect(current_path).to eq question_path(question)
+    end
+
+    scenario 'User changes mind and after downvoting votes for a question', js: true do
+      within('.question__score.vote') do
+        within('.vote__score') { expect(page).to have_content 5 }
+
+        page.find('.vote__button_downvote').click
+        within('.vote__score') { expect(page).to have_content 4 }
+        expect(page).to have_selector '.vote__button_downvote.vote__button_active'
+
+        page.find('.vote__button_upvote').click
+        within('.vote__score') { expect(page).to have_content 6 }
+        expect(page).to have_selector '.vote__button_upvote.vote__button_active'
+        expect(page).not_to have_selector '.vote__button_downvote.vote__button_active'
+      end
+
+      expect(current_path).to eq question_path(question)
+    end
   end
 
   context 'When user is an author' do
@@ -37,8 +76,8 @@ feature 'User can vote for or against a question', %q{
     end
 
     scenario 'User cannot vote for own question' do
-      expect(page).not_to have_link 'Vote up'
-      expect(page).not_to have_link 'Vote down'
+      expect(page).not_to have_selector '.vote__button_upvote'
+      expect(page).not_to have_selector '.vote__button_downvote'
     end
   end
 
@@ -48,8 +87,8 @@ feature 'User can vote for or against a question', %q{
     scenario 'User cannot vote for a question' do
       visit question_path(question)
 
-      expect(page).not_to have_link 'Vote up'
-      expect(page).not_to have_link 'Vote down'
+      expect(page).not_to have_selector '.vote__button_upvote'
+      expect(page).not_to have_selector '.vote__button_downvote'
     end
   end
 end

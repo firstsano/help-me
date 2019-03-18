@@ -13,6 +13,19 @@
         padding: 10px;
     }
 
+    & .question__info-frame {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    & .question__vote {
+        margin-right: 10px;
+    }
+
+    & .question__info {
+        flex: 1;
+    }
+
     & .question__controls {
         padding-top: 10px;
         text-align: right;

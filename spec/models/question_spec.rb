@@ -24,13 +24,35 @@ RSpec.describe Question, type: :model do
       it { is_expected.to respond_to :score }
 
       it 'counts total votes for a question' do
-        upvotes = create_list :vote, 10, votable: question
+        upvotes = create_list :upvote, 10, votable: question
         downvotes = create_list :downvote, 3, votable: question
         expect(question.score).to eq 7
       end
 
       it 'returns 0 when there are no votes' do
         expect(question.score).to eq 0
+      end
+    end
+
+    describe '#upvoted_by_user?' do
+      it { is_expected.to respond_to :upvoted_by_user? }
+
+      it 'returns true if question has upvote created by user and false otherwise' do
+        user, other_user = create_list :user, 2
+        create :upvote, votable: question, user: user
+        expect(question.upvoted_by_user?(user)).to be_truthy
+        expect(question.upvoted_by_user?(other_user)).to be_falsey
+      end
+    end
+
+    describe '#downvoted_by_user?' do
+      it { is_expected.to respond_to :downvoted_by_user? }
+
+      it 'returns true if question has upvote created by user and false otherwise' do
+        user, other_user = create_list :user, 2
+        create :downvote, votable: question, user: user
+        expect(question.downvoted_by_user?(user)).to be_truthy
+        expect(question.downvoted_by_user?(other_user)).to be_falsey
       end
     end
 

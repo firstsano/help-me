@@ -165,7 +165,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #upvote' do
-    context 'when owner upvotes for a question' do
+    context 'when owner upvotes a question' do
       let!(:question) { create :question, created_by: user }
 
       before { sign_in user }
@@ -177,21 +177,27 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'when someone else upvotes for a question' do
+    context 'when someone else upvotes a question' do
       before do
         question
         sign_in user
       end
 
-      context 'when user has already upvoted for this question' do
+      context 'when user has already upvoted a question' do
         before { create :upvote, votable: question, user: user }
 
         it 'removes upvote' do
           expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(-1)
         end
+
+        it 'assigns a proper hash' do
+          post :upvote, params: { id: question, format: 'json' }
+          expected_json = { score: question.score, upvoted: false }.to_json
+          expect(response.body).to eq expected_json
+        end
       end
 
-      context 'when user has already downvoted for this question' do
+      context 'when user has already downvoted a question' do
         before { create :downvote, votable: question, user: user }
 
         it 'removes downvote' do
@@ -201,18 +207,24 @@ RSpec.describe QuestionsController, type: :controller do
         it 'adds upvote' do
           expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(1)
         end
+
+        it 'assigns a proper hash' do
+          post :upvote, params: { id: question, format: 'json' }
+          expected_json = { score: question.score, upvoted: true }.to_json
+          expect(response.body).to eq expected_json
+        end
       end
 
       context 'when user upvotes for the question for the first time' do
         it 'adds upvote' do
           expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(1)
         end
-      end
 
-      it 'assigns a hash with a score' do
-        post :upvote, params: { id: question, format: 'json' }
-        expected_json = { score: question.score }.to_json
-        expect(response.body).to eq expected_json
+        it 'assigns a proper hash' do
+          post :upvote, params: { id: question, format: 'json' }
+          expected_json = { score: question.score, upvoted: true }.to_json
+          expect(response.body).to eq expected_json
+        end
       end
     end
   end
@@ -230,21 +242,27 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'when someone else downvotes for a question' do
+    context 'when someone else downvotes a question' do
       before do
         question
         sign_in user
       end
 
-      context 'when user has already downvoted for this question' do
+      context 'when user has already downvoted a question' do
         before { create :downvote, votable: question, user: user }
 
         it 'removes downvote' do
           expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(-1)
         end
+
+        it 'assigns a proper hash' do
+          post :downvote, params: { id: question, format: 'json' }
+          expected_json = { score: question.score, downvoted: false }.to_json
+          expect(response.body).to eq expected_json
+        end
       end
 
-      context 'when user has already upvoted for this question' do
+      context 'when user has already upvoted a question' do
         before { create :upvote, votable: question, user: user }
 
         it 'removes upvote' do
@@ -254,18 +272,24 @@ RSpec.describe QuestionsController, type: :controller do
         it 'adds downvote' do
           expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(1)
         end
+
+        it 'assigns a proper hash' do
+          post :downvote, params: { id: question, format: 'json' }
+          expected_json = { score: question.score, downvoted: true }.to_json
+          expect(response.body).to eq expected_json
+        end
       end
 
       context 'when user downvotes for the question for the first time' do
         it 'adds downvote' do
           expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(1)
         end
-      end
 
-      it 'assigns a hash with a score' do
-        post :upvote, params: { id: question, format: 'json' }
-        expected_json = { score: question.score }.to_json
-        expect(response.body).to eq expected_json
+        it 'assigns a proper hash' do
+          post :downvote, params: { id: question, format: 'json' }
+          expected_json = { score: question.score, downvoted: true }.to_json
+          expect(response.body).to eq expected_json
+        end
       end
     end
   end

@@ -25,4 +25,12 @@ class Question < ApplicationRecord
   def score
     votes.map(&:value).reduce 0, :+
   end
+
+  def upvoted_by_user?(user)
+    upvotes.find_by(user: user).present?
+  end
+
+  def downvoted_by_user?(user)
+    downvotes.find_by(user: user).present?
+  end
 end
