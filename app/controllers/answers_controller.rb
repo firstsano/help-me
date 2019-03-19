@@ -1,8 +1,9 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question, only: :create
-  before_action :load_answer, only: %i[update destroy best]
+  before_action :load_answer, only: %i[update destroy best upvote downvote]
   before_action :authorize_resource!, only: %i[update destroy]
+  before_action :restrict_votes!, only: %i[upvote downvote]
 
   def create
     @answer = @question.answers.build answer_params
@@ -29,6 +30,18 @@ class AnswersController < ApplicationController
     end
   end
 
+  def upvote
+    previous_vote = @answer.votes.find_by(user: current_user)&.destroy
+    @answer.upvotes.create user: current_user unless previous_vote&.upvote?
+    render json: { score: @answer.score, upvoted: !previous_vote&.upvote? }
+  end
+
+  def downvote
+    previous_vote = @answer.votes.find_by(user: current_user)&.destroy
+    @answer.downvotes.create user: current_user unless previous_vote&.downvote?
+    render json: { score: @answer.score, downvoted: !previous_vote&.downvote? }
+  end
+
   private
 
   def load_question
@@ -41,6 +54,11 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body, attachments_attributes: [:id, :source, :_destroy])
+  end
+
+  def restrict_votes!
+    message = { error: 'Owner cannot vote' }
+    redirect_to question_path(@answer.question), **message if @answer.created_by == current_user
   end
 
   def authorize_resource!

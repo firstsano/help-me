@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
     resources :answers, shallow: true do
       put :best, on: :member
+      post :upvote, on: :member
+      post :downvote, on: :member
     end
   end
 end

@@ -11,13 +11,28 @@
         padding: 10px;
     }
 
+    & .answer__info-frame {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    & .answer__vote {
+        margin-right: 10px;
+    }
+
+    & .answer__info {
+        flex: 1;
+    }
+
     & .answer__controls {
         padding-top: 10px;
         text-align: right;
     }
 
-    & .answer__form.answer__form_remote {
-        display: none;
+    & .answer__form {
+        &_remote {
+            display: none;
+        }
     }
 
     & .answer__attachments {

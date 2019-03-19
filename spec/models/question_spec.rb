@@ -8,10 +8,10 @@ RSpec.describe Question, type: :model do
     it { is_expected.to have_many :votes }
     it { is_expected.to have_many :upvotes }
     it { is_expected.to have_many :downvotes }
+    it { is_expected.to accept_nested_attributes_for :attachments }
   end
 
   context 'Validations' do
-    it { is_expected.to accept_nested_attributes_for :attachments }
     it { is_expected.to validate_presence_of :created_by }
     it { is_expected.to validate_presence_of :title }
     it { is_expected.to validate_presence_of :body }
@@ -53,26 +53,6 @@ RSpec.describe Question, type: :model do
         create :downvote, votable: question, user: user
         expect(question.downvoted_by_user?(user)).to be_truthy
         expect(question.downvoted_by_user?(other_user)).to be_falsey
-      end
-    end
-
-    describe '#upvotes' do
-      it { is_expected.to respond_to :upvotes }
-
-      it 'counts question\'s upvotes' do
-        upvotes = create_list :vote, 10, votable: question
-        downvotes = create_list :downvote, 3, votable: question
-        expect(question.upvotes).to match_array upvotes
-      end
-    end
-
-    describe '#downvotes' do
-      it { is_expected.to respond_to :downvotes }
-
-      it 'counts question\'s downvotes' do
-        upvotes = create_list :vote, 10, votable: question
-        downvotes = create_list :downvote, 3, votable: question
-        expect(question.downvotes).to match_array downvotes
       end
     end
 

@@ -167,4 +167,134 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'POST #upvote' do
+    context 'when owner upvotes an answer' do
+      let!(:answer) { create :answer, created_by: user }
+
+      before { sign_in user }
+
+      it 'redirects to a question with error message' do
+        post :upvote, params: { id: answer, format: 'json' }
+        expect(response).to redirect_to question_path(answer.question)
+        expect(controller).to set_flash[:error]
+      end
+    end
+
+    context 'when someone else upvotes an answer' do
+      before do
+        answer
+        sign_in user
+      end
+
+      context 'when user has already upvoted an answer' do
+        before { create :upvote, votable: answer, user: user }
+
+        it 'removes upvote' do
+          expect { post :upvote, params: { id: answer, format: 'json' } }.to change(answer.upvotes, :count).by(-1)
+        end
+
+        it 'assigns a proper hash' do
+          post :upvote, params: { id: answer, format: 'json' }
+          expected_json = { score: answer.score, upvoted: false }.to_json
+          expect(response.body).to eq expected_json
+        end
+      end
+
+      context 'when user has already downvoted an answer' do
+        before { create :downvote, votable: answer, user: user }
+
+        it 'removes downvote' do
+          expect { post :upvote, params: { id: answer, format: 'json' } }.to change(answer.downvotes, :count).by(-1)
+        end
+
+        it 'adds upvote' do
+          expect { post :upvote, params: { id: answer, format: 'json' } }.to change(answer.upvotes, :count).by(1)
+        end
+
+        it 'assigns a proper hash' do
+          post :upvote, params: { id: answer, format: 'json' }
+          expected_json = { score: answer.score, upvoted: true }.to_json
+          expect(response.body).to eq expected_json
+        end
+      end
+
+      context 'when user upvotes an answer for the first time' do
+        it 'adds upvote' do
+          expect { post :upvote, params: { id: answer, format: 'json' } }.to change(answer.upvotes, :count).by(1)
+        end
+
+        it 'assigns a proper hash' do
+          post :upvote, params: { id: answer, format: 'json' }
+          expected_json = { score: answer.score, upvoted: true }.to_json
+          expect(response.body).to eq expected_json
+        end
+      end
+    end
+  end
+
+  describe 'POST #downvote' do
+    context 'when owner downvotes an answer' do
+      let!(:answer) { create :answer, created_by: user }
+
+      before { sign_in user }
+
+      it 'redirects to an answer with error message' do
+        post :downvote, params: { id: answer, format: 'json' }
+        expect(response).to redirect_to question_path(answer.question)
+        expect(controller).to set_flash[:error]
+      end
+    end
+
+    context 'when someone else downvotes an answer' do
+      before do
+        answer
+        sign_in user
+      end
+
+      context 'when user has already downvoted an answer' do
+        before { create :downvote, votable: answer, user: user }
+
+        it 'removes downvote' do
+          expect { post :downvote, params: { id: answer, format: 'json' } }.to change(answer.downvotes, :count).by(-1)
+        end
+
+        it 'assigns a proper hash' do
+          post :downvote, params: { id: answer, format: 'json' }
+          expected_json = { score: answer.score, downvoted: false }.to_json
+          expect(response.body).to eq expected_json
+        end
+      end
+
+      context 'when user has already upvoted an answer' do
+        before { create :upvote, votable: answer, user: user }
+
+        it 'removes upvote' do
+          expect { post :downvote, params: { id: answer, format: 'json' } }.to change(answer.upvotes, :count).by(-1)
+        end
+
+        it 'adds downvote' do
+          expect { post :downvote, params: { id: answer, format: 'json' } }.to change(answer.downvotes, :count).by(1)
+        end
+
+        it 'assigns a proper hash' do
+          post :downvote, params: { id: answer, format: 'json' }
+          expected_json = { score: answer.score, downvoted: true }.to_json
+          expect(response.body).to eq expected_json
+        end
+      end
+
+      context 'when user downvotes an answer for the first time' do
+        it 'adds downvote' do
+          expect { post :downvote, params: { id: answer, format: 'json' } }.to change(answer.downvotes, :count).by(1)
+        end
+
+        it 'assigns a proper hash' do
+          post :downvote, params: { id: answer, format: 'json' }
+          expected_json = { score: answer.score, downvoted: true }.to_json
+          expect(response.body).to eq expected_json
+        end
+      end
+    end
+  end
 end
