@@ -1,8 +1,9 @@
 class QuestionsController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!, except: %i[show index]
-  before_action :load_question, only: %i[show update destroy upvote downvote]
+  before_action :load_question, only: %i[show update destroy]
   before_action :authorize_resource!, only: %i[update destroy]
-  before_action :restrict_votes!, only: %i[upvote downvote]
 
   def index
     @questions = Question.all
@@ -36,18 +37,6 @@ class QuestionsController < ApplicationController
     redirect_to questions_path, notice: 'The question was successfully deleted'
   end
 
-  def upvote
-    previous_vote = @question.votes.find_by(user: current_user)&.destroy
-    @question.upvotes.create user: current_user unless previous_vote&.upvote?
-    render json: { score: @question.score, upvoted: !previous_vote&.upvote? }
-  end
-
-  def downvote
-    previous_vote = @question.votes.find_by(user: current_user)&.destroy
-    @question.downvotes.create user: current_user unless previous_vote&.downvote?
-    render json: { score: @question.score, downvoted: !previous_vote&.downvote? }
-  end
-
   private
 
   def load_question
@@ -58,9 +47,8 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body, attachments_attributes: [:id, :source, :_destroy])
   end
 
-  def restrict_votes!
-    message = { error: 'Owner cannot vote' }
-    redirect_to question_path(@question), **message if @question.created_by == current_user
+  def redirect_path(question)
+    question_path question
   end
 
   def authorize_resource!

@@ -88,7 +88,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'redirects to question with error message' do
         patch :update, params: { id: answer, answer: new_attributes, format: 'js' }
         expect(response).to redirect_to question_path(question)
-        expect(controller).to set_flash[:alert]
+        expect(controller).to set_flash[:error]
       end
     end
   end
@@ -120,7 +120,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'redirects to question' do
         delete :destroy, params: { id: answer }
         expect(response).to redirect_to question_path(question)
-        expect(controller).to set_flash[:alert]
+        expect(controller).to set_flash[:error]
       end
     end
   end
@@ -163,7 +163,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'redirects to the question with error message' do
         put :best, params: { id: answer, format: 'js' }
         expect(response).to redirect_to question_path(question)
-        expect(controller).to set_flash[:alert]
+        expect(controller).to set_flash[:error]
       end
     end
   end

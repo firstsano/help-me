@@ -3,16 +3,14 @@ Rails.application.routes.draw do
 
   root to: 'questions#index'
 
-  resources :questions do
-    member do
-      post :upvote
-      post :downvote
-    end
+  concern :votable do
+    post :upvote, on: :member
+    post :downvote, on: :member
+  end
 
-    resources :answers, shallow: true do
+  resources :questions, concerns: :votable do
+    resources :answers, shallow: true, concerns: :votable do
       put :best, on: :member
-      post :upvote, on: :member
-      post :downvote, on: :member
     end
   end
 end
