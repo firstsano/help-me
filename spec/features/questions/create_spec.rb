@@ -7,23 +7,44 @@ feature 'User can create a question', %q{
 } do
 
   given(:user) { create :user }
+  given(:question) { attributes_for :question }
 
   context 'When user is signed in' do
-    scenario 'User creates a question' do
-      sign_in user
-      visit questions_path
+    context 'With invalid attributes' do
+      scenario 'User tries to create a question' do
+        sign_in user
+        visit questions_path
 
-      click_on 'Create question'
-      expect(current_path).to eq new_question_path
+        click_on 'Create question'
+        expect(current_path).to eq new_question_path
 
-      fill_in 'Title', with: 'Awesome title'
-      fill_in 'Body', with: 'Awesome Body'
-      click_on 'Save'
+        fill_in 'Title', with: question[:title]
+        fill_in 'Body', with: ''
+        click_on 'Save'
 
-      expect(page).to have_text 'Question created successfully'
+        expect(page).to have_content 'Body can\'t be blank'
+      end
+    end
 
-      visit questions_path
-      expect(page).to have_content 'Awesome title'
+    context 'With valid attributes' do
+      scenario 'User creates a question' do
+        sign_in user
+        visit questions_path
+
+        click_on 'Create question'
+        expect(current_path).to eq new_question_path
+
+        fill_in 'Title', with: question[:title]
+        fill_in 'Body', with: question[:body]
+        click_on 'Save'
+
+        expect(page).to have_text 'Question created successfully'
+
+        visit questions_path
+        expect(page).to have_content question[:title]
+      end
+
+      scenario 'While one user creates a question another one can see it appears on index page'
     end
   end
 
