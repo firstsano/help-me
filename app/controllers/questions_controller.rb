@@ -4,6 +4,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[show index]
   before_action :load_question, only: %i[show update destroy]
   before_action :authorize_resource!, only: %i[update destroy]
+  after_action :publish_question, only: :create
 
   def index
     @questions = Question.all
@@ -38,6 +39,14 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def publish_question
+    return unless @question.valid?
+
+    template = ApplicationController.render partial: 'questions/question_row',
+                                            locals: { question: @question }
+    ActionCable.server.broadcast 'questions', template
+  end
 
   def load_question
     @question = Question.find params[:id]

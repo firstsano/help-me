@@ -14,8 +14,10 @@
 //= require activestorage
 //= require jquery2
 //= require jquery.remotipart
+//= require action_cable
 //= require popper
 //= require bootstrap
 //= require material
 //= require cocoon
+//= require app
 //= require_tree .

@@ -9,9 +9,7 @@ hr
 
 .row
   .col
-    - @questions.each do |question|
-      .card
-        .card-body
-          h5.card-title = link_to question.title, question_path(question)
-          p.card-text = question.body
-      br
+    .questions
+      = render partial: "question_row",
+               collection: @questions,
+               as: :question

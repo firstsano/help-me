@@ -61,8 +61,11 @@ feature 'User can create a question', %q{
           expect(page).to have_text 'Question created successfully'
         end
 
+        created_question = Question.last
+
         Capybara.using_session('first user') do
-          expect(page).to have_content question[:title]
+          expect(page).to have_link created_question.title,
+                                    href: question_path(created_question)
         end
       end
     end
