@@ -5,6 +5,7 @@ $voted-color: $color-success;
     color: rgba(black, 0.3);
     padding: 10px;
     text-align: center;
+    width: 75px;
 
     .vote__button {
         font-size: $font-size;
@@ -22,5 +23,11 @@ $voted-color: $color-success;
     .vote__score {
         font-size: $font-size;
         font-weight: 300;
+    }
+}
+
+.vote.vote_unvotable {
+    .vote__score {
+        padding: 30px 15px;
     }
 }

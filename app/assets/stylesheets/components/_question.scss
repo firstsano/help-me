@@ -1,3 +1,5 @@
+$score-color: rgba($color-primary, 0.4);
+
 .question {
     @include vertical-padding(10px);
 
@@ -18,7 +20,7 @@
         align-items: flex-start;
     }
 
-    & .question__vote {
+    & .question__score {
         margin-right: 10px;
     }
 

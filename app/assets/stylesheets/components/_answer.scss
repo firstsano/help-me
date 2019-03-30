@@ -1,3 +1,5 @@
+$score-color: rgba($color-primary, 0.4);
+
 .answer {
     @include vertical-padding(10px);
     @include border-radius(5px);
@@ -16,7 +18,8 @@
         align-items: flex-start;
     }
 
-    & .answer__vote {
+    & .answer__score {
+        border-right: solid 1px $score-color;
         margin-right: 10px;
     }
 
