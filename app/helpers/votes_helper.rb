@@ -11,4 +11,8 @@ module VotesHelper
     end
     link_to path, remote: true, method: :post, class: classes.join(" "), &block
   end
+
+  def votable?(resource)
+    user_signed_in? && resource.created_by != current_user
+  end
 end

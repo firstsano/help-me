@@ -1,12 +1,12 @@
 .answer data-answer-id=answer.id class=('answer_best' if answer.is_best?)
   .answer__display
     .answer__info-frame
-      .answer__score.vote
-        - if user_signed_in? and answer.created_by != current_user
+      .answer__score.vote class=('vote_unvotable' unless votable?(answer))
+        - if votable? answer
           = vote_button upvote_answer_path(answer), answer, :upvote
             i.material-icons keyboard_arrow_up
         .vote__score = answer.score
-        - if user_signed_in? and answer.created_by != current_user
+        - if votable? answer
           = vote_button downvote_answer_path(answer), answer, :downvote
             i.material-icons keyboard_arrow_down
       .answer__info
