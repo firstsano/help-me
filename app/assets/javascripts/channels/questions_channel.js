@@ -1,9 +1,9 @@
 (function($) {
   const subscriptions = App.cable.subscriptions;
-  const s = { questions: '.questions' };
+  const selectors = { questions: '.questions' };
 
   const subscribe = function() {
-    $questions = $(s.questions);
+    $questions = $(selectors.questions);
     if (!$questions.length) {
       return false;
     }
