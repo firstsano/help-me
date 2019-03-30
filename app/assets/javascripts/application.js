@@ -19,5 +19,6 @@
 //= require bootstrap
 //= require material
 //= require cocoon
+//= require lodash
 //= require app
 //= require_tree .
