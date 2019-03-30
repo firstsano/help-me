@@ -1,5 +1,5 @@
 (function($) {
-  const selectors = s = {
+  const s = {
     vote: '.vote',
     score: '.vote__score',
     button: {
