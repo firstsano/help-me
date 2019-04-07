@@ -20,14 +20,15 @@ h2 Answers
 
 hr.separator
 
-h2 Your answer
-.answer.question-answer
-  .answer__form
-    .answer__form-errors
-    = simple_form_for [@question, @answer], remote: true do |f|
-      = f.input :body, label: false
-      = render 'nested_attachment_form', form: f
-      .answer__controls
-        = button_tag type: :submit, class: 'answer__control-button'
-          i.material-icons add
-          | Answer the question
+- if user_signed_in?
+  h2 Your answer
+  .answer.question-answer
+    .answer__form
+      .answer__form-errors
+      = simple_form_for [@question, @answer], remote: true do |f|
+        = f.input :body, label: false
+        = render 'nested_attachment_form', form: f
+        .answer__controls
+          = button_tag type: :submit, class: 'answer__control-button'
+            i.material-icons add
+            | Answer the question

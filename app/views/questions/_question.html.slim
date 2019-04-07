@@ -25,7 +25,8 @@
           | Edit
         =< link_to question_path(question),
                    method: :delete,
-                   class: 'question__control-button'
+                   class: 'question__control-button',
+                   data: { confirm: 'Are you sure want to delete this record?' }
           i.material-icons restore_from_trash
           | Delete
 
