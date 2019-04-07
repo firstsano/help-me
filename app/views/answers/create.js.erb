@@ -2,5 +2,5 @@
   $('.question-answer .answer__form-errors').html('<ul><li><%= j @answer.errors.full_messages.join("<li></li>") %></li></ul>');
 <%- else %>
   $('.question-answer .answer__form-errors').html('');
-  $('.answers').append('<%= j render(@answer) %>');
+  $('.answers').prepend('<%= j render(@answer) %>');
 <% end %>
