@@ -6,6 +6,7 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: %i[update destroy best]
   before_action :authorize_resource!, only: %i[update destroy]
   before_action :restrict_votes!, only: %i[upvote downvote]
+  after_action :publish_answer
 
   def create
     @answer = @question.answers.build answer_params
@@ -33,6 +34,14 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def publish_answer
+    return unless @answer.valid?
+
+    answer_body = @answer.body.truncate 20
+    message = { body: answer_body, created_by: current_user.id }
+    AnswersChannel.broadcast_to @answer.question, message
+  end
 
   def load_question
     @question = Question.find params.require(:question_id)
