@@ -20,7 +20,7 @@ feature 'User can comment a question', %q{
       scenario 'User creates a comment', js: true do
         within('.question-comment') do
           fill_in 'comment[body]', with: comment[:body]
-          click_on 'Save'
+          click_on 'Add comment'
         end
 
         expect(current_path).to eq question_path(question)
