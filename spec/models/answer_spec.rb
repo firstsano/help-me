@@ -1,20 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
-  describe 'Associations' do
+  context 'Associations' do
     it { is_expected.to belong_to :question }
     it { is_expected.to belong_to :created_by }
     it { is_expected.to have_many :attachments }
     it { is_expected.to accept_nested_attributes_for :attachments }
   end
 
-  describe 'Validations' do
+  context 'Validations' do
     it { is_expected.to validate_presence_of :created_by }
     it { is_expected.to validate_presence_of :body }
     it { is_expected.to validate_presence_of :question }
   end
 
-  describe 'Instance_methods' do
+  context 'Instance_methods' do
     subject(:answer) { create :answer }
 
     describe '#score' do
@@ -105,7 +105,7 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  describe 'class methods' do
+  context 'class methods' do
     subject { described_class }
 
     describe '.best' do

@@ -17,7 +17,7 @@ RSpec.describe Question, type: :model do
     it { is_expected.to validate_presence_of :body }
   end
 
-  describe 'Instance_methods' do
+  context 'Instance_methods' do
     subject(:question) { create :question }
 
     describe '#score' do
