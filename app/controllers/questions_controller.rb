@@ -15,7 +15,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    gon.question = @question
+    gon.question = @question.id
     @answer = Answer.new
   end
 
