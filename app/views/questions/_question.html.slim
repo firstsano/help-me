@@ -13,6 +13,16 @@
         h2.question__title = question.title
         .question__body = question.body
         .question__attachments = render question.attachments
+      .question__comments
+        .comments.question-comment
+          .comments__form
+            .comments__form-errors
+            = simple_form_for [@question, @comment], remote: true do |f|
+              = f.input :body, label: false
+              .comments__controls
+                = button_tag type: :submit, class: 'comments__control-button'
+                  i.material-icons add
+                  | Add comment
     .question__controls
       - if question.created_by == current_user
         = link_to edit_question_path(question),
