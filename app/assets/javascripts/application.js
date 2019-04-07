@@ -21,4 +21,5 @@
 //= require cocoon
 //= require lodash
 //= require app
+//= require notification
 //= require_tree .
