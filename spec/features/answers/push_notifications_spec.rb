@@ -1,6 +1,6 @@
 require_relative '../features_helper'
 
-feature 'User gets notifications', %q{
+feature 'User gets notifications about new answers', %q{
   In order to know if there are new answers
   As an any user
   I want to be notified

@@ -43,31 +43,6 @@ feature 'User can create a question', %q{
         visit questions_path
         expect(page).to have_content question[:title]
       end
-
-      scenario 'While one user creates a question another one can see it appears on index page', js: true do
-        Capybara.using_session('first user') do
-          visit questions_path
-          expect(page).not_to have_content question[:title]
-        end
-
-        Capybara.using_session('second user') do
-          sign_in user
-
-          visit new_question_path
-          fill_in 'Title', with: question[:title]
-          fill_in 'Body', with: question[:body]
-          click_on 'Save'
-
-          expect(page).to have_text 'Question created successfully'
-        end
-
-        created_question = Question.last
-
-        Capybara.using_session('first user') do
-          expect(page).to have_link created_question.title,
-                                    href: question_path(created_question)
-        end
-      end
     end
   end
 

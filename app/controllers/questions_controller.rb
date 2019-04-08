@@ -43,7 +43,7 @@ class QuestionsController < ApplicationController
   private
 
   def publish_question
-    return unless @question.valid?
+    return unless @question.persisted?
 
     template = ApplicationController.render partial: 'questions/question-row',
                                             locals: { question: @question }

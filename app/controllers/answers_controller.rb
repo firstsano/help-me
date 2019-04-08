@@ -37,7 +37,7 @@ class AnswersController < ApplicationController
   private
 
   def publish_answer
-    return unless @answer.valid?
+    return unless @answer.persisted?
 
     answer_body = @answer.body.truncate 20
     message = { body: answer_body, created_by: current_user.id }

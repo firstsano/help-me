@@ -47,3 +47,7 @@ $score-color: rgba($color-primary, 0.4);
         @extend .btn, .btn-secondary;
     }
 }
+
+.question.question_row {
+    @include vertical-padding(inherit);
+}
