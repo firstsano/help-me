@@ -44,7 +44,7 @@ class QuestionsController < ApplicationController
   def publish_question
     return unless @question.valid?
 
-    template = ApplicationController.render partial: 'questions/question_row',
+    template = ApplicationController.render partial: 'questions/question-row',
                                             locals: { question: @question }
     ActionCable.server.broadcast 'questions', template
   end
