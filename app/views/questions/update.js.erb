@@ -1,4 +1,4 @@
-(function() {
+(function($) {
   <%- if @question.errors.present? %>
     let $question = $('<%= j render(@question) %>');
     let $questionForm = $question.find('.question__form');
@@ -6,4 +6,4 @@
   <%- else %>
     $('.question').replaceWith('<%= j render(@question) %>');
   <%- end %>
-})();
+})(jQuery);
