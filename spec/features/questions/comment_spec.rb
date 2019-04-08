@@ -18,14 +18,33 @@ feature 'User can comment a question', %q{
 
     context 'With valid comment' do
       scenario 'User creates a comment', js: true do
-        within('.question-comment') do
+        within('.question__comments') do
           fill_in 'comment[body]', with: comment[:body]
           click_on 'Add comment'
         end
 
         expect(current_path).to eq question_path(question)
-        within('.question__comments') { expect(page).to have_content comment[:body] }
+        within('.question__comments') { expect(page).to have_content comment[:body], count: 1 }
       end
+    end
+
+    context 'With invalid comment' do
+      scenario 'User tries to create a comment', js: true do
+        within('.question__comments') do
+          fill_in 'comment[body]', with: nil
+          click_on 'Add comment'
+        end
+
+        expect(current_path).to eq question_path(question)
+        expect(page).to have_content "Body can't be blank"
+      end
+    end
+  end
+
+  context 'When user is not signed in' do
+    scenario 'User does not see a form to leave a comment' do
+      visit question_path(question)
+      expect(page).not_to have_selector '.comments__form'
     end
   end
 end

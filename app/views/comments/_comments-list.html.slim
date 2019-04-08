@@ -2,11 +2,12 @@
 .comments
   .comments__list
     = render commentable.comments
-  .comments__form
-    .comments__form-errors
-    = simple_form_for comment, url: comment_path(commentable), remote: true do |f|
-      = f.input :body, label: false
-      .comments__controls
-        = button_tag type: :submit, class: 'comments__control-button'
-          i.material-icons add
-          | Add comment
+  - if user_signed_in?
+    .comments__form
+      .comments__form-errors
+      = simple_form_for comment, url: comment_path(commentable), remote: true do |f|
+        = f.input :body, label: false
+        .comments__controls
+          = button_tag type: :submit, class: 'comments__control-button'
+            i.material-icons add
+            | Add comment
