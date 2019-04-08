@@ -30,7 +30,7 @@ feature 'User can comment an answer', %q{
     end
 
     context 'With invalid comment' do
-      scenario 'User tries to create a comment', js: true do
+      scenario 'User sees validation errors', js: true do
         within(".answer[data-answer-id='#{answer.id}'] .answer__comments") do
           fill_in 'comment[body]', with: nil
           click_on 'Add comment'
