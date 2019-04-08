@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
   include Voted
+  include Commented
 
   before_action :authenticate_user!
   before_action :load_question, only: :create
