@@ -194,7 +194,7 @@ RSpec.describe AnswersController, type: :controller do
           expect { post :upvote, params: { id: answer, format: 'json' } }.to change(answer.upvotes, :count).by(-1)
         end
 
-        it 'assigns a proper hash' do
+        it 'responds with a proper json' do
           post :upvote, params: { id: answer, format: 'json' }
           expected_json = { score: answer.score, upvoted: false }.to_json
           expect(response.body).to eq expected_json
@@ -212,7 +212,7 @@ RSpec.describe AnswersController, type: :controller do
           expect { post :upvote, params: { id: answer, format: 'json' } }.to change(answer.upvotes, :count).by(1)
         end
 
-        it 'assigns a proper hash' do
+        it 'responds with a proper json' do
           post :upvote, params: { id: answer, format: 'json' }
           expected_json = { score: answer.score, upvoted: true }.to_json
           expect(response.body).to eq expected_json
@@ -224,7 +224,7 @@ RSpec.describe AnswersController, type: :controller do
           expect { post :upvote, params: { id: answer, format: 'json' } }.to change(answer.upvotes, :count).by(1)
         end
 
-        it 'assigns a proper hash' do
+        it 'responds with a proper json' do
           post :upvote, params: { id: answer, format: 'json' }
           expected_json = { score: answer.score, upvoted: true }.to_json
           expect(response.body).to eq expected_json
@@ -259,7 +259,7 @@ RSpec.describe AnswersController, type: :controller do
           expect { post :downvote, params: { id: answer, format: 'json' } }.to change(answer.downvotes, :count).by(-1)
         end
 
-        it 'assigns a proper hash' do
+        it 'responds with a proper json' do
           post :downvote, params: { id: answer, format: 'json' }
           expected_json = { score: answer.score, downvoted: false }.to_json
           expect(response.body).to eq expected_json
@@ -277,7 +277,7 @@ RSpec.describe AnswersController, type: :controller do
           expect { post :downvote, params: { id: answer, format: 'json' } }.to change(answer.downvotes, :count).by(1)
         end
 
-        it 'assigns a proper hash' do
+        it 'responds with a proper json' do
           post :downvote, params: { id: answer, format: 'json' }
           expected_json = { score: answer.score, downvoted: true }.to_json
           expect(response.body).to eq expected_json
@@ -289,11 +289,50 @@ RSpec.describe AnswersController, type: :controller do
           expect { post :downvote, params: { id: answer, format: 'json' } }.to change(answer.downvotes, :count).by(1)
         end
 
-        it 'assigns a proper hash' do
+        it 'responds with a proper json' do
           post :downvote, params: { id: answer, format: 'json' }
           expected_json = { score: answer.score, downvoted: true }.to_json
           expect(response.body).to eq expected_json
         end
+      end
+    end
+  end
+
+  describe 'POST #comment' do
+    let(:comment) { attributes_for :comment }
+
+    before { sign_in user }
+
+    context 'with valid attributes' do
+      it 'creates a comment to the answer' do
+        expect { post :comment, params: { id: answer, format: 'js', comment: { body: comment[:body] } } }.to change(answer.comments, :count).by(1)
+      end
+
+      context 'after request' do
+        before { post :comment, params: { id: answer, format: 'js', comment: { body: comment[:body] } } }
+
+        it 'sets an author of comment' do
+          expect(answer.comments.last.author).to eq user
+        end
+
+        it 'assigns created comment' do
+          expect(assigns(:comment)).to eq answer.comments.last
+        end
+
+        it 'renders comment view' do
+          expect(response).to render_template :comment
+        end
+      end
+    end
+
+    context 'with invalid attributes' do
+      it 'does not create a comment to the answer' do
+        expect { post :comment, params: { id: answer, format: 'js', comment: { body: nil } } }.not_to change(answer.comments, :count)
+      end
+
+      it 'renders comment view' do
+        post :comment, params: { id: answer, format: 'js',comment: { body: nil } }
+        expect(response).to render_template :comment
       end
     end
   end
