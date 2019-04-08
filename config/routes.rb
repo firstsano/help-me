@@ -8,8 +8,12 @@ Rails.application.routes.draw do
     post :downvote, on: :member
   end
 
-  resources :questions, concerns: :votable do
-    resources :answers, shallow: true, concerns: :votable do
+  concern :commentable do
+    post :comment, on: :member
+  end
+
+  resources :questions, concerns: [:votable, :commentable] do
+    resources :answers, shallow: true, concerns: [:votable, :commentable] do
       put :best, on: :member
     end
   end
