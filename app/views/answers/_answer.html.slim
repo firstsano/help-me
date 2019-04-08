@@ -12,6 +12,8 @@
       .answer__info
         .answer__body = answer.body
         .answer__attachments = render answer.attachments
+        .answer__comments
+          = render '/comments/comments-list', commentable: answer
         .answer__controls
           - if answer.created_by == current_user
             = link_to edit_answer_path(answer),

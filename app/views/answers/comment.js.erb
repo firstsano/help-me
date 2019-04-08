@@ -1,0 +1,5 @@
+(function($) {
+  <%- params = { commentable: @answer } %>
+  <%- params[:comment] = @comment unless @comment.valid? %>
+  $('.answer[data-answer-id="<%= @answer.id %>"] .answer__comments').html('<%= j render("/comments/comments-list", **params) %>');
+})(jQuery);
