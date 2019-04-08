@@ -32,3 +32,6 @@
 
 # Ignore task file
 task.txt
+
+# Ignore spec development files
+/spec/examples.txt
