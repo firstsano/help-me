@@ -1,6 +1,6 @@
 .comments
   .comments__list
-    = render commentable.comments
+    = render commentable.comments.select(&:persisted?)
   - if user_signed_in?
     - comment = local_assigns[:comment] || commentable.comments.build
     = simple_form_for comment, url: comment_path(commentable), html: { class: 'comments__form' }, remote: true do |f|
