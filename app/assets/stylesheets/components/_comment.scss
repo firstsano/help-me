@@ -1,0 +1,24 @@
+.comment {
+    font-size: 13px;
+    border-style: solid none;
+    border-width: 1px;
+    border-color: rgba(black, 0.1);
+    background-color: rgba(black, 0.05);
+    margin: 5px 0;
+    padding: 5px 0 5px 10px;
+
+    & .comment__body {
+        margin-right: 10px;
+    }
+
+    & .comment__author {
+        margin-left: 10px;
+        font-weight: bold;
+    }
+
+    & .comment__created-at {
+        margin-left: 10px;
+        color: rgba(black, 0.5);
+        font-style: italic;
+    }
+}

@@ -1,0 +1,20 @@
+.comments {
+    .comments__form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: space-between;
+    }
+
+    .comments__input {
+        flex: 1
+    }
+
+    & .comments__control-button {
+        @extend .btn, .btn-primary;
+
+        font-size: 12px;
+        padding: 5px;
+        margin-left: 20px;
+    }
+}

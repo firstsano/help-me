@@ -18,6 +18,11 @@ $score-color: rgba($color-primary, 0.4);
     & .question__info-frame {
         display: flex;
         align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    & .question__comments {
+        width: 100%;
     }
 
     & .question__score {

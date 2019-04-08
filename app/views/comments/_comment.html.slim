@@ -1,1 +1,5 @@
-p = comment.body
+.comment
+  span.comment__body = comment.body
+  | &ndash;
+  span.comment__author = comment.author
+  span.comment__created-at = l comment.created_at, format: :short
