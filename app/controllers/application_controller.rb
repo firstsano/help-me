@@ -2,7 +2,6 @@ require "application_responder"
 
 class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
-  respond_to :html
 
   add_flash_types :success, :error
   before_action :configure_permitted_parameters, if: :devise_controller?

@@ -9,6 +9,8 @@ class AnswersController < ApplicationController
   before_action :restrict_votes!, only: %i[upvote downvote]
   after_action :publish_answer
 
+  respond_to :js, only: %i[best create destroy update]
+
   def create
     @answer = @question.answers.build answer_params
     @answer.created_by = current_user
