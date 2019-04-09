@@ -12,11 +12,12 @@ hr.separator
 
 = render @question
 
-hr.separator
+- unless @question.answers.empty?
+  hr.separator
 
-h2 Answers
-.answers
-  = render @question.answers
+  h2 Answers
+    .answers
+      = render @question.answers
 
 hr.separator
 
