@@ -114,7 +114,7 @@ feature 'User gets notifications about comments to the question', %q{
       end
 
       Capybara.using_session(user.name) do
-        within('.question__comments') { expect(page).not_to have_selector '.comment' }
+        within('.question__comments', visible: false) { expect(page).not_to have_selector '.comment' }
       end
     end
   end
