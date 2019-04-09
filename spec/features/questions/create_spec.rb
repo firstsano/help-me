@@ -38,7 +38,7 @@ feature 'User can create a question', %q{
         fill_in 'Body', with: question[:body]
         click_on 'Save'
 
-        expect(page).to have_text 'Question created successfully'
+        expect(page).to have_text 'Question was successfully created'
 
         visit questions_path
         expect(page).to have_content question[:title]

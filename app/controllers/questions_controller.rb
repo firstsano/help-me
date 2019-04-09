@@ -5,7 +5,10 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[show index]
   before_action :load_question, only: %i[show update destroy]
   before_action :authorize_resource!, only: %i[update destroy]
+  before_action :set_gon_question, only: :show
   after_action :publish_question, only: :create
+
+  respond_to :js, only: :update
 
   def index
     @questions = Question.all
@@ -16,31 +19,29 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    gon.question = { id: @question.id, answers: @question.answers.pluck(:id) }
     @answer = Answer.new
   end
 
   def create
-    @question = Question.new(question_params)
+    @question = Question.new question_params
     @question.created_by = current_user
-
-    if @question.save
-      redirect_to @question, notice: 'Question created successfully'
-    else
-      render :new
-    end
+    @question.save
+    respond_with @question
   end
 
   def update
-    @question.update(question_params)
+    @question.update question_params
   end
 
   def destroy
-    @question.destroy
-    redirect_to questions_path, notice: 'The question was successfully deleted'
+    respond_with @question.destroy
   end
 
   private
+
+  def set_gon_question
+    gon.question = { id: @question.id, answers: @question.answers.pluck(:id) }
+  end
 
   def publish_question
     return unless @question.persisted?

@@ -19,7 +19,7 @@ feature 'User can destroy a question', %q{
       click_on 'Delete'
 
       expect(current_path).to eq questions_path
-      expect(page).to have_content 'The question was successfully deleted'
+      expect(page).to have_content 'Question was successfully destroyed'
     end
 
     scenario 'User tries to destroy someone else\'s answer' do

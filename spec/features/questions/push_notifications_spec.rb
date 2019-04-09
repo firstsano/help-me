@@ -28,7 +28,7 @@ feature 'User gets notifications about new questions', %q{
         fill_in 'Body', with: question[:body]
         click_on 'Save'
 
-        expect(page).to have_text 'Question created successfully'
+        expect(page).to have_text 'Question was successfully created'
       end
 
       created_question = Question.last
