@@ -22,7 +22,7 @@
 
   const subscribe = function() {
     const notification = App.notification;
-    const questionId = _.get(gon, 'question');
+    const questionId = _.get(gon, 'question.id');
     const currentUser = _.get(gon, 'user');
     if (!questionId) {
       return false;

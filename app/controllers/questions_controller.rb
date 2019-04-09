@@ -16,7 +16,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    gon.question = @question.id
+    gon.question = { id: @question.id, answers: @question.answers.pluck(:id) }
     @answer = Answer.new
   end
 

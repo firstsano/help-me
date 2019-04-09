@@ -4,6 +4,7 @@ module Commented
   included do
     before_action :load_resource_for_commentable, only: :comment
     before_action :authenticate_user!, only: :comment
+    after_action :publish_comment, only: :comment
   end
 
   def comment
@@ -15,6 +16,17 @@ module Commented
   end
 
   private
+
+  def publish_comment
+    return unless @comment.valid?
+
+    partial = ApplicationController.render partial: '/comments/comment',
+                                           locals: { comment: @comment }
+    CommentsChannel.broadcast_to @comment.commentable,
+                                 created_by: current_user.id,
+                                 commentable_id: @comment.commentable.id,
+                                 comment: partial
+  end
 
   def comment_params
     params.require(:comment).permit(:body)
