@@ -26,6 +26,10 @@
 
   const subscribeOnAnswersComments = function() {
     const answersIds = _.get(gon, 'question.answers');
+    if (_.isNull(answersIds) || _.isEmpty(answersIds)) {
+      return false;
+    }
+
     const callbacks = {
       received(data) {
         if (data.created_by === currentUser) {
