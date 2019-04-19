@@ -12,6 +12,10 @@ feature 'User can sign in with google', %q{
     fscenario 'User signs in' do
       visit new_user_session_path
       expect(page).to have_link 'Sign in with Google', href: user_google_oauth2_omniauth_authorize_path
+
+      click_on 'Sign in with Google'
+      expect(current_path).to eq root_path
+      expect(page).to have_content 'Signed in successfully.'
     end
   end
 
