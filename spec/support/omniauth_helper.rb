@@ -1,9 +1,9 @@
 module OmniauthHelper
-  def mock_google_hash(user: nil, authorization: nil)
+  def mock_google_auth(user: nil, authorization: nil)
     user = user || build(:user)
     authorization = authorization || build(:authorization)
     OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
-      'provider' => authorization.provider,
+      'provider' => 'google_oauth2',
       'uid' => authorization.uid,
       'info' => {
         "name" => user.name,
@@ -16,5 +16,13 @@ module OmniauthHelper
         'secret' => 'mock_secret'
       }
     })
+  end
+
+  def reset_auth(provider)
+    OmniAuth.config.mock_auth[provider] = nil
+  end
+
+  def mock_failure_auth(provider)
+    OmniAuth.config.mock_auth[provider] = :invalid_credentials
   end
 end

@@ -3,6 +3,9 @@ require 'capybara-screenshot/rspec'
 
 RSpec.configure do |config|
   OmniAuth.config.test_mode = true
+  config.before(:each) do
+    Rails.application.env_config["devise.mapping"] = Devise.mappings[:user]
+  end
 
   Capybara.server = :puma
   Capybara.javascript_driver = :selenium_chrome_headless
