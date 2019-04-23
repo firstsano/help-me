@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_07_120403) do
+ActiveRecord::Schema.define(version: 2019_04_23_110557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,16 @@ ActiveRecord::Schema.define(version: 2019_04_07_120403) do
     t.datetime "updated_at", null: false
     t.index ["attachable_id", "attachable_type"], name: "index_attachments_on_attachable_id_and_attachable_type"
     t.index ["attachable_type", "attachable_id"], name: "index_attachments_on_attachable_type_and_attachable_id"
+  end
+
+  create_table "authorizations", force: :cascade do |t|
+    t.string "provider", null: false
+    t.string "uid", null: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider", "uid"], name: "index_authorizations_on_provider_and_uid"
+    t.index ["user_id"], name: "index_authorizations_on_user_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -90,6 +100,7 @@ ActiveRecord::Schema.define(version: 2019_04_07_120403) do
 
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users", column: "created_by_id"
+  add_foreign_key "authorizations", "users"
   add_foreign_key "comments", "users"
   add_foreign_key "questions", "users", column: "created_by_id"
   add_foreign_key "votes", "users"
