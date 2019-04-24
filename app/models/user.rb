@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :trackable,
-         :recoverable, :rememberable, :validatable,
+         :recoverable, :rememberable, :validatable, :confirmable,
          :omniauthable, omniauth_providers: %i[google_oauth2]
 
   has_many :authorizations
@@ -24,6 +24,7 @@ class User < ApplicationRecord
   def self.create_from_ouath(auth)
     password = Devise.friendly_token[0..20]
     User.create! email: auth.info[:email], name: auth.info[:name],
-                 password: password, password_confirmation: password
+                 password: password, password_confirmation: password,
+                 confirmed_at: Date.today
   end
 end

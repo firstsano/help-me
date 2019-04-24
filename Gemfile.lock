@@ -76,6 +76,9 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.2)
       xpath (~> 3.2)
+    capybara-email (3.0.1)
+      capybara (>= 2.4, < 4.0)
+      mail
     capybara-screenshot (1.0.22)
       capybara (>= 1.0, < 4)
       launchy
@@ -129,6 +132,8 @@ GEM
     jwt (2.1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
+    letter_opener (1.7.0)
+      launchy (~> 2.2)
     libv8 (6.7.288.46.1)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -338,6 +343,7 @@ DEPENDENCIES
   bootstrap (= 4.1.1)
   byebug
   capybara (>= 2.15)
+  capybara-email
   capybara-screenshot
   carrierwave (~> 1.0)
   chromedriver-helper
@@ -349,6 +355,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   launchy
+  letter_opener
   listen (>= 3.0.5, < 3.2)
   lodash-rails
   material-sass (= 4.1.1)

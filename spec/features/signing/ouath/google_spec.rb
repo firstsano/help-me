@@ -6,7 +6,8 @@ feature 'User can sign in with google', %q{
   I want to be able to sign in with google
 } do
 
-  before do
+  background do
+    clear_emails
     reset_auth :google_oauth2
     Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
   end

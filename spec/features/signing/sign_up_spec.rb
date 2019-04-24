@@ -6,6 +6,8 @@ feature 'User can sign up', %q{
   I want to be able to sign up
 } do
 
+  background { clear_emails }
+
   context 'When user is already registered' do
     given(:user) { create :user }
 
@@ -41,7 +43,15 @@ feature 'User can sign up', %q{
     fill_in 'user[password_confirmation]', with: user[:password]
     click_on 'Sign up'
 
+    open_email user[:email]
+    current_email.click_link 'Confirm my account'
+    expect(page).to have_content 'Your email address has been successfully confirmed.'
+
+    fill_in 'Email', with: user[:email]
+    fill_in 'Password', with: user[:password]
+    click_on 'Log in'
+
     expect(current_path).to eq root_path
-    expect(page).to have_content 'Welcome! You have signed up successfully.'
+    expect(page).to have_content 'Signed in successfully'
   end
 end

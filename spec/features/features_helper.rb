@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'capybara-screenshot/rspec'
+require 'capybara/email/rspec'
 
 RSpec.configure do |config|
   OmniAuth.config.test_mode = true
