@@ -9,13 +9,12 @@ feature 'User can sign in with google', %q{
   background do
     clear_emails
     reset_auth :google_oauth2
-    Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google_oauth2]
   end
 
   context 'When user has an authorization' do
     given!(:user) { create :user }
     given!(:authorization) { create :authorization, provider: 'google_oauth2', user: user }
-    before { mock_google_auth user: user, authorization: authorization }
+    background { mock_auth :google_oauth2, user: user, authorization: authorization }
 
     scenario 'User signs in' do
       visit new_user_session_path
@@ -30,9 +29,9 @@ feature 'User can sign in with google', %q{
   context 'When user has no authorization' do
     context 'When user exists' do
       given!(:user) { create :user }
-      before { mock_google_auth user: user }
+      before { mock_auth :google_oauth2, user: user }
 
-      scenario 'User signs in and authorization is created' do
+      scenario 'Authorization is created and user signs in' do
         visit new_user_session_path
         expect(page).to have_link 'Sign in with Google', href: user_google_oauth2_omniauth_authorize_path
 
@@ -43,7 +42,7 @@ feature 'User can sign in with google', %q{
     end
 
     context 'When user does not exist' do
-      before { mock_google_auth }
+      before { mock_auth :google_oauth2 }
 
       scenario 'User is created and signs in' do
         visit new_user_session_path
@@ -56,16 +55,34 @@ feature 'User can sign in with google', %q{
     end
   end
 
-  context 'When user triggered omniauth error' do
-    before { mock_failure_auth :google_oauth2 }
+  context 'When oauth provider triggered any errors' do
+    context 'When user triggered invalid credentials error' do
+      before { mock_failure_auth :google_oauth2 }
 
-    scenario 'User is redirected to root_path' do
-      visit new_user_session_path
-      expect(page).to have_link 'Sign in with Google', href: user_google_oauth2_omniauth_authorize_path
+      scenario 'User is redirected to root_path with error message' do
+        visit new_user_session_path
+        expect(page).to have_link 'Sign in with Google', href: user_google_oauth2_omniauth_authorize_path
 
-      click_on 'Sign in with Google'
-      expect(current_path).to eq root_path
-      expect(page).to have_content 'Unable to sign in with provider'
+        click_on 'Sign in with Google'
+        expect(current_path).to eq root_path
+        expect(page).to have_content 'Unable to sign in with Google. Try again later.'
+      end
+    end
+
+    context 'When provider has sent inapropriate data' do
+      before do
+        user_with_invalid_email = build :user, email: 'invalid_email'
+        mock_auth :google_oauth2, user: user_with_invalid_email
+      end
+
+      scenario 'User is redirected to root_path with error message' do
+        visit new_user_session_path
+        expect(page).to have_link 'Sign in with Google', href: user_google_oauth2_omniauth_authorize_path
+
+        click_on 'Sign in with Google'
+        expect(current_path).to eq root_path
+        expect(page).to have_content 'Unable to sign in with Google. Try again later.'
+      end
     end
   end
 end
