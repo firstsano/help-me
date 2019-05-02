@@ -4,7 +4,7 @@ require 'capybara/email/rspec'
 
 RSpec.configure do |config|
   OmniAuth.config.test_mode = true
-  config.before(:each) do
+  config.before(:each, type: :feature) do
     Rails.application.env_config["devise.mapping"] = Devise.mappings[:user]
   end
 

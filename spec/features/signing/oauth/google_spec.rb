@@ -22,7 +22,7 @@ feature 'User can sign in with google', %q{
 
       click_on 'Sign in with Google'
       expect(current_path).to eq root_path
-      expect(page).to have_content 'Successfully authenticated from Google account'
+      expect(page).to have_content 'Successfully authenticated from google_oauth2 account'
     end
   end
 
@@ -37,7 +37,7 @@ feature 'User can sign in with google', %q{
 
         click_on 'Sign in with Google'
         expect(current_path).to eq root_path
-        expect(page).to have_content 'Successfully authenticated from Google account'
+        expect(page).to have_content 'Successfully authenticated from google_oauth2 account'
       end
     end
 
@@ -50,7 +50,7 @@ feature 'User can sign in with google', %q{
 
         click_on 'Sign in with Google'
         expect(current_path).to eq root_path
-        expect(page).to have_content 'Successfully authenticated from Google account'
+        expect(page).to have_content 'Successfully authenticated from google_oauth2 account'
       end
     end
   end
@@ -65,23 +65,7 @@ feature 'User can sign in with google', %q{
 
         click_on 'Sign in with Google'
         expect(current_path).to eq root_path
-        expect(page).to have_content 'Unable to sign in with Google. Try again later.'
-      end
-    end
-
-    context 'When provider has sent inapropriate data' do
-      before do
-        user_with_invalid_email = build :user, email: 'invalid_email'
-        mock_auth :google_oauth2, user: user_with_invalid_email
-      end
-
-      scenario 'User is redirected to root_path with error message' do
-        visit new_user_session_path
-        expect(page).to have_link 'Sign in with Google', href: user_google_oauth2_omniauth_authorize_path
-
-        click_on 'Sign in with Google'
-        expect(current_path).to eq root_path
-        expect(page).to have_content 'Unable to sign in with Google. Try again later.'
+        expect(page).to have_content 'Could not authenticate'
       end
     end
   end

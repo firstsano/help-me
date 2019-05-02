@@ -56,4 +56,5 @@ group :test do
   gem 'rails-controller-testing'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '4.0.0.rc1'
+  gem 'timecop'
 end

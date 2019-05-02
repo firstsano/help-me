@@ -11,28 +11,25 @@ class User < ApplicationRecord
     name
   end
 
-  def self.find_for_oauth(auth)
-    provider, uid = auth.provider, auth.uid.to_s
-    authorization = Authorization.find_by provider: provider, uid: uid
-    return authorization.user if authorization
-
-    user = self.find_by(email: auth.info[:email]) || self.create_from_ouath(auth)
-    user.authorizations.create provider: provider, uid: uid
-    user
+  def has_provider?(provider)
+    authorizations.where(provider: provider).any?
   end
 
-  def self.find_by_auth(provider:, uid:)
+  def generate_auth(provider, uid)
+    self.authorizations.create! provider: provider, uid: uid
+  end
+
+  def self.generate_for_oauth(name, email)
+    self.find_by(email: email) || self.create_confirmed(name, email)
+  end
+
+  def self.find_by_auth(provider, uid)
     self.joins(:authorizations).where(authorizations: { provider: provider, uid: uid }).first
   end
 
-  def self.create_from_ouath(auth)
-    create_with_password email: auth.info[:email], name: auth.info[:name], confirmed_at: Date.today
-  end
-
-  def self.create_with_password(**attributes)
+  def self.create_confirmed(name, email)
     password = Devise.friendly_token[0..20]
-    attributes[:password] = password
-    attributes[:password_confirmation] = password
-    User.create **attributes
+    User.create! name: name, email: email, password: password,
+                 password_confirmation: password, confirmed_at: Date.today
   end
 end

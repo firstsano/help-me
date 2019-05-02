@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :authorization do
-    provider { Faker::Lorem.word }
+    sequence(:provider) { |n| "#{Faker::Lorem.word}#{n}" }
     uid { SecureRandom.uuid }
     user
   end

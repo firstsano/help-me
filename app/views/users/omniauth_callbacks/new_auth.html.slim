@@ -1,0 +1,8 @@
+h2 Email confirmation
+
+= simple_form_for(:user) do |f|
+  = @errors
+  .form-inputs
+    = f.input :email, required: true, autofocus: true, input_html: { autocomplete: "email" }
+  .form-actions
+    = f.button :submit, "Submit"

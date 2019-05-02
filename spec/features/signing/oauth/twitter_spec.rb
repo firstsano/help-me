@@ -23,21 +23,21 @@ feature 'User can sign in with twitter', %q{
 
         click_on 'Sign in with Twitter'
         expect(current_path).to eq root_path
-        expect(page).to have_content 'Successfully authenticated from Twitter account'
+        expect(page).to have_content 'Successfully authenticated from twitter account'
       end
     end
 
     context 'When user uses another twitter account' do
       given!(:user) { create :user }
       given!(:user_authorization) { create :authorization, provider: 'twitter', user: user }
-      given!(:authorization) { create :authorization, provider: 'twitter', user: user }
+      given(:authorization) { build :authorization, provider: 'twitter', user: user }
       background { mock_auth :twitter, user: user, authorization: authorization }
 
       scenario 'User is redirected to the root_path with error message' do
         visit new_user_session_path
 
         click_on 'Sign in with Twitter'
-        fill_in 'email', with: user.email
+        fill_in 'Email', with: user.email
         click_on 'Submit'
 
         expect(current_path).to eq root_path
@@ -56,7 +56,7 @@ feature 'User can sign in with twitter', %q{
 
         visit new_user_session_path
         click_on 'Sign in with Twitter'
-        fill_in 'email', with: user.email
+        fill_in 'Email', with: user.email
         click_on 'Submit'
       end
 
@@ -66,24 +66,7 @@ feature 'User can sign in with twitter', %q{
         visit new_user_session_path
         click_on 'Sign in with Google'
         expect(current_path).to eq root_path
-        expect(page).to have_content 'Successfully authenticated from Google account'
-      end
-    end
-
-    context 'When user uses another twitter account' do
-      given!(:user) { create :user }
-      given!(:user_authorization) { create :authorization, provider: 'twitter', user: user }
-      given!(:authorization) { create :authorization, provider: 'twitter', user: user }
-      background { mock_auth :twitter, user: user, authorization: authorization }
-
-      scenario 'User is redirected to the root_path with error message' do
-        visit new_user_session_path
-        click_on 'Sign in with Twitter'
-        fill_in 'email', with: user.email
-        click_on 'Submit'
-
-        expect(current_path).to eq root_path
-        expect(page).to have_content 'You already have another twitter account.'
+        expect(page).to have_content 'Successfully authenticated from google_oauth2 account'
       end
     end
   end
@@ -96,9 +79,9 @@ feature 'User can sign in with twitter', %q{
       scenario 'User is asked to enter his email for confirmation' do
         visit new_user_session_path
         click_on 'Sign in with Twitter'
-        expect(current_path).to eq auth_email_path
+        expect(current_path).to eq users_auth_email_confirmation_path
 
-        fill_in 'email', with: user.email
+        fill_in 'Email', with: user.email
         click_on 'Submit'
 
         expect(page).to have_content 'Follow email link to confirm your account'
@@ -106,11 +89,22 @@ feature 'User can sign in with twitter', %q{
         expect(current_email).not_to be_nil
       end
 
+      scenario 'User is shown an error message on invalid email' do
+        visit new_user_session_path
+        click_on 'Sign in with Twitter'
+        expect(current_path).to eq users_auth_email_confirmation_path
+
+        fill_in 'Email', with: 'invalid_email'
+        click_on 'Submit'
+
+        expect(page).to have_content 'Invalid email'
+      end
+
       context 'When user enters his email' do
         background do
           visit new_user_session_path
           click_on 'Sign in with Twitter'
-          fill_in 'email', with: user.email
+          fill_in 'Email', with: user.email
           click_on 'Submit'
         end
 
@@ -118,19 +112,29 @@ feature 'User can sign in with twitter', %q{
           scenario 'User is redirected to email page on sign in tries' do
             visit new_user_session_path
             click_on 'Sign in with Twitter'
-            expect(current_path).to eq auth_email_path
+            expect(current_path).to eq users_auth_email_confirmation_path
           end
         end
 
         context 'When user is approved' do
           scenario 'Authorization is created and user signs in' do
             open_email user.email
-            current_email.click 'Confirm my account'
+            current_email.click_link 'Confirm your authorization'
             expect(page).to have_content 'Your email address has been successfully confirmed.'
 
             visit new_user_session_path
             click_on 'Sign in with Twitter'
-            expect(page).to have_content 'Successfully authenticated from Twitter account'
+            expect(page).to have_content 'Successfully authenticated from twitter account'
+          end
+
+          scenario 'User cannot use same link again' do
+            open_email user.email
+            current_email.click_link 'Confirm your authorization'
+            expect(page).to have_content 'Your email address has been successfully confirmed.'
+
+            open_email user.email
+            current_email.click_link 'Confirm your authorization'
+            expect(page).to have_content 'Request token does not exist or has already been used.'
           end
         end
       end
@@ -138,27 +142,27 @@ feature 'User can sign in with twitter', %q{
 
     context 'When user does not exist' do
       let(:email) { Faker::Internet.email }
-      background { mock_auth :twitter, }
+      background { mock_auth :twitter }
 
       scenario 'User is created and signs in' do
         visit new_user_session_path
-        expect(page).to have_link 'Sign in with Twitter', href: user_google_oauth2_omniauth_authorize_path
+        expect(page).to have_link 'Sign in with Twitter', href: user_twitter_omniauth_authorize_path
 
         click_on 'Sign in with Twitter'
-        expect(current_path).to eq auth_email_path
+        expect(current_path).to eq users_auth_email_confirmation_path
 
-        fill_in 'email', with: email
+        fill_in 'Email', with: email
         click_on 'Submit'
 
         expect(page).to have_content 'Follow email link to confirm your account'
 
         open_email email
-        current_email.click 'Confirm my account'
+        current_email.click_link 'Confirm your authorization'
         expect(page).to have_content 'Your email address has been successfully confirmed.'
 
         visit new_user_session_path
         click_on 'Sign in with Twitter'
-        expect(page).to have_content 'Successfully authenticated from Twitter account'
+        expect(page).to have_content 'Successfully authenticated from twitter account'
       end
     end
   end
