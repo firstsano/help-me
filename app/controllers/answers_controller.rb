@@ -6,7 +6,6 @@ class AnswersController < ApplicationController
   before_action :load_question, only: :create
   before_action :load_answer, only: %i[update destroy best]
   before_action :authorize_resource!, only: %i[update destroy]
-  before_action :restrict_votes!, only: %i[upvote downvote]
   after_action :publish_answer
 
   respond_to :js, only: %i[best create destroy update]
