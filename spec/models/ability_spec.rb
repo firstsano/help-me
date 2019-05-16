@@ -29,5 +29,10 @@ describe Ability, type: :model do
       it { is_expected.to be_able_to do_action, create(:question, created_by: user), created_by: user }
       it { is_expected.not_to be_able_to do_action, create(:question, created_by: other_user), created_by: user }
     end
+
+    %i[update destroy].each do |do_action|
+      it { is_expected.to be_able_to do_action, create(:answer, created_by: user), created_by: user }
+      it { is_expected.not_to be_able_to do_action, create(:answer, created_by: other_user), created_by: user }
+    end
   end
 end
