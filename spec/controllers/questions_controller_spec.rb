@@ -172,8 +172,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to a question with error message' do
         post :upvote, params: { id: question, format: 'json' }
-        expect(response).to redirect_to question_path(question)
-        expect(controller).to set_flash[:error]
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -237,8 +236,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to a question with error message' do
         post :downvote, params: { id: question, format: 'json' }
-        expect(response).to redirect_to question_path(question)
-        expect(controller).to set_flash[:error]
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
