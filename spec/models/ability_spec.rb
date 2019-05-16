@@ -19,5 +19,10 @@ describe Ability, type: :model do
 
     it { is_expected.not_to be_able_to :manage, :all }
     it { is_expected.to be_able_to :read, :all }
+
+    it { is_expected.to be_able_to :create, Question }
+    it { is_expected.to be_able_to :create, Answer }
+    it { is_expected.to be_able_to :create, Comment }
+    it { is_expected.to be_able_to :create, Attachment }
   end
 end
