@@ -2,10 +2,10 @@ class AnswersController < ApplicationController
   include Voted
   include Commented
 
-  before_action :authenticate_user!
   before_action :load_question, only: :create
   before_action :load_answer, only: %i[update destroy best]
   before_action :authorize_resource!, only: %i[update destroy]
+
   after_action :publish_answer
 
   respond_to :js, only: %i[best create destroy update]
