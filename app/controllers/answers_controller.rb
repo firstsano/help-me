@@ -27,7 +27,6 @@ class AnswersController < ApplicationController
     question = @answer.question
     @previous_best_answer = question.best_answer
     question.set_best_answer @answer
-    render :best
   end
 
   private
