@@ -2,9 +2,12 @@ class QuestionsController < ApplicationController
   include Voted
   include Commented
 
-  before_action :authenticate_user!, except: %i[show index]
+  skip_before_action :authenticate_user!, only: %i[show index]
+
   load_and_authorize_resource only: %i[index new show create update destroy]
+
   before_action :set_gon_question, only: :show
+
   after_action :publish_question, only: :create
 
   respond_to :html

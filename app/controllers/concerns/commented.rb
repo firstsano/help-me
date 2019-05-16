@@ -3,7 +3,6 @@ module Commented
 
   included do
     before_action :load_resource_for_commentable, only: :comment
-    before_action :authenticate_user!, only: :comment
     after_action :publish_comment, only: :comment
   end
 
