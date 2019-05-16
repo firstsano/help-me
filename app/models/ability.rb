@@ -14,7 +14,6 @@ class Ability
     cannot :upvote, [Question, Answer], created_by: user
     can :downvote, [Question, Answer]
     cannot :downvote, [Question, Answer], created_by: user
-    can :best, [Answer]
-    cannot :best, [Answer], created_by: user
+    can :best, [Answer], question: { created_by: user }
   end
 end

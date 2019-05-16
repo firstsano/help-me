@@ -161,8 +161,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirects to the question with error message' do
         put :best, params: { id: answer, format: 'js' }
-        expect(response).to redirect_to question_path(question)
-        expect(controller).to set_flash[:error]
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end

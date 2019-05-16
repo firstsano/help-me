@@ -25,13 +25,9 @@ class AnswersController < ApplicationController
 
   def best
     question = @answer.question
-    if question.created_by != current_user
-      redirect_to redirect_path(@answer), error: 'You are not permitted to perform this operation'
-    else
-      @previous_best_answer = question.best_answer
-      question.set_best_answer @answer
-      render :best
-    end
+    @previous_best_answer = question.best_answer
+    question.set_best_answer @answer
+    render :best
   end
 
   private
