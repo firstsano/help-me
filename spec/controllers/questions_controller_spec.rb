@@ -104,7 +104,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to question with error message' do
         patch :update, params: { id: question, question: new_attributes }
-        expect(response).to redirect_to questions_path
+        expect(response).to redirect_to root_path
         expect(controller).to set_flash[:error]
       end
     end
