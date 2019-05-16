@@ -3,8 +3,7 @@ class AnswersController < ApplicationController
   include Commented
 
   before_action :load_question, only: :create
-  before_action :load_answer, only: %i[update destroy best]
-  before_action :authorize_resource!, only: %i[update destroy]
+  load_and_authorize_resource
 
   after_action :publish_answer
 
@@ -49,20 +48,11 @@ class AnswersController < ApplicationController
     @question = Question.find params.require(:question_id)
   end
 
-  def load_answer
-    @answer = Answer.find params.require(:id)
-  end
-
   def redirect_path(answer)
     question_path answer.question
   end
 
   def answer_params
     params.require(:answer).permit(:body, attachments_attributes: [:id, :source, :_destroy])
-  end
-
-  def authorize_resource!
-    message = { error: 'You are not permitted to perform this operation' }
-    redirect_to redirect_path(@answer), **message if @answer.created_by != current_user
   end
 end
