@@ -3,7 +3,6 @@ module Voted
 
   included do
     before_action :load_resource_for_votable, only: %i[upvote downvote]
-    before_action :restrict_votes!, only: %i[upvote downvote]
   end
 
   def upvote
@@ -21,11 +20,6 @@ module Voted
   end
 
   private
-
-  def restrict_votes!
-    votable = instance_variable_get "@#{votable_name}"
-    redirect_to redirect_path(votable), error: 'Owner cannot vote' if votable.created_by == current_user
-  end
 
   def load_resource_for_votable
     votable = instance_variable_get "@#{votable_name}"
