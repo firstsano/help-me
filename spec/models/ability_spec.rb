@@ -10,5 +10,6 @@ describe Ability, type: :model do
     it { is_expected.to be_able_to :read, Question }
     it { is_expected.to be_able_to :read, Answer }
     it { is_expected.to be_able_to :read, Comment }
+    it { is_expected.to be_able_to :read, Attachment }
   end
 end
