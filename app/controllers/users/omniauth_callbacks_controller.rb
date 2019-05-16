@@ -1,4 +1,6 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  skip_authorization_check
+
   before_action :sign_in_by_authorization!, only: %i[google_oauth2 twitter]
   before_action :restrict_empty_session_auth!, :load_email, only: :register_auth
   before_action :load_confirmation_request, only: :confirm_auth

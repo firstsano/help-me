@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
 
   protect_from_forgery
+  check_authorization unless: :devise_controller?
   add_flash_types :success, :error
 
   before_action :authenticate_user!
