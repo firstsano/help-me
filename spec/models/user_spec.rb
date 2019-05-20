@@ -44,19 +44,19 @@ RSpec.describe User, type: :model do
   context 'Class methods' do
     subject(:users) { described_class }
 
-    describe '.generate_for_oauth' do
-      it { is_expected.to respond_to :generate_for_oauth }
+    describe '.get_by_oauth' do
+      it { is_expected.to respond_to :get_by_oauth }
 
       context 'when user does not exist' do
         it 'creates a user' do
-          user = users.generate_for_oauth Faker::Name.name, Faker::Internet.email
+          user = users.get_by_oauth Faker::Name.name, Faker::Internet.email
           expect(user).to be_a_kind_of(users)
           expect(user.password).to be_present
           expect(user).to be_confirmed
         end
 
         it 'raises error on invalid params' do
-          expect { users.generate_for_oauth Faker::Name.name, 'invalid email' }.to raise_error ActiveRecord::RecordInvalid
+          expect { users.get_by_oauth Faker::Name.name, 'invalid email' }.to raise_error ActiveRecord::RecordInvalid
         end
       end
 
@@ -64,7 +64,7 @@ RSpec.describe User, type: :model do
         let(:user) { create :user }
 
         it 'returns the user' do
-          expect(users.generate_for_oauth(user.name, user.email)).to eq user
+          expect(users.get_by_oauth(user.name, user.email)).to eq user
         end
       end
     end

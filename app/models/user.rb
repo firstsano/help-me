@@ -19,7 +19,7 @@ class User < ApplicationRecord
     self.authorizations.create! provider: provider, uid: uid
   end
 
-  def self.generate_for_oauth(name, email)
+  def self.get_by_oauth(name, email)
     self.find_by(email: email) || self.create_confirmed(name, email)
   end
 

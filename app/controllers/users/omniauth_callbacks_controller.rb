@@ -6,7 +6,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   before_action :load_confirmation_request, only: :confirm_auth
 
   def google_oauth2
-    user = User.generate_for_oauth auth.info.name, auth.info.email
+    user = User.get_by_oauth auth.info.name, auth.info.email
     user.generate_auth auth.provider, auth.uid
     sign_in_user user
   end
@@ -34,7 +34,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def confirm_auth
     @request.confirm
-    user = User.generate_for_oauth @request.name, @request.email
+    user = User.get_by_oauth @request.name, @request.email
     if user.has_provider?(@request.provider)
       redirect_to root_path, error: "You already have another #{@request.provider} account."
     else
