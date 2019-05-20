@@ -13,17 +13,13 @@ Doorkeeper.configure do
   # file then you need to declare this block in order to restrict access to the web interface for
   # adding oauth authorized applications. In other case it will return 403 Forbidden response
   # every time somebody will try to access the admin web interface.
-  #
-  admin_authenticator do
-    # Put your admin authentication logic here.
-    # Example implementation:
 
-    current_user || warden.authenticate!(scope: :user)
-    # if current_user
-    #   head :forbidden unless current_user.admin?
-    # else
-    #   redirect_to sign_in_url
-    # end
+  admin_authenticator do
+    if current_user
+      head :forbidden unless current_user.is_admin?
+    else
+      redirect_to sign_in_url
+    end
   end
 
   # If you are planning to use Doorkeeper in Rails 5 API-only application, then you might
