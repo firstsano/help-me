@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   use_doorkeeper
 
+  api_version(module: "Api::V1", path: { value: "api/v1" }, defaults: { format: :json }, default: true) do
+    resources :profiles
+  end
+
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks',
     registrations: 'registrations'
