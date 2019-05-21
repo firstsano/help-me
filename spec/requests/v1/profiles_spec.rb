@@ -7,12 +7,12 @@ RSpec.describe 'Profiles API', type: :request do
     context 'when unauthorized' do
       it 'responds with forbidden status without token' do
         get resource, params: { format: :json }
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status :unauthorized
       end
 
       it 'responds with forbidden status with incorrect token' do
         get resource, params: { format: :json, access_token: '123456' }
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status :unauthorized
       end
     end
 
@@ -22,7 +22,7 @@ RSpec.describe 'Profiles API', type: :request do
 
       it 'responds with status ok' do
         get resource, params: { format: :json, access_token: access_token.token }
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status :ok
       end
     end
   end
