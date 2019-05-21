@@ -2,9 +2,9 @@ Rails.application.routes.draw do
   use_doorkeeper
 
   api_version(module: "Api::V1", path: { value: "api/v1" }, defaults: { format: :json }, default: true) do
-    resources :profiles do
-      get :me, on: :collection
-    end
+    get "profiles/me", to: "profiles#me"
+    get "users", to: "users#index"
+    get "users/index", to: "users#index"
   end
 
   devise_for :users, controllers: {
