@@ -1,4 +1,4 @@
-class QuestionsController < ApplicationController
+class QuestionsController < ::ApplicationController
   include Voted
   include Commented
 

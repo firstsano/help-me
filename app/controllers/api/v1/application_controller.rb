@@ -1,6 +1,10 @@
+require 'application_responder'
+
 module Api
   module V1
     class ApplicationController < ActionController::API
+      self.responder = ApplicationResponder
+
       before_action :doorkeeper_authorize!
       respond_to :json
 
