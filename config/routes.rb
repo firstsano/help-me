@@ -8,15 +8,13 @@ Rails.application.routes.draw do
   end
 
   devise_for :users, controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks',
-    registrations: 'registrations'
+    omniauth_callbacks: "users/omniauth_callbacks",
+    registrations: "registrations"
   }
 
-  get 'users/auth/email_confirmation', to: 'users/omniauth_callbacks#new_auth'
-  post 'users/auth/email_confirmation', to: 'users/omniauth_callbacks#register_auth'
-  get 'users/auth/confirm', to: 'users/omniauth_callbacks#confirm_auth'
-
-  root to: 'questions#index'
+  get "users/auth/email_confirmation", to: "users/omniauth_callbacks#new_auth"
+  post "users/auth/email_confirmation", to: "users/omniauth_callbacks#register_auth"
+  get "users/auth/confirm", to: "users/omniauth_callbacks#confirm_auth"
 
   concern :votable do
     post :upvote, on: :member
@@ -32,4 +30,6 @@ Rails.application.routes.draw do
       put :best, on: :member
     end
   end
+
+  root to: "questions#index"
 end
