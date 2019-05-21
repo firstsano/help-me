@@ -20,9 +20,23 @@ RSpec.describe 'Profiles API', type: :request do
       let(:user) { create :user }
       let(:access_token) { create :access_token, resource_owner_id: user.id }
 
+      before { get resource, params: { format: :json, access_token: access_token.token } }
+
       it 'responds with status ok' do
-        get resource, params: { format: :json, access_token: access_token.token }
         expect(response).to have_http_status :ok
+      end
+
+      it "returns user's email" do
+        expect(response.body).to be_json_eql(user.email.to_json).at_path('email')
+      end
+
+      it "returns user's name" do
+        expect(response.body).to be_json_eql(user.name.to_json).at_path('name')
+      end
+
+      it "does not return user's passsword" do
+        expect(response.body).not_to have_json_path('password')
+        expect(response.body).not_to have_json_path('encrypted_password')
       end
     end
   end
