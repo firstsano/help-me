@@ -51,10 +51,11 @@ group :development do
 end
 
 group :test do
+  gem 'capybara', '>= 2.15'
   gem 'capybara-email'
   gem 'capybara-screenshot'
-  gem 'capybara', '>= 2.15'
   gem 'chromedriver-helper'
+  gem 'json_spec'
   gem 'launchy'
   gem 'rails-controller-testing'
   gem 'selenium-webdriver'
