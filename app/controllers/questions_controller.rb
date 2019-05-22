@@ -7,7 +7,6 @@ class QuestionsController < ::ApplicationController
   load_and_authorize_resource
 
   before_action :set_gon_question, only: :show
-
   after_action :publish_question, only: :create
 
   respond_to :html
