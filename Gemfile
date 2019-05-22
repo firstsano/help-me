@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.0'
 
+gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap',     '4.1.1'
 gem 'cancancan'
@@ -16,9 +17,11 @@ gem 'jquery-rails'
 gem 'lodash-rails'
 gem 'material-sass', '4.1.1'
 gem 'mini_racer'
+gem 'oj'
+gem 'oj_mimic_json'
+gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
-gem 'omniauth'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.2'
