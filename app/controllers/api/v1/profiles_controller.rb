@@ -3,11 +3,12 @@ module Api
     class ProfilesController < Api::V1::ApplicationController
       def index
         other_users = User.all - [current_resource_owner]
-        response = { users: other_users }
-        respond_with response
+        authorize! :read, other_users
+        respond_with other_users
       end
 
       def me
+        authorize! :read, current_resource_owner
         respond_with current_resource_owner
       end
     end

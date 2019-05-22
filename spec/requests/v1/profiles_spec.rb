@@ -68,20 +68,20 @@ describe 'Profiles API', type: :request do
       end
 
       it "returns users as an array" do
-        expect(response.body).to be_json_eql(other_users.to_json).at_path('users')
+        expect(response.body).to be_json_eql(other_users.to_json)
       end
 
       it "returns user's email" do
-        expect(response.body).to have_json_path('users/0/email')
+        expect(response.body).to have_json_path('0/email')
       end
 
       it "returns user's name" do
-        expect(response.body).to have_json_path('users/0/name')
+        expect(response.body).to have_json_path('0/name')
       end
 
       it "does not return user's passsword" do
-        expect(response.body).not_to have_json_path('users/0/password')
-        expect(response.body).not_to have_json_path('users/0/encrypted_password')
+        expect(response.body).not_to have_json_path('0/password')
+        expect(response.body).not_to have_json_path('0/encrypted_password')
       end
     end
   end
