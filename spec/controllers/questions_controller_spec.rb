@@ -1,6 +1,6 @@
 require_relative 'controllers_helper'
 
-RSpec.describe QuestionsController, type: :controller do
+describe QuestionsController, type: :controller do
   let(:question) { create :question }
   let(:user) { create :user }
 

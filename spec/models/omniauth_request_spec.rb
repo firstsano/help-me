@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe OmniauthRequest, type: :model do
+describe OmniauthRequest, type: :model do
   context 'Validations' do
     it { is_expected.to validate_presence_of :email }
     it { is_expected.to validate_presence_of :name }

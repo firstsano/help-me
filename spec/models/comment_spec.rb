@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Comment, type: :model do
+describe Comment, type: :model do
   context 'Associations' do
     it { is_expected.to belong_to :commentable }
     it { is_expected.to belong_to :author }

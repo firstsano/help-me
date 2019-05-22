@@ -1,6 +1,6 @@
 require_relative '../controllers_helper'
 
-RSpec.describe Users::OmniauthCallbacksController, type: :controller do
+describe Users::OmniauthCallbacksController, type: :controller do
   describe 'POST #register_auth' do
     let(:email) { generate :email }
 

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Question, type: :model do
+describe Question, type: :model do
   context 'Associations' do
     it { is_expected.to have_many :answers }
     it { is_expected.to belong_to :created_by }

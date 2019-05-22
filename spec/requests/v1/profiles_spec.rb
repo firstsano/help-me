@@ -1,16 +1,16 @@
 require_relative 'requests_helper'
 
-RSpec.describe 'Profiles API', type: :request do
+describe 'Profiles API', type: :request do
   describe 'GET /me' do
     let(:resource) { resource_uri('profiles/me') }
 
     context 'when unauthorized' do
-      it 'responds with forbidden status without token' do
+      it 'responds with unauthorized without token' do
         get resource, params: { format: :json }
         expect(response).to have_http_status :unauthorized
       end
 
-      it 'responds with forbidden status with incorrect token' do
+      it 'responds with unauthorized with incorrect token' do
         get resource, params: { format: :json, access_token: '123456' }
         expect(response).to have_http_status :unauthorized
       end
