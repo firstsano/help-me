@@ -3,7 +3,7 @@ require 'application_responder'
 class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
 
-  protect_from_forgery
+  protect_from_forgery with: :exception
   check_authorization unless: :devise_controller?
   add_flash_types :success, :error
 
