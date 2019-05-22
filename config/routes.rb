@@ -1,13 +1,6 @@
 Rails.application.routes.draw do
   use_doorkeeper
 
-  api_version(module: "Api::V1", path: { value: "api/v1" }, defaults: { format: :json }, default: true) do
-    resources :profiles, only: :index do
-      get :me, on: :collection
-    end
-    resources :questions
-  end
-
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     registrations: "registrations"
@@ -30,6 +23,13 @@ Rails.application.routes.draw do
     resources :answers, shallow: true, concerns: [:votable, :commentable] do
       put :best, on: :member
     end
+  end
+
+  api_version(module: "Api::V1", path: { value: "api/v1" }, defaults: { format: :json }, default: true) do
+    resources :profiles, only: :index do
+      get :me, on: :collection
+    end
+    resources :questions
   end
 
   root to: "questions#index"
