@@ -42,9 +42,9 @@ describe 'Questions API', type: :request do
   end
 
   describe 'GET /questions/:id' do
-    let!(:question) { create :question, answers: create_list(:answer, 10), attachments: create_list(:question_attachment, 3) }
+    let!(:question) { create :question, comments: create_list(:question_comment, 10), attachments: create_list(:question_attachment, 3) }
     let(:resource) { resource_uri "questions/#{question.id}" }
-    let(:answer) { question.answers.first }
+    let(:comment) { question.comments.first }
     let(:attachment) { question.attachments.first }
 
     context 'when unauthorized' do
@@ -76,21 +76,26 @@ describe 'Questions API', type: :request do
         end
       end
 
-      it 'responds with answers of question' do
-        expect(response.body).to have_json_size(question.answers.count).at_path('answers')
+      it 'responds with comments to a question' do
+        expect(response.body).to have_json_size(question.comments.count).at_path('comments')
       end
 
-      it "responds with question with answers and each answer has id only" do
-        expect(response.body).to be_json_eql(answer.id.to_json).at_path("answers/0/id")
-        expect(response.body).to have_json_size(1).at_path("answers/0")
+      %w[id author_name body].each do |attribute|
+        it "responds with question with comments with #{attribute} field" do
+          comment_id = JSON.parse(response.body)["comments"].first["id"]
+          comment = question.comments.find_by id: comment_id
+          expect(response.body).to be_json_eql(comment.send(attribute.to_sym).to_json).at_path("comments/0/#{attribute}")
+        end
       end
+
+
 
       it 'responds with attachments of question' do
         expect(response.body).to have_json_size(question.attachments.count).at_path('attachments')
       end
 
-      it "responds with question with attachments and each attachment has url only" do
-        expect(response.body).to be_json_eql(attachment.source.url.to_json).at_path("attachments/0/url")
+      it "responds with question with attachments and each attachment has source_url only" do
+        expect(response.body).to be_json_eql(attachment.source.url.to_json).at_path("attachments/0/source_url")
         expect(response.body).to have_json_size(1).at_path("attachments/0")
       end
     end

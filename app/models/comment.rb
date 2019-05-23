@@ -3,4 +3,6 @@ class Comment < ApplicationRecord
   belongs_to :commentable, polymorphic: true
 
   validates :body, :author, :commentable, presence: true
+
+  delegate :name, to: :author, prefix: true
 end
