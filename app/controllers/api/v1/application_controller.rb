@@ -5,9 +5,11 @@ module Api
     class ApplicationController < ActionController::API
       self.responder = ApplicationResponder
 
-      before_action :doorkeeper_authorize!
-      check_authorization
       respond_to :json
+      check_authorization
+
+      before_action :verify_requested_format!
+      before_action :doorkeeper_authorize!
 
       protected
 

@@ -6,6 +6,10 @@ module Api
       def index
         respond_with @questions
       end
+
+      def show
+        respond_with @question
+      end
     end
   end
 end
