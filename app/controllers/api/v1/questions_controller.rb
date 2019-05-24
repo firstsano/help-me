@@ -10,6 +10,10 @@ module Api
       def show
         respond_with @question
       end
+
+      def create
+        respond_with nothing: true
+      end
     end
   end
 end

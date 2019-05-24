@@ -97,4 +97,24 @@ describe 'Questions API', type: :request do
       end
     end
   end
+
+  describe 'POST /questions' do
+    let(:resource) { resource_uri 'questions' }
+    let(:question_params) { attributes_for :question }
+
+    context 'when unauthorized' do
+      it 'responds with unauthorized without token' do
+        post resource, params: { format: :json, question: question_params }
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it 'responds with unauthorized with invalid token' do
+        post resource, params: { format: :json, access_token: '123456', question: question_params }
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context 'when authorized' do
+    end
+  end
 end
