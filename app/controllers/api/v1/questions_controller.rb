@@ -12,7 +12,15 @@ module Api
       end
 
       def create
-        respond_with nothing: true
+        @question.created_by = current_user
+        @question.save
+        respond_with @question
+      end
+
+      private
+
+      def question_params
+        params.require(:question).permit(:title, :body)
       end
     end
   end

@@ -32,9 +32,9 @@ describe 'Questions API', type: :request do
         expect(response.body).to have_json_size questions.count
       end
 
-      %w[id title body created_at updated_at].each do |attribute|
+      %i[id title body created_at updated_at].each do |attribute|
         it "responds with questions and each question contains #{attribute} field" do
-          attribute_field = question.send(attribute.to_sym).to_json
+          attribute_field = question.send(attribute).to_json
           expect(response.body).to be_json_eql(attribute_field).at_path("0/#{attribute}")
         end
       end
@@ -68,10 +68,10 @@ describe 'Questions API', type: :request do
         expect(response).to have_http_status :ok
       end
 
-      %w[id title body created_at updated_at].each do |attribute|
+      %i[id title body created_at updated_at].each do |attribute|
         it "responds with question with #{attribute} field" do
-          attribute_field = question.send(attribute.to_sym).to_json
-          expect(response.body).to be_json_eql(attribute_field).at_path(attribute)
+          attribute_field = question.send(attribute).to_json
+          expect(response.body).to be_json_eql(attribute_field).at_path("#{attribute}")
         end
       end
 
@@ -79,11 +79,11 @@ describe 'Questions API', type: :request do
         expect(response.body).to have_json_size(question.comments.count).at_path('comments')
       end
 
-      %w[id author_name body].each do |attribute|
+      %i[id author_name body].each do |attribute|
         it "responds with question with comments with #{attribute} field" do
           comment_id = JSON.parse(response.body)["comments"].first["id"]
           comment = question.comments.find_by id: comment_id
-          expect(response.body).to be_json_eql(comment.send(attribute.to_sym).to_json).at_path("comments/0/#{attribute}")
+          expect(response.body).to be_json_eql(comment.send(attribute).to_json).at_path("comments/0/#{attribute}")
         end
       end
 
@@ -115,6 +115,44 @@ describe 'Questions API', type: :request do
     end
 
     context 'when authorized' do
+      let!(:user) { create :user }
+      let(:access_token) { create :access_token, resource_owner_id: user.id }
+
+      context 'with invalid attributes' do
+        let(:question_params) { attributes_for :question, body: nil }
+
+        it 'responds with created status' do
+          post resource, params: { format: :json, access_token: access_token.token, question: question_params }
+          expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it 'does not create a question' do
+          expect { post resource, params: { format: :json, access_token: access_token.token, question: question_params } }.not_to change(Question, :count)
+        end
+
+        it 'returns errors' do
+          post resource, params: { format: :json, access_token: access_token.token, question: question_params }
+          expect(response.body).to have_json_path('errors')
+        end
+      end
+
+      context 'with valid attributes' do
+        it 'responds with created status' do
+          post resource, params: { format: :json, access_token: access_token.token, question: question_params }
+          expect(response).to have_http_status :created
+        end
+
+        it 'creates a question' do
+          expect { post resource, params: { format: :json, access_token: access_token.token, question: question_params } }.to change(Question, :count).by(1)
+        end
+
+        %i[title body].each do |attribute|
+          it "responds with created question with attribute #{attribute}" do
+            post resource, params: { format: :json, access_token: access_token.token, question: question_params }
+            expect(response.body).to be_json_eql(question_params[attribute].to_json).at_path("#{attribute}")
+          end
+        end
+      end
     end
   end
 end
