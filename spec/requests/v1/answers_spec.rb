@@ -1,7 +1,7 @@
 require_relative 'requests_helper'
 
 describe 'Answers API', type: :request do
-  describe 'GET /questions/:id/answers' do
+  describe 'GET /questions/:question_id/answers' do
     let!(:question) { create :question }
     let!(:answers) { create_list :answer, 10, question: question }
     let!(:other_answers) { create_list :answer, 20 }
@@ -95,6 +95,65 @@ describe 'Answers API', type: :request do
       it "responds with an answer with attachments and each attachment has source_url only" do
         expect(response.body).to be_json_eql(attachment.source.url.to_json).at_path("attachments/0/source_url")
         expect(response.body).to have_json_size(1).at_path("attachments/0")
+      end
+    end
+  end
+
+  describe 'POST /questions/:question_id/answers' do
+    let!(:question) { create :question }
+    let(:answer_params) { attributes_for(:answer).merge({ question_id: question.id }) }
+    let(:resource) { resource_uri "questions/#{question.id}/answers" }
+
+    context 'when unauthorized' do
+      it 'responds with unauthorized without token' do
+        post resource, params: { format: :json, answer: answer_params }
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it 'responds with unauthorized with invalid token' do
+        post resource, params: { format: :json, access_token: '123456', answer: answer_params }
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context 'when authorized' do
+      let!(:user) { create :user }
+      let(:access_token) { create :access_token, resource_owner_id: user.id }
+
+      context 'with invalid attributes' do
+        let(:answer_params) { attributes_for :answer, body: nil }
+
+        it 'responds with unprocessable_entity status' do
+          post resource, params: { format: :json, access_token: access_token.token, answer: answer_params }
+          expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it 'does not create a question' do
+          expect { post resource, params: { format: :json, access_token: access_token.token, answer: answer_params } }.not_to change(Answer, :count)
+        end
+
+        it 'returns errors' do
+          post resource, params: { format: :json, access_token: access_token.token, answer: answer_params }
+          expect(response.body).to have_json_path('errors')
+        end
+      end
+
+      context 'with valid attributes' do
+        it 'responds with created status' do
+          post resource, params: { format: :json, access_token: access_token.token, answer: answer_params }
+          expect(response).to have_http_status :created
+        end
+
+        it 'creates a question' do
+          expect { post resource, params: { format: :json, access_token: access_token.token, answer: answer_params } }.to change(question.answers, :count).by(1)
+        end
+
+        %i[body].each do |attribute|
+          it "responds with created question with attribute #{attribute}" do
+            post resource, params: { format: :json, access_token: access_token.token, answer: answer_params }
+            expect(response.body).to be_json_eql(answer_params[attribute].to_json).at_path("#{attribute}")
+          end
+        end
       end
     end
   end
