@@ -5,10 +5,6 @@ module Api
       has_many :comments
       has_many :attachments
 
-      class CommentSerializer < ::ActiveModel::Serializer
-        attributes :id, :body, :author_name
-      end
-
       class AttachmentSerializer < ::ActiveModel::Serializer
         attribute :source_url
       end

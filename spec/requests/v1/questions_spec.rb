@@ -44,7 +44,6 @@ describe 'Questions API', type: :request do
   describe 'GET /questions/:id' do
     let!(:question) { create :question, comments: create_list(:question_comment, 10), attachments: create_list(:question_attachment, 3) }
     let(:resource) { resource_uri "questions/#{question.id}" }
-    let(:comment) { question.comments.first }
     let(:attachment) { question.attachments.first }
 
     context 'when unauthorized' do
