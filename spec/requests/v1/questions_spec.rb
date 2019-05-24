@@ -121,7 +121,7 @@ describe 'Questions API', type: :request do
       context 'with invalid attributes' do
         let(:question_params) { attributes_for :question, body: nil }
 
-        it 'responds with created status' do
+        it 'responds with unprocessable_entity status' do
           post resource, params: { format: :json, access_token: access_token.token, question: question_params }
           expect(response).to have_http_status :unprocessable_entity
         end
