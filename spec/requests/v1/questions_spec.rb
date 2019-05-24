@@ -87,8 +87,6 @@ describe 'Questions API', type: :request do
         end
       end
 
-
-
       it 'responds with attachments of question' do
         expect(response.body).to have_json_size(question.attachments.count).at_path('attachments')
       end
