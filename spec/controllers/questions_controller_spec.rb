@@ -19,16 +19,22 @@ describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { sign_in user }
-    before { get :new }
+    login_user
+    let(:controller_request) { get :new }
 
-    it 'assigns new question to @question' do
-      expect(assigns(:question)).to be_a_new Question
+    context 'when question is rendered' do
+      before { controller_request }
+
+      it 'assigns new question to @question' do
+        expect(assigns(:question)).to be_a_new Question
+      end
+
+      it 'renders new view' do
+        expect(response).to render_template :new
+      end
     end
 
-    it 'renders new view' do
-      expect(response).to render_template :new
-    end
+    it_behaves_like "authenticable controller"
   end
 
   describe 'GET #show' do
@@ -48,16 +54,16 @@ describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    before { sign_in user }
+    login_user
+    let(:question_params) { attributes_for :question }
+    let(:controller_request) { patch :update, params: { id: question, question: question_params, format: 'js' } }
 
     context 'when owner updates a question' do
       let(:question) { create :question, created_by: user }
 
       context 'with valid attributes' do
-        let(:new_attributes) { attributes_for(:question) }
-
         before do
-          patch :update, params: { id: question, question: new_attributes, format: 'js' }
+          controller_request
           question.reload
         end
 
@@ -65,9 +71,9 @@ describe QuestionsController, type: :controller do
           expect(assigns(:question)).to eq question
         end
 
-        it 'saves question\'s changes' do
-          expect(question.title).to eq new_attributes[:title]
-          expect(question.body).to eq new_attributes[:body]
+        it "saves question's changes" do
+          expect(question.title).to eq question_params[:title]
+          expect(question.body).to eq question_params[:body]
         end
 
         it 'renders update view' do
@@ -76,12 +82,14 @@ describe QuestionsController, type: :controller do
       end
 
       context 'with invalid attributes' do
+        let(:question_params) { attributes_for :question, title: nil }
+
         before do
-          patch :update, params: { id: question, question: attributes_for(:question, title: nil), format: 'js' }
+          controller_request
           question.reload
         end
 
-        it 'does not save question\'s changes' do
+        it "does not save question's changes" do
           expect(question.title).not_to be_nil
         end
 
@@ -92,242 +100,86 @@ describe QuestionsController, type: :controller do
     end
 
     context 'when someone else updates a question' do
-      let(:new_attributes) { attributes_for(:question) }
+      let(:controller_request) { patch :update, params: { id: question, question: question_params } }
 
       it 'does not change the question title' do
-        expect { patch :update, params: { id: question, question: new_attributes } }.not_to change(question, :title)
+        expect { controller_request }.not_to change(question, :title)
       end
 
       it 'does not change the question body' do
-        expect { patch :update, params: { id: question, question: new_attributes } }.not_to change(question, :body)
+        expect { controller_request }.not_to change(question, :body)
       end
 
       it 'redirects to question with error message' do
-        patch :update, params: { id: question, question: new_attributes }
+        controller_request
         expect(response).to redirect_to root_path
         expect(controller).to set_flash[:error]
       end
     end
+
+    it_behaves_like "authenticable controller"
   end
 
   describe 'POST #create' do
-    before { sign_in user }
+    login_user
+    let(:question_params) { attributes_for :question }
+    let(:controller_request) { post :create, params: { question: question_params } }
 
     context 'with valid attributes' do
       it 'saves the new question to the database' do
-        expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+        expect { controller_request }.to change(Question, :count).by(1)
       end
 
       it 'redirects to show view' do
-        post :create, params: { question: attributes_for(:question) }
+        controller_request
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
 
     context 'with invalid attributes' do
+      let(:question_params) { attributes_for :question, title: nil }
+
       it 'does not save the question' do
-        expect { post :create, params: { question: attributes_for(:question, title: nil) } }.not_to change(Question, :count)
+        expect { controller_request }.not_to change(Question, :count)
       end
 
       it 'renders new view' do
-        post :create, params: { question: attributes_for(:question, title: nil) }
+        controller_request
         expect(response).to render_template :new
       end
     end
+
+    it_behaves_like "authenticable controller"
   end
 
   describe 'DELETE #destroy' do
+    login_user
+    let(:controller_request) { delete :destroy, params: { id: question } }
+
     context 'when owner deletes a question' do
       let!(:question) { create :question, created_by: user }
 
-      before { sign_in user }
-
       it 'deletes the question' do
-        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+        expect { controller_request }.to change(Question, :count).by(-1)
       end
 
       it 'redirects to index' do
-        delete :destroy, params: { id: question }
+        controller_request
         expect(response).to redirect_to questions_path
       end
     end
 
     context 'when someone else deletes a question' do
-      before do
-        question
-        sign_in user
-      end
+      before { question }
 
       it 'does not delete the question' do
-        expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
+        expect { controller_request }.not_to change(Question, :count)
       end
     end
+
+    it_behaves_like "authenticable controller"
   end
 
-  describe 'POST #upvote' do
-    context 'when owner upvotes a question' do
-      let!(:question) { create :question, created_by: user }
-
-      before { sign_in user }
-
-      it 'redirects to a question with error message' do
-        post :upvote, params: { id: question, format: 'json' }
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context 'when someone else upvotes a question' do
-      before do
-        question
-        sign_in user
-      end
-
-      context 'when user has already upvoted a question' do
-        before { create :upvote, votable: question, user: user }
-
-        it 'removes upvote' do
-          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(-1)
-        end
-
-        it 'assigns a proper hash' do
-          post :upvote, params: { id: question, format: 'json' }
-          expected_json = { score: question.score, upvoted: false }.to_json
-          expect(response.body).to eq expected_json
-        end
-      end
-
-      context 'when user has already downvoted a question' do
-        before { create :downvote, votable: question, user: user }
-
-        it 'removes downvote' do
-          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(-1)
-        end
-
-        it 'adds upvote' do
-          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(1)
-        end
-
-        it 'assigns a proper hash' do
-          post :upvote, params: { id: question, format: 'json' }
-          expected_json = { score: question.score, upvoted: true }.to_json
-          expect(response.body).to eq expected_json
-        end
-      end
-
-      context 'when user upvotes for the question for the first time' do
-        it 'adds upvote' do
-          expect { post :upvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(1)
-        end
-
-        it 'assigns a proper hash' do
-          post :upvote, params: { id: question, format: 'json' }
-          expected_json = { score: question.score, upvoted: true }.to_json
-          expect(response.body).to eq expected_json
-        end
-      end
-    end
-  end
-
-  describe 'POST #downvote' do
-    context 'when owner downvotes for a question' do
-      let!(:question) { create :question, created_by: user }
-
-      before { sign_in user }
-
-      it 'redirects to a question with error message' do
-        post :downvote, params: { id: question, format: 'json' }
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context 'when someone else downvotes a question' do
-      before do
-        question
-        sign_in user
-      end
-
-      context 'when user has already downvoted a question' do
-        before { create :downvote, votable: question, user: user }
-
-        it 'removes downvote' do
-          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(-1)
-        end
-
-        it 'responds with a proper json' do
-          post :downvote, params: { id: question, format: 'json' }
-          expected_json = { score: question.score, downvoted: false }.to_json
-          expect(response.body).to eq expected_json
-        end
-      end
-
-      context 'when user has already upvoted a question' do
-        before { create :upvote, votable: question, user: user }
-
-        it 'removes upvote' do
-          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.upvotes, :count).by(-1)
-        end
-
-        it 'adds downvote' do
-          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(1)
-        end
-
-        it 'responds with a proper json' do
-          post :downvote, params: { id: question, format: 'json' }
-          expected_json = { score: question.score, downvoted: true }.to_json
-          expect(response.body).to eq expected_json
-        end
-      end
-
-      context 'when user downvotes for the question for the first time' do
-        it 'adds downvote' do
-          expect { post :downvote, params: { id: question, format: 'json' } }.to change(question.downvotes, :count).by(1)
-        end
-
-        it 'responds with a proper json' do
-          post :downvote, params: { id: question, format: 'json' }
-          expected_json = { score: question.score, downvoted: true }.to_json
-          expect(response.body).to eq expected_json
-        end
-      end
-    end
-  end
-
-  describe 'POST #comment' do
-    let(:comment) { attributes_for :comment }
-
-    before { sign_in user }
-
-    context 'with valid attributes' do
-      it 'creates a comment to the question' do
-        expect { post :comment, params: { id: question, format: 'js', comment: { body: comment[:body] } } }.to change(question.comments, :count).by(1)
-      end
-
-      context 'after request' do
-        before { post :comment, params: { id: question, format: 'js', comment: { body: comment[:body] } } }
-
-        it 'sets an author of comment' do
-          expect(question.comments.last.author).to eq user
-        end
-
-        it 'assigns created comment' do
-          expect(assigns(:comment)).to eq question.comments.last
-        end
-
-        it 'renders comment view' do
-          expect(response).to render_template :comment
-        end
-      end
-    end
-
-    context 'with invalid attributes' do
-      it 'does not create a comment to the question' do
-        expect { post :comment, params: { id: question, format: 'js', comment: { body: nil } } }.not_to change(question.comments, :count)
-      end
-
-      it 'renders comment view' do
-        post :comment, params: { id: question, format: 'js',comment: { body: nil } }
-        expect(response).to render_template :comment
-      end
-    end
-  end
+  it_behaves_like 'votable controller', 'question'
+  it_behaves_like 'commentable controller', 'question'
 end

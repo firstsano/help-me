@@ -1,6 +1,8 @@
 require_relative '../controllers_helper'
 
 describe Users::OmniauthCallbacksController, type: :controller do
+  before { @request.env["devise.mapping"] = Devise.mappings[:user] }
+
   describe 'POST #register_auth' do
     let(:email) { generate :email }
 
