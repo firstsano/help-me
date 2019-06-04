@@ -4,21 +4,8 @@ describe 'Profiles API', type: :request do
   describe 'GET /me' do
     let(:resource) { resource_uri('profiles/me') }
 
-    context 'when unauthorized' do
-      it 'responds with unauthorized without token' do
-        get resource, params: { format: :json }
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'responds with unauthorized with incorrect token' do
-        get resource, params: { format: :json, access_token: '123456' }
-        expect(response).to have_http_status :unauthorized
-      end
-    end
-
     context 'when authorized' do
-      let!(:user) { create :user }
-      let!(:access_token) { create :access_token, resource_owner_id: user.id }
+      login_user
 
       before { get resource, params: { format: :json, access_token: access_token.token } }
 
@@ -39,27 +26,16 @@ describe 'Profiles API', type: :request do
         expect(response.body).not_to have_json_path('encrypted_password')
       end
     end
+
+    it_behaves_like 'authenticable request'
   end
 
   describe 'GET /index' do
     let(:resource) { resource_uri('profiles') }
 
-    context 'when unauthorized' do
-      it 'responds with forbidden status without token' do
-        get resource, params: { format: :json }
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'responds with forbidden status with incorrect token' do
-        get resource, params: { format: :json, access_token: '123456' }
-        expect(response).to have_http_status :unauthorized
-      end
-    end
-
     context 'when authorized' do
-      let!(:user) { create :user }
+      login_user
       let!(:other_users) { create_list :user, 10 }
-      let!(:access_token) { create :access_token, resource_owner_id: user.id }
 
       before { get resource, params: { format: :json, access_token: access_token.token } }
 
@@ -84,5 +60,7 @@ describe 'Profiles API', type: :request do
         expect(response.body).not_to have_json_path('0/encrypted_password')
       end
     end
+
+    it_behaves_like 'authenticable request'
   end
 end

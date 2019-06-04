@@ -7,21 +7,8 @@ describe 'Answers API', type: :request do
     let!(:other_answers) { create_list :answer, 20 }
     let(:resource) { resource_uri("questions/#{question.id}/answers") }
 
-    context 'when unauthorized' do
-      it 'responds with unauthorized without token' do
-        get resource, params: { format: :json }
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'responds with unauthorized with incorrect token' do
-        get resource, params: { format: :json, access_token: '123456' }
-        expect(response).to have_http_status :unauthorized
-      end
-    end
-
     context 'when authorized' do
-      let(:user) { create :user }
-      let!(:access_token) { create :access_token, resource_owner_id: user.id }
+      login_user
 
       before { get resource, params: { format: :json, access_token: access_token.token } }
 
@@ -40,27 +27,16 @@ describe 'Answers API', type: :request do
         end
       end
     end
+
+    it_behaves_like 'authenticable request'
   end
 
   describe 'GET /answers/:id' do
     let!(:answer) { create :answer, comments: create_list(:answer_comment, 10), attachments: create_list(:answer_attachment, 3) }
     let(:resource) { resource_uri("answers/#{answer.id}") }
 
-    context 'when unauthorized' do
-      it 'responds with unauthorized without token' do
-        get resource, params: { format: :json }
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'responds with unauthorized with incorrect token' do
-        get resource, params: { format: :json, access_token: '123456' }
-        expect(response).to have_http_status :unauthorized
-      end
-    end
-
     context 'when authorized' do
-      let(:user) { create :user }
-      let!(:access_token) { create :access_token, resource_owner_id: user.id }
+      login_user
       let(:attachment) { answer.attachments.first }
 
       before { get resource, params: { format: :json, access_token: access_token.token } }
@@ -97,6 +73,8 @@ describe 'Answers API', type: :request do
         expect(response.body).to have_json_size(1).at_path("attachments/0")
       end
     end
+
+    it_behaves_like 'authenticable request'
   end
 
   describe 'POST /questions/:question_id/answers' do
@@ -104,21 +82,8 @@ describe 'Answers API', type: :request do
     let(:answer_params) { attributes_for(:answer).merge({ question_id: question.id }) }
     let(:resource) { resource_uri "questions/#{question.id}/answers" }
 
-    context 'when unauthorized' do
-      it 'responds with unauthorized without token' do
-        post resource, params: { format: :json, answer: answer_params }
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'responds with unauthorized with invalid token' do
-        post resource, params: { format: :json, access_token: '123456', answer: answer_params }
-        expect(response).to have_http_status :unauthorized
-      end
-    end
-
     context 'when authorized' do
-      let!(:user) { create :user }
-      let(:access_token) { create :access_token, resource_owner_id: user.id }
+      login_user
 
       context 'with invalid attributes' do
         let(:answer_params) { attributes_for :answer, body: nil }
@@ -156,5 +121,7 @@ describe 'Answers API', type: :request do
         end
       end
     end
+
+    it_behaves_like 'authenticable request'
   end
 end
