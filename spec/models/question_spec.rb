@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Question, type: :model do
-  context 'Associations' do
+  describe 'Associations' do
     it { is_expected.to have_many :answers }
     it { is_expected.to belong_to :created_by }
     it { is_expected.to have_many :attachments }
@@ -12,50 +12,14 @@ describe Question, type: :model do
     it { is_expected.to accept_nested_attributes_for :attachments }
   end
 
-  context 'Validations' do
+  describe 'Validations' do
     it { is_expected.to validate_presence_of :created_by }
     it { is_expected.to validate_presence_of :title }
     it { is_expected.to validate_presence_of :body }
   end
 
-  context 'Instance_methods' do
+  describe 'Instance_methods' do
     subject(:question) { create :question }
-
-    describe '#score' do
-      it { is_expected.to respond_to :score }
-
-      it 'counts total votes for a question' do
-        upvotes = create_list :upvote, 10, votable: question
-        downvotes = create_list :downvote, 3, votable: question
-        expect(question.score).to eq 7
-      end
-
-      it 'returns 0 when there are no votes' do
-        expect(question.score).to eq 0
-      end
-    end
-
-    describe '#upvoted_by_user?' do
-      it { is_expected.to respond_to :upvoted_by_user? }
-
-      it 'returns true if question has upvote created by user and false otherwise' do
-        user, other_user = create_list :user, 2
-        create :upvote, votable: question, user: user
-        expect(question.upvoted_by_user?(user)).to be_truthy
-        expect(question.upvoted_by_user?(other_user)).to be_falsey
-      end
-    end
-
-    describe '#downvoted_by_user?' do
-      it { is_expected.to respond_to :downvoted_by_user? }
-
-      it 'returns true if question has upvote created by user and false otherwise' do
-        user, other_user = create_list :user, 2
-        create :downvote, votable: question, user: user
-        expect(question.downvoted_by_user?(user)).to be_truthy
-        expect(question.downvoted_by_user?(other_user)).to be_falsey
-      end
-    end
 
     describe '#set_best_answer' do
       let!(:answer) { create :answer, question: question }
@@ -100,5 +64,7 @@ describe Question, type: :model do
         end
       end
     end
+
+    it_behaves_like 'votable model', 'question'
   end
 end

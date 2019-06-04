@@ -1,14 +1,10 @@
 require 'rails_helper'
 
-<<<<<<< HEAD
-RSpec.describe Authorization, type: :model do
+describe Authorization, type: :model do
   describe 'Associations' do
     it { is_expected.to belong_to :user }
   end
 
-=======
-describe Authorization, type: :model do
->>>>>>> Refactor
   describe 'Validations' do
     subject { build :authorization }
 

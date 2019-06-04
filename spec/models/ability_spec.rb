@@ -4,7 +4,7 @@ require 'cancan/matchers'
 describe Ability, type: :model do
   subject(:ability) { Ability.new(user) }
 
-  describe 'for guest' do
+  describe 'For guest' do
     let(:user) { nil }
 
     it { is_expected.to be_able_to :read, Question }
@@ -13,7 +13,7 @@ describe Ability, type: :model do
     it { is_expected.to be_able_to :read, Attachment }
   end
 
-  describe 'for user' do
+  describe 'For user' do
     let(:user) { create :user }
     let(:other_user) { create :user }
 

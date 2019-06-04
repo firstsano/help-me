@@ -1,18 +1,18 @@
 require 'rails_helper'
 
 describe User, type: :model do
-  context 'Validations' do
+  describe 'Validations' do
     it { is_expected.to validate_presence_of :email }
     it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
     it { is_expected.to validate_presence_of :name }
     it { is_expected.to validate_presence_of :password }
   end
 
-  context 'Associations' do
+  describe 'Associations' do
     it { is_expected.to have_many :authorizations }
   end
 
-  context 'Instance methods' do
+  describe 'Instance methods' do
     subject(:user) { create :user }
 
     describe '#has_provider?' do
@@ -41,7 +41,7 @@ describe User, type: :model do
     end
   end
 
-  context 'Class methods' do
+  describe 'Class methods' do
     subject(:users) { described_class }
 
     describe '.get_by_oauth' do

@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Vote, type: :model do
-  context 'Associations' do
+  describe 'Associations' do
     it { is_expected.to belong_to :votable }
     it { is_expected.to belong_to :user }
   end
 
-  context 'Validations' do
+  describe 'Validations' do
     subject { build :question_vote }
 
     it { is_expected.to validate_presence_of :votable }
@@ -15,7 +15,7 @@ describe Vote, type: :model do
     it { is_expected.to validate_uniqueness_of(:votable_id).scoped_to(:user_id, :votable_type) }
   end
 
-  context 'Instance methods' do
+  describe 'Instance methods' do
     subject(:vote) { create :question_vote }
 
     describe '#upvote?' do
