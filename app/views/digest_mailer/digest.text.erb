@@ -1,0 +1,5 @@
+Hello there!
+You missed following questions:
+<%- @questions.each do |question| %>
+  <%= question.title %> - <%= question.body %>
+<%- end %>
