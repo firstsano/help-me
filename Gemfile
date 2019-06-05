@@ -29,12 +29,14 @@ gem 'remotipart', '~> 1.2'
 gem 'responders'
 gem 'sassc-rails'
 gem 'show_for'
+gem 'sidekiq'
 gem 'simple_form'
 gem 'slim-rails'
 gem 'turbolinks', '~> 5'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'uglifier', '>= 1.3.0'
 gem 'versionist'
+gem 'whenever', require: false
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
@@ -62,6 +64,7 @@ group :test do
   gem 'json_spec'
   gem 'launchy'
   gem 'rails-controller-testing'
+  gem 'rspec-sidekiq'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '4.0.0.rc1'
   gem 'timecop'
