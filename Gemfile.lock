@@ -121,6 +121,9 @@ GEM
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.25)
+    fuubar (2.4.0)
+      rspec-core (~> 3.0)
+      ruby-progressbar (~> 1.4)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     gon (6.2.1)
@@ -387,6 +390,7 @@ DEPENDENCIES
   doorkeeper
   factory_bot_rails
   faker!
+  fuubar
   gon
   jbuilder (~> 2.5)
   jquery-rails

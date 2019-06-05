@@ -58,6 +58,7 @@ group :test do
   gem 'capybara-email'
   gem 'capybara-screenshot'
   gem 'chromedriver-helper'
+  gem 'fuubar'
   gem 'json_spec'
   gem 'launchy'
   gem 'rails-controller-testing'
