@@ -64,7 +64,31 @@ describe Question, type: :model do
         end
       end
     end
+  end
 
-    it_behaves_like 'votable model', 'question'
+  describe 'Class methods' do
+    subject(:questions) { described_class }
+
+    describe '.digest', :with_timecop do
+      it { is_expected.to respond_to :digest }
+
+      it 'selects only digest questions' do
+        outdated_questions = create_list :question, 20
+        recent_time = Time.now + 1.day
+        Timecop.freeze recent_time
+        digest_questions = create_list :question, 10
+
+        aggregate_failures "within 24 hours" do
+          (1..24).each do |hours|
+            Timecop.freeze(recent_time + hours.hours)
+            expect(questions.digest).to match_array digest_questions
+          end
+        end
+      end
+    end
+  end
+
+  it_behaves_like 'votable model', 'question' do
+    let(:question) { create :question }
   end
 end

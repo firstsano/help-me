@@ -7,6 +7,8 @@ class Question < ApplicationRecord
   has_many :attachments, as: :attachable, inverse_of: :attachable
   belongs_to :created_by, foreign_key: :created_by_id, class_name: 'User'
 
+  scope :digest, -> { where("created_at >= ?", (DateTime.now - 1.day)) }
+
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
   validates :title, :body, :created_by, presence: true
