@@ -44,7 +44,7 @@ describe User, type: :model do
   describe 'Class methods' do
     subject(:users) { described_class }
 
-    describe '.get_by_oauth' do
+    describe '.get_by_oauth', :with_timecop do
       it { is_expected.to respond_to :get_by_oauth }
 
       context 'when user does not exist' do
@@ -69,7 +69,7 @@ describe User, type: :model do
       end
     end
 
-    describe '.create_confirmed' do
+    describe '.create_confirmed', :with_timecop do
       it { is_expected.to respond_to :create_confirmed }
 
       it 'creates a user' do
