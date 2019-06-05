@@ -68,8 +68,6 @@ describe Answer, type: :model do
         end
       end
     end
-
-    it_behaves_like 'votable model', 'answer'
   end
 
   describe 'Class methods' do
@@ -84,5 +82,9 @@ describe Answer, type: :model do
         expect(subject.best).to match_array best_answers
       end
     end
+  end
+
+  it_behaves_like 'votable model', 'answer' do
+    let(:answer) { create :answer }
   end
 end
