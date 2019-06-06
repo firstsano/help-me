@@ -137,7 +137,7 @@ describe QuestionsController, type: :controller do
       it 'creates question subscription to created question' do
         controller_request
         user.reload
-        expect(user.subscriptions).to match_array Question.last.subscribers
+        expect(Question.last.subscribers).to include user
       end
 
       it 'redirects to show view' do

@@ -25,7 +25,7 @@ describe User, type: :model do
         expect { user.subscribe(question) }.to change(user.subscriptions, :count).by(1)
         user.reload
         question.reload
-        expect(question.subscribers).to include user.subscriptions.first
+        expect(question.subscribers).to include user
       end
     end
 

@@ -10,6 +10,8 @@ class Answer < ApplicationRecord
 
   validates :body, :question, :created_by, presence: true
 
+  after_create :notificate_question_subscribers
+
   def self.best
     where is_best: true
   end
@@ -24,5 +26,9 @@ class Answer < ApplicationRecord
 
   def can_be_best_for?(user)
     (not is_best?) and question.created_by == user
+  end
+
+  def notificate_question_subscribers
+    NotificateQuestionSubscriberJob.perform_later self
   end
 end

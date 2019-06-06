@@ -10,6 +10,7 @@ describe Question, type: :model do
     it { is_expected.to have_many :downvotes }
     it { is_expected.to have_many :comments }
     it { is_expected.to have_many :subscribers }
+    it { is_expected.to have_many :question_subscriptions }
     it { is_expected.to accept_nested_attributes_for :attachments }
   end
 

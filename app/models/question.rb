@@ -6,7 +6,8 @@ class Question < ApplicationRecord
   has_one :best_answer, -> { where is_best: true }, class_name: 'Answer'
   has_many :attachments, as: :attachable, inverse_of: :attachable
   belongs_to :created_by, foreign_key: :created_by_id, class_name: 'User'
-  has_many :subscribers, class_name: 'QuestionSubscription', dependent: :destroy
+  has_many :question_subscriptions, dependent: :destroy
+  has_many :subscribers, through: :question_subscriptions, source: :user
 
   scope :digest, -> { where("created_at >= ?", (DateTime.now - 1.day)) }
 

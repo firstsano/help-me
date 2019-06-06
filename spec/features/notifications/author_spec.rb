@@ -24,9 +24,6 @@ feature 'Author receives notifications about the question', %q{
     end
 
     scenario 'author receives notification by email' do
-      expect(Sidekiq::Worker.jobs.size).to eq 1
-
-      Sidekiq::Worker.drain_all
       open_email author.email
 
       expect(current_email).to have_content 'There is a new answer to your question'
