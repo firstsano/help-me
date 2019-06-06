@@ -6,6 +6,7 @@ feature 'User gets notifications about new answers', %q{
   I want to be notified
 } do
 
+  setup_user_mapping
   given(:user) { create :user }
   given(:author) { create :user }
   given(:question) { create :question }
@@ -86,6 +87,7 @@ feature 'User gets notifications about comments to the answer', %q{
   I want to be notified
 } do
 
+  setup_user_mapping
   given(:user) { create :user }
   given(:author) { create :user }
   given(:question) { create :question }

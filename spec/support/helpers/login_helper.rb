@@ -19,12 +19,15 @@ module LoginHelper
 
   module Feature
     def login_user
+      setup_user_mapping
+
       let(:user) { @user = create :user }
 
-      before do
-        Rails.application.env_config["devise.mapping"] = Devise.mappings[:user]
-        sign_in user
-      end
+      before { sign_in user }
+    end
+
+    def setup_user_mapping
+      before { Rails.application.env_config["devise.mapping"] = Devise.mappings[:user] }
     end
   end
 end

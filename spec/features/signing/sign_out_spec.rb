@@ -6,10 +6,9 @@ feature 'User can sign out', %q{
   I want to be able to sign out
 } do
 
-  scenario 'Signed user tries to sign out' do
-    user = create :user
-    sign_in user
+  login_user
 
+  scenario 'Signed user tries to sign out' do
     visit root_path
     within('.navigation__signing') { click_on user.name }
 

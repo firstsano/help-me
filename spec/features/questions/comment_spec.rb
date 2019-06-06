@@ -6,15 +6,12 @@ feature 'User can comment a question', %q{
   I want to be able to leave a comment
 } do
 
-  given(:user) { create :user }
   given!(:question) { create :question }
   given(:comment) { attributes_for :comment }
 
   context 'When user is signed in' do
-    before do
-      sign_in user
-      visit question_path(question)
-    end
+    login_user
+    before { visit question_path(question) }
 
     context 'With valid comment' do
       scenario 'User creates a comment', js: true do

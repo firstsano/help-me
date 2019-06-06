@@ -6,6 +6,8 @@ feature 'User can sign in with twitter', %q{
   I want to be able to sign in with twitter
 } do
 
+  setup_user_mapping
+
   background do
     clear_emails
     reset_auth :twitter

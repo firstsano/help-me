@@ -6,15 +6,13 @@ feature 'Adding attachment to an answer', %q{
   I want to be able to attach files
 } do
 
-  given(:user) { create :user }
   given(:question) { create :question }
   given(:answer) { attributes_for :answer }
   given(:filenames) { %w[sample.txt sample2.txt sample3.txt] }
 
-  before do
-    sign_in user
-    visit question_path(question)
-  end
+  login_user
+
+  before { visit question_path(question) }
 
   scenario 'User tries to attach multiple files to an answer', js: true do
     within('.question-answer') do
@@ -41,13 +39,13 @@ feature 'Removing attachment from an answer', %q{
   I want to be able to delete an attachment
 } do
 
-  given(:user) { create :user }
   given(:question) { create :question }
   given(:answer) { create :answer, question: question, created_by: user }
   given(:filenames) { %w[sample.txt sample2.txt sample3.txt] }
 
+  login_user
+
   before do
-    sign_in user
     filenames.each { |filename| create :attachment, attachable: answer, filename: filename }
     visit question_path(question)
   end

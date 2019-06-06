@@ -2,7 +2,7 @@ require_relative '../features_helper'
 
 feature 'User can view list of questions', %q{
   In order to find interesting questions
-  As an user
+  As a user
   I want to be able to view a list of questions
 } do
 
@@ -19,7 +19,7 @@ end
 
 feature 'User can view a question', %q{
   In order to answer the question or to read others' answers
-  As an user
+  As a user
   I want to be able to view the question
 } do
 

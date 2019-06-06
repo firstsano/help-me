@@ -6,9 +6,7 @@ feature 'Choosing the best answer', %q{
   I want to be able to choose the best answer
 } do
 
-  let(:user) { create :user }
-
-  before { sign_in user }
+  login_user
 
   scenario 'Question\'s owner sets the best answer', js: true do
     question = create :question, created_by: user

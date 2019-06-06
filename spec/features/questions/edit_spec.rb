@@ -7,8 +7,7 @@ feature 'Editing the question', %q{
 } do
 
   context 'When user is signed' do
-    given(:user) { create :user }
-    before { sign_in user }
+    login_user
 
     scenario 'User tries to edit someone else\'s question' do
       question = create :question

@@ -9,17 +9,16 @@ feature 'User can sign up', %q{
   background { clear_emails }
 
   context 'When user is already registered' do
-    given(:user) { create :user }
+    login_user
 
     scenario 'Signed user tries to register' do
-      sign_in user
-
       visit new_user_registration_path
       expect(current_path).to eq root_path
       expect(page).to have_content 'You are already signed in.'
     end
 
     scenario 'Unsigned user tries to register' do
+      sign_out user
       visit new_user_registration_path
 
       fill_in 'Email', with: user.email

@@ -5,13 +5,14 @@ feature 'User can upvote or downvote an answer', %q{
   As a user
   I want to be able to vote for a question
 } do
+
   context 'When answer is someone else\'s' do
-    given(:user) { create :user }
     given(:answer) { create :answer }
+
+    login_user
 
     before do
       create_list :upvote, 5, votable: answer
-      sign_in user
       visit question_path(answer.question)
     end
 
@@ -66,13 +67,10 @@ feature 'User can upvote or downvote an answer', %q{
   end
 
   context 'When user is an author' do
-    given(:user) { create :user }
+    login_user
     given(:answer) { create :answer, created_by: user }
 
-    before do
-      sign_in user
-      visit question_path(answer.question)
-    end
+    before { visit question_path(answer.question) }
 
     scenario 'User cannot vote for own answer' do
       within('.answers') do

@@ -10,8 +10,7 @@ feature 'Editing answer', %q{
   before { create_list :answer, 5, question: question }
 
   context 'When user is signed' do
-    given(:user) { create :user }
-    before { sign_in user }
+    login_user
 
     scenario 'User tries to edit someone else\'s answer' do
       visit question_path(question)

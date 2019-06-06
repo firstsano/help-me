@@ -6,12 +6,11 @@ feature 'Adding attachment to question', %q{
   I want to be able to attach files
 } do
 
-  given(:user) { create :user }
+  login_user
   given(:new_question) { attributes_for :question }
   given(:filenames) { %w[sample.txt sample2.txt sample3.txt] }
 
   before do
-    sign_in user
     visit new_question_path
     fill_in 'Title', with: new_question[:title]
     fill_in 'Body', with: new_question[:body]
@@ -41,12 +40,11 @@ feature 'Removing attachment from question', %q{
   I want to be able to delete it
 } do
 
-  given(:user) { create :user }
+  login_user
   given(:question) { create :question, created_by: user }
   given(:filenames) { %w[sample.txt sample2.txt sample3.txt] }
 
   before do
-    sign_in user
     filenames.each { |filename| create :attachment, attachable: question, filename: filename }
     visit question_path(question)
   end

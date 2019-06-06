@@ -11,9 +11,7 @@ feature 'User can destroy an answer', %q{
   before { create_list :answer, 5, question: question }
 
   context 'When user is signed in' do
-    given(:user) { create :user }
-
-    before { sign_in user }
+    login_user
 
     scenario 'Owner tries to destroy an anwer', js: true do
       answers = create_list :answer, 3, question: question, created_by: user

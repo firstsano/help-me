@@ -7,12 +7,11 @@ feature 'User can vote for or against a question', %q{
 } do
 
   context 'When question is someone else\'s' do
-    given(:user) { create :user }
+    login_user
     given(:question) { create :question }
 
     before do
       create_list :upvote, 5, votable: question
-      sign_in user
       visit question_path(question)
     end
 
@@ -67,13 +66,10 @@ feature 'User can vote for or against a question', %q{
   end
 
   context 'When user is an author' do
-    given(:user) { create :user }
+    login_user
     given(:question) { create :question, created_by: user }
 
-    before do
-      sign_in user
-      visit question_path(question)
-    end
+    before { visit question_path(question) }
 
     scenario 'User cannot vote for own question' do
       expect(page).not_to have_selector '.vote__button_upvote'

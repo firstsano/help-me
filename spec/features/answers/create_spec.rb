@@ -6,14 +6,14 @@ feature 'User can create an answer to the question', %q{
   I want to be able to answer the question
 } do
 
-  given(:user) { create :user }
   given(:question) { create :question }
   given(:answer) { attributes_for :answer }
 
   context 'When user is signed in' do
+    login_user
+
     before do
       create_list :answer, 5, question: question
-      sign_in user
       visit question_path(question)
     end
 

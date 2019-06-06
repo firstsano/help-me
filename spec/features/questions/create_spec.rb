@@ -6,18 +6,20 @@ feature 'User can create a question', %q{
   I want to be able to create a question
 } do
 
-  given(:user) { create :user }
   given(:question) { attributes_for :question }
 
   context 'When user is signed in' do
+    login_user
+
+    background do
+      visit questions_path
+
+      click_on 'Create question'
+      expect(current_path).to eq new_question_path
+    end
+
     context 'With invalid attributes' do
       scenario 'User tries to create a question' do
-        sign_in user
-        visit questions_path
-
-        click_on 'Create question'
-        expect(current_path).to eq new_question_path
-
         fill_in 'Title', with: question[:title]
         fill_in 'Body', with: ''
         click_on 'Save'
@@ -28,12 +30,6 @@ feature 'User can create a question', %q{
 
     context 'With valid attributes' do
       scenario 'User creates a question' do
-        sign_in user
-        visit questions_path
-
-        click_on 'Create question'
-        expect(current_path).to eq new_question_path
-
         fill_in 'Title', with: question[:title]
         fill_in 'Body', with: question[:body]
         click_on 'Save'

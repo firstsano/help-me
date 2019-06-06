@@ -4,9 +4,6 @@ require 'capybara/email/rspec'
 
 RSpec.configure do |config|
   OmniAuth.config.test_mode = true
-  config.before(:each, type: :feature) do
-    Rails.application.env_config["devise.mapping"] = Devise.mappings[:user]
-  end
 
   Capybara.server = :puma
   Capybara.javascript_driver = :selenium_chrome_headless
@@ -15,4 +12,5 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :feature
   config.include CoreHelper, type: :feature
   config.include AttachmentHelper, type: :feature
+  config.extend LoginHelper::Feature, type: :feature
 end

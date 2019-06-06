@@ -6,9 +6,7 @@ feature 'User can view the best answer', %q{
   I want to be able to view the best answer
 } do
 
-  let(:user) { create :user }
-
-  before { sign_in user }
+  login_user
 
   scenario 'User sees best the best answer as the first and with special highlight' do
     question = create :question, created_by: user
