@@ -4,6 +4,6 @@ class MailDigestJob < ApplicationJob
   def perform
     questions = Question.digest
     users = User.all
-    users.each { |user| DigestMailer.digest(user, questions).deliver_later }
+    users.each { |user| QuestionMailer.digest(user, questions).deliver_later }
   end
 end
