@@ -130,6 +130,16 @@ describe QuestionsController, type: :controller do
         expect { controller_request }.to change(Question, :count).by(1)
       end
 
+      it 'creates new question subscription' do
+        expect { controller_request }.to change(user.subscriptions, :count).by(1)
+      end
+
+      it 'creates question subscription to created question' do
+        controller_request
+        user.reload
+        expect(user.subscriptions).to match_array Question.last.subscribers
+      end
+
       it 'redirects to show view' do
         controller_request
         expect(response).to redirect_to question_path(assigns(:question))

@@ -9,6 +9,7 @@ describe Question, type: :model do
     it { is_expected.to have_many :upvotes }
     it { is_expected.to have_many :downvotes }
     it { is_expected.to have_many :comments }
+    it { is_expected.to have_many :subscribers }
     it { is_expected.to accept_nested_attributes_for :attachments }
   end
 
@@ -16,6 +17,22 @@ describe Question, type: :model do
     it { is_expected.to validate_presence_of :created_by }
     it { is_expected.to validate_presence_of :title }
     it { is_expected.to validate_presence_of :body }
+  end
+
+  describe 'Callbacks' do
+    describe '#after_create' do
+      let!(:user) { create :user }
+      let(:question) { build :question, created_by: user }
+
+      it 'calls subscribe_user method' do
+        expect(question).to receive(:subscribe_user)
+        question.save
+      end
+
+      it 'generates subscription between author and question' do
+        expect { question.save }.to change(user.subscriptions, :count).by(1)
+      end
+    end
   end
 
   describe 'Instance_methods' do

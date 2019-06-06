@@ -9,11 +9,25 @@ describe User, type: :model do
   end
 
   describe 'Associations' do
+    it { is_expected.to have_many :subscriptions }
     it { is_expected.to have_many :authorizations }
   end
 
   describe 'Instance methods' do
     subject(:user) { create :user }
+
+    describe '#subscribe' do
+      let!(:question) { create :question }
+
+      it { is_expected.to respond_to :subscribe }
+
+      it 'generates a new valid subscription for user', :aggregate_failures do
+        expect { user.subscribe(question) }.to change(user.subscriptions, :count).by(1)
+        user.reload
+        question.reload
+        expect(question.subscribers).to include user.subscriptions.first
+      end
+    end
 
     describe '#has_provider?' do
       let(:provider) { 'test_provider' }
