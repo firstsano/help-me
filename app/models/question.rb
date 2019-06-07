@@ -15,7 +15,7 @@ class Question < ApplicationRecord
 
   validates :title, :body, :created_by, presence: true
 
-  after_create :subscribe_user
+  after_create :subscribe_author
 
   def set_best_answer(answer)
     raise ArgumentError unless answer.question == self
@@ -30,7 +30,7 @@ class Question < ApplicationRecord
 
   private
 
-  def subscribe_user
+  def subscribe_author
     created_by.subscribe self
   end
 end

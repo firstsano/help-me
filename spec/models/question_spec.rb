@@ -25,8 +25,8 @@ describe Question, type: :model do
       let!(:user) { create :user }
       let(:question) { build :question, created_by: user }
 
-      it 'calls subscribe_user method' do
-        expect(question).to receive(:subscribe_user)
+      it 'calls subscribe_author method' do
+        expect(question).to receive(:subscribe_author)
         question.save
       end
 
