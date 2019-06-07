@@ -16,17 +16,13 @@ describe Answer, type: :model do
   end
 
   describe 'Callbacks' do
-    describe '#after_create', :with_activejob do
+    describe '#after_create' do
       let(:answer) { build :answer }
 
       it 'calls notificates question subscribers', :aggregate_failures do
         expect(answer).to receive(:notificate_question_subscribers).and_call_original
         expect(NotificateQuestionSubscriberJob).to receive(:perform_later).with(answer).and_call_original
         answer.save
-      end
-
-      it 'calls notificates question subscribers' do
-        expect { answer.save }.to have_enqueued_job.once.on_queue("default")
       end
     end
   end
