@@ -10,7 +10,7 @@ class Answer < ApplicationRecord
 
   validates :body, :question, :created_by, presence: true
 
-  after_create :notificate_question_subscribers
+  after_commit :notificate_question_subscribers
 
   def self.best
     where is_best: true

@@ -16,7 +16,7 @@ describe Answer, type: :model do
   end
 
   describe 'Callbacks' do
-    describe '#after_create' do
+    describe '#after_commit' do
       let(:answer) { build :answer }
 
       it 'calls notificates question subscribers', :aggregate_failures do
