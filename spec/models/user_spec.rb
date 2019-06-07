@@ -61,6 +61,8 @@ describe User, type: :model do
         expect(user.subscribed?(question)).to eq false
         user.subscribe question
         expect(user.subscribed?(question)).to eq true
+        user.unsubscribe question
+        expect(user.subscribed?(question)).to eq false
       end
     end
 
