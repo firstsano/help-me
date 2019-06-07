@@ -3,4 +3,5 @@
 <%- else %>
   $('.question-answer .answer__form-errors').html('');
   $('.answers').prepend('<%= j render(@answer) %>');
+  $('.question-answer').find("input[type=text], textarea").val("");
 <% end %>
