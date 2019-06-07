@@ -1,4 +1,4 @@
-require_relative 'jobs_helper'
+require 'rails_helper'
 
 describe NotificateQuestionSubscriberJob, type: :job do
   let(:users) { create_list :user, 10 }
@@ -14,7 +14,7 @@ describe NotificateQuestionSubscriberJob, type: :job do
     NotificateQuestionSubscriberJob.perform_now answer
   end
 
-  it 'properly enqueues jobs' do
+  it 'properly enqueues jobs', :activejob_test_adapter do
     expect { NotificateQuestionSubscriberJob.perform_now(answer) }.to have_enqueued_job.exactly(subscribers.count).on_queue('mailers').times
   end
 end

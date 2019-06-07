@@ -1,4 +1,4 @@
-require_relative 'jobs_helper'
+require 'rails_helper'
 
 describe MailDigestJob, type: :job do
   let!(:predefined_users) { create_list :user, 10 }
@@ -11,7 +11,7 @@ describe MailDigestJob, type: :job do
     MailDigestJob.perform_now
   end
 
-  it 'properly enqueues jobs' do
+  it 'properly enqueues jobs', :activejob_test_adapter do
     allow(Question).to receive(:digest).and_return questions
     expect { MailDigestJob.perform_now }.to have_enqueued_job.exactly(users_and_question_authors.count).on_queue('mailers').times
   end
