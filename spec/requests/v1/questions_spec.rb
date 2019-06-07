@@ -7,7 +7,6 @@ describe 'Questions API', type: :request do
 
     context 'when authorized' do
       login_user
-      let(:question) { questions.first }
 
       before { get resource, params: { format: :json, access_token: access_token.token } }
 
@@ -21,8 +20,9 @@ describe 'Questions API', type: :request do
 
       %i[id title body created_at updated_at].each do |attribute|
         it "responds with questions and each question contains #{attribute} field" do
-          attribute_field = question.send(attribute).to_json
-          expect(response.body).to be_json_eql(attribute_field).at_path("0/#{attribute}")
+          question_id = JSON.parse(response.body).first["id"]
+          question = Question.find_by id: question_id
+          expect(response.body).to be_json_eql(question.send(attribute).to_json).at_path("0/#{attribute}")
         end
       end
     end
