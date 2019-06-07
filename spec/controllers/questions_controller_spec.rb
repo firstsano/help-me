@@ -190,6 +190,41 @@ describe QuestionsController, type: :controller do
     it_behaves_like "authenticable controller"
   end
 
+  describe 'PUT #subscribe' do
+    login_user
+    let(:controller_request) { put :subscribe, params: { id: question } }
+
+    before { question }
+
+    context 'when user is not subscribed yet' do
+      it 'properly creates a subscription' do
+        expect { controller_request }.to change(user.subscriptions, :count).by(1)
+      end
+
+      it 'responds with a proper json' do
+        controller_request
+        expected_json = { subscribed: true }.to_json
+        expect(response.body).to eq expected_json
+      end
+    end
+
+    context 'when user is already subscribed' do
+      before { user.subscribe question }
+
+      it 'removes a subscription' do
+        expect { controller_request }.to change(user.subscriptions, :count).by(-1)
+      end
+
+      it 'responds with a proper json' do
+        controller_request
+        expected_json = { subscribed: false }.to_json
+        expect(response.body).to eq expected_json
+      end
+    end
+
+    it_behaves_like "authenticable controller"
+  end
+
   it_behaves_like 'votable controller', 'question'
   it_behaves_like 'commentable controller', 'question'
 end

@@ -10,7 +10,11 @@
           = vote_button downvote_question_path(question), question, :downvote
             i.material-icons keyboard_arrow_down
       .question__info
-        h2.question__title = question.title
+        div
+          = link_to subscribe_question_path(question), remote: true,
+                    method: :put, class: 'question__subscription'
+            i.material-icons notifications_none
+          h2.question__title = question.title
         .question__body = question.body
         .question__attachments = render question.attachments
       .question__comments

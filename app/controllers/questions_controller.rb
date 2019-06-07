@@ -28,6 +28,13 @@ class QuestionsController < ::ApplicationController
     respond_with @question
   end
 
+  def subscribe
+    subscribe_method = current_user.subscribed?(@question) ? :unsubscribe : :subscribe
+    current_user.send subscribe_method, @question
+
+    render json: { subscribed: current_user.subscribed?(@question) }
+  end
+
   def update
     @question.update question_params
   end

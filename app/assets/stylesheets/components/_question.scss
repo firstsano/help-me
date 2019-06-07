@@ -15,6 +15,11 @@ $score-color: rgba($color-primary, 0.4);
         padding: 10px;
     }
 
+    & .question__subscription {
+        color: $color-primary;
+        float: right;
+    }
+
     & .question__info-frame {
         display: flex;
         align-items: flex-start;

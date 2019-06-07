@@ -29,6 +29,41 @@ describe User, type: :model do
       end
     end
 
+    describe '#unsubscribe' do
+      let!(:question) { create :question }
+
+      it { is_expected.to respond_to :unsubscribe }
+
+      context 'when subscription exists' do
+        before { user.subscribe question }
+
+        it 'removes a subscription for user', :aggregate_failures do
+          expect { user.unsubscribe(question) }.to change(user.subscriptions, :count).by(-1)
+          user.reload
+          question.reload
+          expect(question.subscribers).not_to include user
+        end
+      end
+
+      context 'when subscription does not exist' do
+        it 'does nothing' do
+          expect { user.unsubscribe(question) }.not_to change(user.subscriptions, :count)
+        end
+      end
+    end
+
+    describe '#subscribed?' do
+      let!(:question) { create :question }
+
+      it { is_expected.to respond_to :subscribed? }
+
+      it 'returns proper boolean if user subscribe to a question', :aggregate_failures do
+        expect(user.subscribed?(question)).to eq false
+        user.subscribe question
+        expect(user.subscribed?(question)).to eq true
+      end
+    end
+
     describe '#has_provider?' do
       let(:provider) { 'test_provider' }
       before { create_list :authorization, 5, user: user }

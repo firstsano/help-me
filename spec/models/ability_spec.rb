@@ -28,6 +28,8 @@ describe Ability, type: :model do
     it { is_expected.to be_able_to :comment, Question }
     it { is_expected.to be_able_to :comment, Answer }
 
+    it { is_expected.to be_able_to :subscribe, Question }
+
     describe 'setting best answer' do
       let(:answer) { create :answer, question: question }
 

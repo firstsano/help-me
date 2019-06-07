@@ -11,7 +11,7 @@ feature 'User can subscribe to a question', %q{
 
   scenario 'User subscribes to a question', js: true do
     visit question_path(question)
-    click_on 'Subscribe'
+    find('.question__subscription').click
 
     expect(current_path).to eq question_path(question)
     expect(page).to have_content 'Subscribed'

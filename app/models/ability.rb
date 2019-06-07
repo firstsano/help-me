@@ -6,6 +6,7 @@ class Ability
     return unless user.present?
 
     can :read, :all
+    can :subscribe, Question
     can :comment, [Question, Answer]
     can :create, [Question, Answer, Comment, Attachment]
     can :update, [Question, Answer], created_by: user

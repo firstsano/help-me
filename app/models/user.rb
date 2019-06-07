@@ -37,4 +37,12 @@ class User < ApplicationRecord
   def subscribe(question)
     self.subscriptions.create user: self, question: question
   end
+
+  def unsubscribe(question)
+    self.subscriptions.where(question_id: question).destroy_all
+  end
+
+  def subscribed?(question)
+    subscriptions.where(question_id: question).any?
+  end
 end

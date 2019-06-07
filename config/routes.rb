@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: [:votable, :commentable] do
+    put :subscribe, on: :member
     resources :answers, shallow: true, concerns: [:votable, :commentable] do
       put :best, on: :member
     end
