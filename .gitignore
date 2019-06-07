@@ -35,3 +35,6 @@ task.txt
 
 # Ignore spec development files
 /spec/examples.txt
+
+# Ignore coverage
+/coverage

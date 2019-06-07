@@ -49,7 +49,7 @@ feature 'Subscriber receives notifications about the question', %q{
     end
   end
 
-  context 'When author of answer is a subscriber', js: true do
+  context 'When author of answer is a subscriber', :sidekiq_inline, js: true do
     background do
       sign_in answer_author
       visit question_path(question)
@@ -60,7 +60,6 @@ feature 'Subscriber receives notifications about the question', %q{
       end
 
       expect(page).to have_content answer_params[:body]
-      Sidekiq::Worker.drain_all
     end
 
     context 'When user is an author of question' do

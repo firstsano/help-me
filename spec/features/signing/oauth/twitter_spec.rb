@@ -4,7 +4,7 @@ feature 'User can sign in with twitter', %q{
   In order to be able to work with project as signed in user
   As a user
   I want to be able to sign in with twitter
-} do
+}, :sidekiq_inline do
 
   setup_user_mapping
 
