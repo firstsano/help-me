@@ -17,7 +17,7 @@ gem 'jquery-rails'
 gem 'lodash-rails'
 gem 'material-sass', '4.1.1'
 gem 'mini_racer'
-gem 'mysql2', '~> 0.4.10', platform: :ruby
+gem 'mysql2', '~> 0.4.10'
 gem 'oj_mimic_json'
 gem 'oj'
 gem 'omniauth-google-oauth2'
