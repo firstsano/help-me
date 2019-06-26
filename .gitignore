@@ -38,3 +38,7 @@ task.txt
 
 # Ignore coverage
 /coverage
+
+# Ignore machine specific sphinx files
+config/*sphinx.conf
+db/sphinx
