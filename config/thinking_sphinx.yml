@@ -1,0 +1,12 @@
+default: &default
+  enable_star: 1
+  min_infix_len: 1
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
