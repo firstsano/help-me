@@ -1,0 +1,20 @@
+.global-search {
+    padding-bottom: 3 * $offset;
+
+    & .global-search__form {
+        @extend .row;
+    }
+
+    & .global-search__query {
+        @extend .col-sm-10;
+    }
+
+    & .global-search__submit-layout {
+        @extend .col-sm-2;
+    }
+
+    & .global-search__submit {
+        @extend .btn, .btn-secondary;
+        width: 100%;
+    }
+}
