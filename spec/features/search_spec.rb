@@ -33,7 +33,7 @@ feature 'User can find question/answer/comment/user by using search field', %q{
         click_on 'Search'
       end
 
-      expect(current_path).to eq search_results_path
+      expect(current_path).to eq search_path
 
       required_questions.each { |question| expect(page).to have_link href: question_path(question) }
       required_answers.each { |answer| expect(page).to have_link href: question_path(answer.question) }

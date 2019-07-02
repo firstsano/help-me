@@ -1,7 +1,10 @@
 .global-search
-  = simple_form_for :search, html: { class: 'global-search__form' } do |f|
-    .global-search__query = f.input :query, label: false, input_html: { id: :search }
+  = simple_form_for :search, url: search_path,
+                    method: :get,
+                    enforce_utf8: false,
+                    html: { class: 'global-search__form' } do |f|
+    .global-search__query = f.input :query, label: false, input_html: { id: :search, value: @query }
     .global-search__submit-layout
-      = button_tag type: :submit, class: 'global-search__submit' do
+      = button_tag type: :submit, name: nil, class: 'global-search__submit' do
         ' Search
         i.material-icons search
