@@ -29,8 +29,8 @@ feature 'User can find question/answer/comment/user by using search field', %q{
     scenario 'User submits query and get results of search' do
       visit root_path
       within('.global-search') do
-        fill_in 'search', with: "appl"
-        click_on 'Submit'
+        fill_in "search", with: "appl"
+        click_on 'Search'
       end
 
       expect(current_path).to eq search_results_path
