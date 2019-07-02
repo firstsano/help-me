@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     registrations: "registrations"
   }
 
+  get "search", to: "search#index"
+
   get "users/auth/email_confirmation", to: "users/omniauth_callbacks#new_auth"
   post "users/auth/email_confirmation", to: "users/omniauth_callbacks#register_auth"
   get "users/auth/confirm", to: "users/omniauth_callbacks#confirm_auth"
