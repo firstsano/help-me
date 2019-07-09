@@ -62,6 +62,7 @@ group :test do
   gem 'capybara-email'
   gem 'capybara-screenshot'
   gem 'chromedriver-helper'
+  gem 'database_cleaner'
   gem 'fuubar'
   gem 'json_spec'
   gem 'launchy'
