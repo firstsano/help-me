@@ -10,7 +10,7 @@ feature 'Adding attachment to question', %q{
   given(:new_question) { attributes_for :question }
   given(:filenames) { %w[sample.txt sample2.txt sample3.txt] }
 
-  before do
+  background do
     visit new_question_path
     fill_in 'Title', with: new_question[:title]
     fill_in 'Body', with: new_question[:body]
