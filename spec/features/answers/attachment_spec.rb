@@ -6,13 +6,13 @@ feature 'Adding attachment to an answer', %q{
   I want to be able to attach files
 } do
 
-  given(:question) { create :question }
+  given!(:question) { create :question }
   given(:answer) { attributes_for :answer }
   given(:filenames) { %w[sample.txt sample2.txt sample3.txt] }
 
   login_user
 
-  before { visit question_path(question) }
+  background { visit question_path(question) }
 
   scenario 'User tries to attach multiple files to an answer', js: true do
     within('.question-answer') do
