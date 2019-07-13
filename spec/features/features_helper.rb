@@ -13,4 +13,5 @@ RSpec.configure do |config|
   config.include CoreHelper, type: :feature
   config.include AttachmentHelper, type: :feature
   config.extend LoginHelper::Feature, type: :feature
+  config.include SphinxHelper, type: :feature
 end
