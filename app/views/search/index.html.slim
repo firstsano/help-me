@@ -1,1 +1,8 @@
-dummy
+.search-results
+  h1.search-results__title
+    ' Search results for:
+    .search-results__query = @query
+  ul.search-results__list
+    - @results.each do |result|
+      li.search-results__item
+        = search_result_for result, @query, starred_query: @results.options[:star]

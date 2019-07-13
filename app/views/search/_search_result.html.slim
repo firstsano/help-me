@@ -1,0 +1,11 @@
+.search-result
+  i.material-icons.search-result__icon[title=title]
+    = icon
+  .search-result__content
+    = content
+    - if local_assigns[:details]
+      .search-result__details
+        = details
+  - if local_assigns[:link]
+    .search-result__more
+      = link
