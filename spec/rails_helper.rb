@@ -60,24 +60,6 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.around(:each) do |example|
-    case example.example.metadata[:type]
-    when :feature
-      DatabaseCleaner.strategy = :truncation
-    else
-      DatabaseCleaner.strategy = :transaction
-    end
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
-
-
   config.example_status_persistence_file_path = "spec/examples.txt"
 
   # Filter lines from Rails gems in backtraces.
