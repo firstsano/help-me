@@ -1,5 +1,10 @@
+// Colors
 $color-primary: #29b6f6;
 $color-success: #01bc07;
+$color-aside: rgba(black, 0.5);
+
+// Geometry
+$offset: 15px;
 
 // Setup material scheme
 $primary: (
@@ -7,5 +12,3 @@ $primary: (
     dark: darken($color-primary, 10%),
     light: lighten($color-primary, 10%)
 );
-
-$offset: 15px;

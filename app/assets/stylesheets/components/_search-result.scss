@@ -1,0 +1,28 @@
+.search-result {
+    display: flex;
+
+    & .search-result__content {
+        width: 100%;
+    }
+
+    & .search-result__icon {
+        align-self: center;
+        color: $color-primary;
+        cursor: pointer;
+        margin-right: $offset;
+    }
+
+    & .search-result__more {
+        align-self: flex-end;
+        margin-left: 50px;
+    }
+
+    & .search-result__link {
+        @extend .btn, .btn-primary;
+    }
+
+    & .search-result__details {
+        color: $color-aside;
+        font-size: 13px;
+    }
+}

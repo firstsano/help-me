@@ -1,0 +1,24 @@
+.search-results {
+    & .search-results__title {
+        font-size: 24px;
+        font-weight: bolder;
+        margin-bottom: $offset;
+    }
+
+    & .search-results__query {
+        display: inline;
+        font-style: italic;
+        font-weight: normal;
+
+        &:before { content: "\00ab"; }
+        &:after { content: "\00bb"; }
+    }
+
+    & .search-results__list {
+        @extend .list-group;
+    }
+
+    & .search-results__item {
+        @extend .list-group-item;
+    }
+}
