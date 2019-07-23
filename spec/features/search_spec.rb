@@ -64,7 +64,7 @@ feature 'User can find question/answer/comment/user by using search field', %q{
     end
 
     context 'When using targeting search' do
-      scenario 'User selects type of enitity, submits query and gets results' do
+      scenario "User selects 'question' as required type of entity, submits query and gets results" do
         sphinx_index
 
         visit root_path
@@ -75,6 +75,26 @@ feature 'User can find question/answer/comment/user by using search field', %q{
         end
 
         expect(current_path).to eq search_path
+
+        required_questions.each do |question|
+          expect(page).to have_link href: question_path(question)
+          expect(page).to have_content question.title
+          expect(page).to have_content question.body
+        end
+
+        answer_with_search_result = required_answers.first
+        expect(page).not_to have_link href: question_path(answer_with_search_result.question)
+        expect(page).not_to have_content answer_with_search_result.body
+
+        user_with_search_result = required_users.first
+        expect(page).not_to have_content user_with_search_result.name
+        expect(page).not_to have_content user_with_search_result.email
+
+        comment_with_search_result = required_comments.first
+        expect(page).not_to have_content comment_with_search_result.body
+
+        matches = all('.match')
+        expect(matches.count).to eq required_questions.count
       end
     end
   end
