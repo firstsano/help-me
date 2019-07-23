@@ -14,7 +14,7 @@ describe SearchController, type: :controller do
     context 'when query is given' do
       context 'when rendering results' do
         before do
-          allow(ThinkingSphinx).to receive(:search).with(query, hash_including(:per_page, :star)).and_return(results)
+          allow(SphinxSearch).to receive(:search).with(query, nil, hash_including(:per_page, :star)).and_return(results)
           get :index, params: { search: { query: query } }
         end
 
@@ -27,10 +27,10 @@ describe SearchController, type: :controller do
         end
       end
 
-      it 'calls Sphinx search with query and query escaping', aggregate_failures: true do
+      it "calls SphinxSearch's search with query, category and query escaping", aggregate_failures: true do
         expect(ThinkingSphinx::Query).to receive(:escape).with(query).and_call_original
-        expect(ThinkingSphinx).to receive(:search).with(query, hash_including(:per_page, :star))
-        get :index, params: { search: { query: query } }
+        expect(SphinxSearch).to receive(:search).with(query, 'question', hash_including(:per_page, :star))
+        get :index, params: { search: { query: query, category: 'question' } }
       end
     end
   end

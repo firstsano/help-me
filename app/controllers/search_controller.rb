@@ -5,8 +5,13 @@ class SearchController < ApplicationController
   respond_to :html
 
   def index
-    query = params.require(:search).permit(:query)[:query]
-    @query = ThinkingSphinx::Query.escape query
-    @results = ThinkingSphinx.search @query, star: true, per_page: 40
+    @query = ThinkingSphinx::Query.escape search_params[:query]
+    @results = SphinxSearch.search @query, search_params[:category], star: true, per_page: 40
+  end
+
+  private
+
+  def search_params
+    params.require(:search).permit(:query, :category)
   end
 end
