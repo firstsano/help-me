@@ -4,7 +4,9 @@
                     enforce_utf8: false,
                     html: { class: 'global-search__form' } do |f|
     .global-search__query = f.input :query, label: false, input_html: { id: :search, value: @query }
-    .global-search__category = f.input :category, label: false, as: :select, collection: SphinxSearch::CATEGORIES
+    .global-search__category = f.input :category, label: false, as: :select,
+                                       collection: SphinxSearch::CATEGORIES, include_blank: true,
+                                       selected: @category
     .global-search__submit-layout
       = button_tag type: :submit, name: nil, class: 'global-search__submit' do
         ' Search

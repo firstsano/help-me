@@ -6,7 +6,8 @@ class SearchController < ApplicationController
 
   def index
     @query = ThinkingSphinx::Query.escape search_params[:query]
-    @results = SphinxSearch.search @query, search_params[:category], star: true, per_page: 40
+    @category = search_params[:category]
+    @results = SphinxSearch.search @query, @category, star: true, per_page: 40
   end
 
   private
