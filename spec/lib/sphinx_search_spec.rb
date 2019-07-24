@@ -12,7 +12,7 @@ describe SphinxSearch, type: :module do
         before { stub_const("SphinxSearch::CATEGORIES", ['question']) }
 
         it 'calls Sphinx search on specified classes' do
-          expect(ThinkingSphinx).to receive(:search).with(query, hash_including(classes: Question))
+          expect(ThinkingSphinx).to receive(:search).with(query, hash_including(classes: [Question]))
           sphinx_search.search query, 'question'
         end
       end
