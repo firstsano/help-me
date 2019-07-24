@@ -6,11 +6,15 @@
     }
 
     & .global-search__query {
-        @extend .col-sm-10;
+        @extend .col-sm-8;
     }
 
     & .global-search__submit-layout {
-        @extend .col-sm-2;
+        @extend .col-sm;
+    }
+
+    & .global-search__category {
+        @extend .col-sm;
     }
 
     & .global-search__submit {
